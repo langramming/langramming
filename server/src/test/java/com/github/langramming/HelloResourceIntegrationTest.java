@@ -7,18 +7,18 @@ import javax.ws.rs.client.WebTarget;
 import org.glassfish.grizzly.http.server.HttpServer;
 
 import org.glassfish.grizzly.http.server.NetworkListener;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HelloResourceIntegrationTest {
 
     private HttpServer server;
     private WebTarget target;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // start the server
         server = LangrammingMain.startServer(0); // 0 means find any random available port
@@ -38,7 +38,7 @@ public class HelloResourceIntegrationTest {
         target = c.target(baseUrl);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         server.shutdownNow();
     }
