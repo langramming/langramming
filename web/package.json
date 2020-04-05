@@ -1,0 +1,12 @@
+{
+  "name": "langramming-website",
+  "version": "0.0.1",
+  "description": "The website for the langramming project",
+  "main": "index.js",
+  "repository": "https://github.com/langramming/langramming",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "echo yeet"
+  }
+}
