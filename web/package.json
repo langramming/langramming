@@ -2,11 +2,30 @@
   "name": "langramming-website",
   "version": "0.0.1",
   "description": "The website for the langramming project",
-  "main": "index.js",
+  "main": "dist/index.html",
   "repository": "https://github.com/langramming/langramming",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "echo yeet"
+    "build": "parcel build public/index.html",
+    "start": "parcel serve public/index.html"
+  },
+  "engines": {
+    "node": "^12.16.1",
+    "yarn": "^1.22.4"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router": "^5.1.2",
+    "redux": "^4.0.5",
+    "tslib": "^1.11.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
+    "parcel": "^1.12.4",
+    "typescript": "^3.8.3"
   }
 }

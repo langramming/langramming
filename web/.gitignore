@@ -1,6 +1,10 @@
 # Custom ignored files
-/node
-/node_modules
+# nodejs installation for Maven
+/node/
+
+# Compilation directories
+/dist/
+/build/
 
 ### Node ###
 # Logs
@@ -19,23 +23,14 @@ pids
 *.seed
 *.pid.lock
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
 # Dependency directories
 node_modules/
-jspm_packages/
 
-# TypeScript v1 declaration files
-typings/
-
-# TypeScript cache
+# caches
+/.cache/
+/.parcel-cache/
 *.tsbuildinfo
-
-# Optional npm cache directory
 .npm
-
-# Optional eslint cache
 .eslintcache
 
 # Optional REPL history
@@ -54,12 +49,6 @@ typings/
 # Storybook build outputs
 .out
 .storybook-out
-
-# vuepress build output
-.vuepress/dist
-
-# DynamoDB Local files
-.dynamodb/
 
 # Temporary folders
 tmp/
