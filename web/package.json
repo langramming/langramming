@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "parcel build public/index.html",
+    "build": "rm -rf build/ dist/ && parcel build public/index.html",
     "start": "parcel serve public/index.html"
   },
   "engines": {
