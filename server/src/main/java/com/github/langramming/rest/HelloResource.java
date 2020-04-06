@@ -6,7 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Root resource (exposed at "/hello" path)
+ * Example resource: this is exposed at "/api/hello"
  */
 @Path("/hello")
 public class HelloResource {

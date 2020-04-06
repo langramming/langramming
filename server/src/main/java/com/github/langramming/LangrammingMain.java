@@ -1,5 +1,9 @@
 package com.github.langramming;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
+import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -10,11 +14,21 @@ public class LangrammingMain {
     private static final int DEFAULT_PORT = 8080;
 
     public static HttpServer startServer(int port) {
+        JacksonJaxbJsonProvider jsonProvider = new JacksonJaxbJsonProvider();
+        jsonProvider.setMapper(new ObjectMapper());
+
         // Our REST endpoints live in the .rest package: this loads them automagically.
         final ResourceConfig rc = new ResourceConfig().packages("com.github.langramming.rest");
 
-        URI baseUri = URI.create(String.format("http://localhost:%d", port));
-        return GrizzlyHttpServerFactory.createHttpServer(baseUri, rc);
+        URI baseUri = URI.create(String.format("http://localhost:%d/api/", port));
+        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, rc);
+
+        server.getServerConfiguration().addHttpHandler(
+                new CLStaticHttpHandler(LangrammingMain.class.getClassLoader(), "/assets/"),
+                "/"
+        );
+
+        return server;
     }
 
     public static void main(String[] args) {
