@@ -15,8 +15,13 @@
             </includes>
         </dependencySet>
         <dependencySet>
-            <unpack>true</unpack>
             <outputDirectory>assets</outputDirectory>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <excludes>
+                    <exclude>META-INF/</exclude>
+                </excludes>
+            </unpackOptions>
             <includes>
                 <include>com.github.langramming:langramming-web:jar</include>
             </includes>
