@@ -25,7 +25,7 @@ public class LangrammingMain {
                 networkListener -> {
                     System.out.format("Server started at :%d\n", networkListener.getPort());
                     System.out.format(
-                            "WADL at %s:%d/application.wadl\n",
+                            "WADL at http://%s:%d/application.wadl\n",
                             networkListener.getHost(),
                             networkListener.getPort()
                     );

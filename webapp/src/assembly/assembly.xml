@@ -12,6 +12,12 @@
             <unpack>true</unpack>
             <includes>
                 <include>com.github.langramming:langramming-server:jar</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <unpack>true</unpack>
+            <outputDirectory>assets</outputDirectory>
+            <includes>
                 <include>com.github.langramming:langramming-web:jar</include>
             </includes>
         </dependencySet>
