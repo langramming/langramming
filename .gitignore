@@ -3,7 +3,7 @@
 *.class
 
 # IntelliJ project files
-.idea/libraries
+.idea/
 *.iml
 
 # Log file
