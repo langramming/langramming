@@ -8,11 +8,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>langramming</name>
+    <name>Langramming</name>
 
     <modules>
         <module>server</module>
         <module>web</module>
+        <module>webapp</module>
     </modules>
 
     <properties>

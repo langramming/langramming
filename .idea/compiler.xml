@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="langramming-server" />
         <module name="langramming-web" />
+        <module name="langramming-webapp" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="13">
       <module name="langramming" target="1.5" />
       <module name="langramming-server" target="13" />
       <module name="langramming-web" target="13" />
+      <module name="langramming-webapp" target="13" />
     </bytecodeTargetLevel>
   </component>
 </project>
