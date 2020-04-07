@@ -1,4 +1,7 @@
 {
+  "name": "Langramming",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "mvn clean package",
     "server": "java -jar webapp/target/langramming-*-bundle.jar",
