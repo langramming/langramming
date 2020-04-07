@@ -2,8 +2,8 @@ package com.github.langramming;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
-import org.glassfish.grizzly.http.server.HttpHandler;
+import com.github.langramming.httpserver.FrontendDevServerForwarder;
+import com.github.langramming.httpserver.StaticAssetsHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -23,16 +23,25 @@ public class LangrammingMain {
         URI baseUri = URI.create(String.format("http://localhost:%d/api/", port));
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, rc);
 
-        server.getServerConfiguration().addHttpHandler(
-                new CLStaticHttpHandler(LangrammingMain.class.getClassLoader(), "/assets/"),
-                "/"
-        );
+        String frontendPortString = System.getenv("FRONTEND_PORT");
+        if (frontendPortString != null) {
+            System.out.format("Proxying assets from the frontend server at localhost:%s\n", frontendPortString);
+            int frontendPort = Integer.parseInt(frontendPortString);
+            server.getServerConfiguration().addHttpHandler(new FrontendDevServerForwarder(frontendPort), "/");
+        } else {
+            System.out.println("Serving built frontend assets");
+            server.getServerConfiguration().addHttpHandler(
+                    new StaticAssetsHandler(),
+                    "/"
+            );
+        }
 
         return server;
     }
 
     public static void main(String[] args) {
-        int serverPort = Integer.getInteger(System.getenv("SERVER_PORT"), DEFAULT_PORT);
+        String serverPortString = System.getenv("SERVER_PORT");
+        int serverPort = serverPortString != null ? Integer.parseInt(serverPortString) : DEFAULT_PORT;
         final HttpServer server = startServer(serverPort);
 
         server.getListeners().stream().findFirst().ifPresentOrElse(
