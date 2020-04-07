@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "mvn clean package",
+    "server": "java -jar webapp/target/langramming-*-bundle.jar",
+    "server:debug": "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=:5005 -jar webapp/target/langramming-*-bundle.jar",
+    "web": "cd web && yarn start"
+  }
+}
