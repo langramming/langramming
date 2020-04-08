@@ -2,8 +2,6 @@ package com.github.langramming.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.github.langramming.model.spotify.SpotifyMusicProvider;
-import com.github.langramming.restclient.RestClient;
-import com.github.langramming.restclient.spotify.SpotifyRestClient;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -12,17 +10,15 @@ import java.util.Map;
 @Getter
 public enum MusicProviderType {
 
-    SPOTIFY("spotify", SpotifyMusicProvider.class, SpotifyRestClient.class);
+    SPOTIFY("spotify", SpotifyMusicProvider.class);
 
     @JsonValue
     private final String id;
     private final Class<? extends MusicProvider> musicProvider;
-    private final Class<? extends RestClient> restClient;
 
-    MusicProviderType(String id, Class<? extends MusicProvider> musicProvider, Class<? extends RestClient> restClient) {
+    MusicProviderType(String id, Class<? extends MusicProvider> musicProvider) {
         this.id = id;
         this.musicProvider = musicProvider;
-        this.restClient = restClient;
     }
 
     private static final Map<String, MusicProviderType> musicProviderTypeCache = new HashMap<>();
