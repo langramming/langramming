@@ -5,9 +5,15 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.github.langramming.httpserver.FrontendDevServerForwarder;
 import com.github.langramming.httpserver.StaticAssetsHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.accesslog.AccessLogBuilder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.net.URI;
 
 public class LangrammingMain {
@@ -18,10 +24,22 @@ public class LangrammingMain {
         jsonProvider.setMapper(new ObjectMapper());
 
         // Our REST endpoints live in the .rest package: this loads them automagically.
-        final ResourceConfig rc = new ResourceConfig().packages("com.github.langramming.rest");
+        final ResourceConfig rc = new ResourceConfig()
+                .packages("com.github.langramming.rest")
+                .register(jsonProvider);
 
         URI baseUri = URI.create(String.format("http://localhost:%d/api/", port));
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, rc);
+        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, rc, false);
+
+        server.getServerConfiguration().setDefaultErrorPageGenerator(((request, status, reasonPhrase, description, exception) -> {
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            exception.printStackTrace(printWriter);
+            request.getResponse().setContentType(MediaType.TEXT_PLAIN);
+            return stringWriter.toString();
+        }));
+
+        new AccessLogBuilder("access.log").instrument(server.getServerConfiguration());
 
         String frontendPortString = System.getenv("FRONTEND_PORT");
         if (frontendPortString != null) {
@@ -34,6 +52,12 @@ public class LangrammingMain {
                     new StaticAssetsHandler(),
                     "/"
             );
+        }
+
+        try {
+            server.start();
+        } catch (IOException ex) {
+            throw new UncheckedIOException("Failed to start Grizzly server!", ex);
         }
 
         return server;
