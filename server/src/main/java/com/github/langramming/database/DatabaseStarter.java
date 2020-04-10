@@ -24,7 +24,7 @@ public class DatabaseStarter {
 
         Reflections databaseEntitiesFinder = new Reflections(
                 new ConfigurationBuilder()
-                        .forPackages("com.langramming.database.model")
+                        .forPackages("com.github.langramming.database.model")
                         .addScanners(new SubTypesScanner(), new TypeAnnotationsScanner())
         );
 
