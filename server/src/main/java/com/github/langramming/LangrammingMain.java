@@ -2,10 +2,12 @@ package com.github.langramming;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.github.langramming.client.telegram.TelegramBotClient;
 import com.github.langramming.database.DatabaseStarter;
 import com.github.langramming.httpserver.FrontendDevServerForwarder;
 import com.github.langramming.httpserver.StaticAssetsHandler;
 import com.github.langramming.database.DatabaseHttpServerProbe;
+import com.github.langramming.util.EnvironmentVariables;
 import org.glassfish.grizzly.http.server.*;
 import org.glassfish.grizzly.http.server.accesslog.AccessLogBuilder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -18,21 +20,22 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.util.Optional;
 
 public class LangrammingMain {
     private static final String NETWORK_LISTENER_NAME = "grizzly";
     private static final int DEFAULT_PORT = 8080;
 
     public static void main(String[] args) {
-        String serverPortString = System.getenv("SERVER_PORT");
-        int serverPort = serverPortString != null
-                ? Integer.parseInt(serverPortString)
-                : DEFAULT_PORT;
+        TelegramBotClient.start();
+
+        int serverPort = EnvironmentVariables.SERVER_PORT
+                .map(Integer::parseInt)
+                .orElse(DEFAULT_PORT);
         final HttpServer server = startServer(serverPort);
 
         NetworkListener networkListener = server.getListener(NETWORK_LISTENER_NAME);
-        System.out.format("Server started at :%d\n", networkListener.getPort());
-        System.out.println("Hit Ctrl+C to stop it...");
+        System.out.format("[Server] Server started at :%d\n", networkListener.getPort());
     }
 
     public static HttpServer startServer(int port) {
@@ -55,7 +58,7 @@ public class LangrammingMain {
         try {
             server.start();
         } catch (IOException ex) {
-            throw new UncheckedIOException("Failed to start Grizzly server!", ex);
+            throw new UncheckedIOException("[Server] Failed to start Grizzly server!", ex);
         }
 
         return server;
@@ -78,13 +81,13 @@ public class LangrammingMain {
 
     public static void installFrontendAssetsHandler(HttpServer server) {
         HttpHandler httpHandler;
-        String frontendPortString = System.getenv("FRONTEND_PORT");
-        if (frontendPortString != null) {
-            int frontendPort = Integer.parseInt(frontendPortString);
-            System.out.format("Proxying assets from the frontend server at localhost:%d\n", frontendPort);
+        Optional<String> frontendPortString = EnvironmentVariables.FRONTEND_PORT;
+        if (frontendPortString.isPresent()) {
+            int frontendPort = Integer.parseInt(frontendPortString.get());
+            System.out.format("[Frontend] Proxying assets from the frontend server at localhost:%d\n", frontendPort);
             httpHandler = new FrontendDevServerForwarder(frontendPort);
         } else {
-            System.out.println("Serving built frontend assets");
+            System.out.println("[Frontend] Serving built frontend assets");
             httpHandler = new StaticAssetsHandler();
         }
 

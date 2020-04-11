@@ -16,6 +16,10 @@
             <groupId>se.michaelthelin.spotify</groupId>
             <artifactId>spotify-web-api-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
