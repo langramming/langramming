@@ -8,6 +8,7 @@ langrammingdb.h2.mv.db
 # IntelliJ project files
 .idea/*
 !.idea/runConfigurations
+.idea/runConfigurations/Run_server.xml  # this contains secrets
 *.iml
 
 # Log file
