@@ -26,7 +26,6 @@ public class DatabaseHttpServerProbe extends HttpServerProbe.Adapter {
     @Override
     public void onBeforeServiceEvent(HttpServerFilter filter, Connection connection, Request request, HttpHandler httpHandler) {
         if (localDatabaseContext.get() == null) {
-            System.out.println("Creating thread database context");
             DatabaseContext databaseContext = new DatabaseContext(sessionFactory);
             localDatabaseContext.set(databaseContext);
         } else {
@@ -34,7 +33,6 @@ public class DatabaseHttpServerProbe extends HttpServerProbe.Adapter {
         }
 
         request.addAfterServiceListener(r -> {
-            System.out.println("Destroying thread database context");
             localDatabaseContext.remove();
         });
     }

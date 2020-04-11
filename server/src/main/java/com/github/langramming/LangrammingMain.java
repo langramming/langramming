@@ -66,6 +66,8 @@ public class LangrammingMain {
 
     public static void installErrorPageGenerator(HttpServer server) {
         server.getServerConfiguration().setDefaultErrorPageGenerator(((request, status, reasonPhrase, description, exception) -> {
+            exception.printStackTrace();
+
             StringWriter stringWriter = new StringWriter();
             PrintWriter printWriter = new PrintWriter(stringWriter);
             exception.printStackTrace(printWriter);
