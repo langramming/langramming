@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { TelegramLogin } from './telegram/telegram-login';
+import { Homepage } from "./homepage";
 
 export const App = () => (
     <>
-        <div>Hello there!</div>
-        <TelegramLogin />
+        <Homepage />
     </>
 );

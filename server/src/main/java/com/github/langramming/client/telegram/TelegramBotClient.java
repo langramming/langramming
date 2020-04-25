@@ -2,16 +2,21 @@ package com.github.langramming.client.telegram;
 
 import com.github.langramming.util.EnvironmentVariables;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.GetMe;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class TelegramBotClient {
 
-    public static void start() {
-        String botToken = EnvironmentVariables.TELEGRAM_API_TOKEN;
-        TelegramBot bot = new TelegramBot(botToken);
-        bot.setUpdatesListener(new TelegramListener(bot));
+    private TelegramBot telegramBot;
 
-        System.out.println("[Telegram] Logged in as @" + bot.execute(new GetMe()).user().username());
+    public void login() {
+        String botToken = EnvironmentVariables.TELEGRAM_API_TOKEN;
+        this.telegramBot = new TelegramBot(botToken);
+        this.telegramBot.setUpdatesListener(new TelegramListener(this.telegramBot));
     }
 
+    public TelegramBot getTelegramBot() {
+        return telegramBot;
+    }
 }
