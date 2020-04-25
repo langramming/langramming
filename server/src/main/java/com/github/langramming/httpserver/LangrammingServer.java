@@ -12,9 +12,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
 import javax.inject.Singleton;
+import javax.ws.rs.Path;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -28,19 +28,15 @@ public class LangrammingServer {
 
     public void start() {
         int port = EnvironmentVariables.SERVER_PORT
-            .map(Integer::parseInt)
-            .orElse(DEFAULT_PORT);
+                .map(Integer::parseInt)
+                .orElse(DEFAULT_PORT);
 
         JacksonJaxbJsonProvider jsonProvider = new JacksonJaxbJsonProvider();
         jsonProvider.setMapper(new ObjectMapper());
 
         // Our REST endpoints live in the .rest package: this loads them automagically.
-        final ResourceConfig rc = new ResourceConfig()
-                .packages("com.github.langramming.rest")
+        final ResourceConfig resourceConfig = new ResourceConfig()
                 .register(jsonProvider);
-
-        URI baseUri = URI.create(String.format("http://localhost:%d/api/", port));
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, rc, false);
 
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
@@ -48,6 +44,14 @@ public class LangrammingServer {
                         .addScanners(new SubTypesScanner())
         );
 
+        reflections.getTypesAnnotatedWith(Path.class)
+                .stream()
+                .filter(clazz -> clazz.getPackageName().startsWith("com.github.langramming.rest"))
+                .map(injector::getInstance)
+                .forEach(resourceConfig::register);
+
+        URI baseUri = URI.create(String.format("http://localhost:%d/api/", port));
+        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, resourceConfig, false);
         reflections.getSubTypesOf(HttpHandler.class)
                 .forEach(clazz -> {
                     HttpHandler handler = injector.getInstance(clazz);
