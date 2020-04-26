@@ -68,7 +68,7 @@ public class LangrammingServer {
         Set<Resource> resources = reflections.getTypesAnnotatedWith(Path.class)
                 .stream()
                 .filter(clazz -> clazz.getPackageName().startsWith("com.github.langramming.rest"))
-                .map(clazz -> Resource.builder(clazz).build())
+                .map(Resource::from)
                 .collect(Collectors.toSet());
 
         resourceConfig.registerResources(resources);
