@@ -25,7 +25,6 @@ public class FrontendResource extends HttpHandler {
         this.frontendService = frontendService;
     }
 
-
     @Override
     public void service(Request request, Response response) throws Exception {
         String asset = request.getRequestURI();
