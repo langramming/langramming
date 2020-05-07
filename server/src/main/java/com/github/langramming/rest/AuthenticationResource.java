@@ -1,9 +1,13 @@
 package com.github.langramming.rest;
 
+import com.github.langramming.httpserver.UserContextFilter;
+import com.github.langramming.model.User;
+import com.github.langramming.service.UserService;
 import com.github.langramming.util.EnvironmentVariables;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -13,19 +17,55 @@ import javax.ws.rs.core.UriInfo;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/auth")
 public class AuthenticationResource {
 
+    private static Set<Long> TEMPORARY_allowedTelegramUsers = new HashSet<>(
+            Arrays.asList(112972102L)
+    );
+
+    @Inject
+    private UserService userService;
+
     @GET
     @Path("/login")
-    public Response login(@Context UriInfo uriInfo) {
-        if (verifyTelegramLogin(uriInfo)) {
-            // TODO: handle login
-            System.out.println("Logged in successfully!");
+    public Response login(@Context org.glassfish.grizzly.http.server.Request request, @Context UriInfo uriInfo) {
+        if (!verifyTelegramLogin(uriInfo)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Bad request").build();
         }
+
+        long telegramId;
+        String name;
+        try {
+            telegramId = Long.parseLong(uriInfo.getQueryParameters().getFirst("id"));
+            name = uriInfo.getQueryParameters().getFirst("first_name");
+        } catch (NumberFormatException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Bad request").build();
+        }
+
+        if (!TEMPORARY_allowedTelegramUsers.contains(telegramId)) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Unauthorized").build();
+        }
+
+        System.out.println("Logged in successfully!");
+        Optional<User> userOpt = userService.getUserByTelegramId(telegramId);
+
+        userOpt.ifPresent(user -> {
+            user.setName(name);
+            userService.updateUser(user);
+        });
+
+        User user = userOpt.orElseGet(() ->
+            userService.createUser(telegramId, name));
+
+        UserContextFilter.setLoggedInUser(request, user);
 
         return Response.temporaryRedirect(
                 UriBuilder.fromPath("/").build()

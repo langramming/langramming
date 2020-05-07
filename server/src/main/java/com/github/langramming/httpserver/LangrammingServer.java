@@ -75,11 +75,12 @@ public class LangrammingServer {
 
         URI baseUri = URI.create(String.format("http://localhost:%d/api/", port));
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, resourceConfig, false);
-        reflections.getSubTypesOf(HttpHandler.class)
-                .forEach(clazz -> {
-                    HttpHandler handler = injector.getInstance(clazz);
-                    server.getServerConfiguration().addHttpHandler(handler);
-                });
+
+        server.getServerConfiguration()
+                .addHttpHandler(injector.getInstance(FrontendResource.class));
+
+        server.getServerConfiguration().getMonitoringConfig().getWebServerConfig()
+                .addProbes(injector.getInstance(UserContextFilter.class));
 
         try {
             server.start();

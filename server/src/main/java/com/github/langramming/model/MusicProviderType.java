@@ -1,6 +1,7 @@
 package com.github.langramming.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.langramming.model.spotify.SpotifyMusicProvider;
 import lombok.Getter;
 

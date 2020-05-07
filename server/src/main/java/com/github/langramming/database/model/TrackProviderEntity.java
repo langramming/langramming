@@ -1,6 +1,9 @@
 package com.github.langramming.database.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity(name = "TrackProvider")
 @Table(name = "track_provider_v1")
