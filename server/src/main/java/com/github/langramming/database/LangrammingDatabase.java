@@ -8,7 +8,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
 import javax.inject.Singleton;
 import java.util.function.BiFunction;
@@ -48,6 +47,7 @@ public class LangrammingDatabase {
                 transaction.commit();
             } catch (Exception ex) {
                 transaction.rollback();
+                ex.printStackTrace();
                 throw ex;
             }
         }

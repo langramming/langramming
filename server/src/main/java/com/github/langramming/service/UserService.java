@@ -35,17 +35,19 @@ public class UserService {
     }
 
     public Optional<User> getUserByTelegramId(long telegramId) {
-        List<TelegramUserEntity> userEntity = database.runInTransaction(((session, transaction) -> {
+        Optional<TelegramUserEntity> userEntityOpt = database.runInTransaction(((session, transaction) -> {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<TelegramUserEntity> q = cb.createQuery(TelegramUserEntity.class);
             Root<TelegramUserEntity> root = q.from(TelegramUserEntity.class);
 
             return session.createQuery(
-                    q.where(cb.equal(root.get("telegramId"), cb.literal(telegramId)))
-            ).getResultList();
+                    q.select(root).where(
+                            cb.equal(root.get("telegramId"), cb.literal(telegramId))
+                    )
+            ).getResultList().stream().findFirst();
         }));
 
-        return userEntity.stream().findFirst().map(this::toUser);
+        return userEntityOpt.map(this::toUser);
     }
 
     public User createUser(long telegramId, String name) {

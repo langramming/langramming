@@ -2,8 +2,10 @@ package com.github.langramming.rest;
 
 import com.github.langramming.httpserver.UserContextFilter;
 import com.github.langramming.model.User;
+import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
 import com.github.langramming.util.EnvironmentVariables;
+import com.github.langramming.util.ResponseHelper;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -34,11 +36,14 @@ public class AuthenticationResource {
     @Inject
     private UserService userService;
 
+    @Inject
+    private ResponseHelper responseHelper;
+
     @GET
     @Path("/login")
     public Response login(@Context org.glassfish.grizzly.http.server.Request request, @Context UriInfo uriInfo) {
         if (!verifyTelegramLogin(uriInfo)) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Bad request").build();
+            return responseHelper.badRequest();
         }
 
         long telegramId;
@@ -47,14 +52,13 @@ public class AuthenticationResource {
             telegramId = Long.parseLong(uriInfo.getQueryParameters().getFirst("id"));
             name = uriInfo.getQueryParameters().getFirst("first_name");
         } catch (NumberFormatException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Bad request").build();
+            return responseHelper.badRequest();
         }
 
         if (!TEMPORARY_allowedTelegramUsers.contains(telegramId)) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Unauthorized").build();
+            return responseHelper.forbidden();
         }
 
-        System.out.println("Logged in successfully!");
         Optional<User> userOpt = userService.getUserByTelegramId(telegramId);
 
         userOpt.ifPresent(user -> {
@@ -67,9 +71,7 @@ public class AuthenticationResource {
 
         UserContextFilter.setLoggedInUser(request, user);
 
-        return Response.temporaryRedirect(
-                UriBuilder.fromPath("/").build()
-        ).build();
+        return responseHelper.redirect("/");
     }
 
     private boolean verifyTelegramLogin(UriInfo uriInfo) {
