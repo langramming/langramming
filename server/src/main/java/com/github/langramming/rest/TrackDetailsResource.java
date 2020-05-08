@@ -2,23 +2,23 @@ package com.github.langramming.rest;
 
 import com.github.langramming.model.MusicProviderType;
 import com.github.langramming.model.TrackDetails;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 
-@Path("/track/details")
+@RestController
+@RequestMapping("/api/track/details")
 public class TrackDetailsResource {
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public TrackDetails getTrackDetails(
-            @QueryParam("provider") @NotNull MusicProviderType provider,
-            @QueryParam("id") @NotNull String id
+            @RequestParam("provider") @NotNull MusicProviderType provider,
+            @RequestParam("id") @NotNull String id
     ) {
         TrackDetails.Artist artist = new TrackDetails.Artist("artist id", "artist name");
         TrackDetails.Album album = new TrackDetails.Album("album id", "album name", Collections.singletonList(artist));

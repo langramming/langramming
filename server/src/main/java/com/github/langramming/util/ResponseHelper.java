@@ -2,11 +2,12 @@ package com.github.langramming.util;
 
 import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 
 @Singleton
 public class ResponseHelper {
@@ -18,37 +19,33 @@ public class ResponseHelper {
         return userProvider.get().isPresent();
     }
 
-    public Response ok(Object entity) {
-        return Response.ok(entity).build();
+    public ResponseEntity<ErrorDTO> badRequest() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorDTO.of("Bad request"));
     }
 
-    public Response badRequest() {
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity(ErrorDTO.of("Bad request"))
+    public ResponseEntity<ErrorDTO> unauthorized() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorDTO.of("Unauthorized"));
+    }
+
+    public ResponseEntity<ErrorDTO> forbidden() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ErrorDTO.of("Forbidden"));
+    }
+
+    public ResponseEntity<ErrorDTO> notFound() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorDTO.of("Not found"));
+    }
+
+    public <T> ResponseEntity<T> redirect(String path) {
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
+                .location(URI.create(path))
                 .build();
     }
 
-    public Response unauthorized() {
-        return Response.status(Response.Status.UNAUTHORIZED)
-                .entity(ErrorDTO.of("Unauthorized"))
-                .build();
-    }
-
-    public Response forbidden() {
-        return Response.status(Response.Status.FORBIDDEN)
-                .entity(ErrorDTO.of("Forbidden"))
-                .build();
-    }
-
-    public Response notFound() {
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity(ErrorDTO.of("Not found"))
-                .build();
-    }
-
-    public Response redirect(String path) {
-        return Response.temporaryRedirect(
-                UriBuilder.fromPath(path).build()
-        ).build();
+    public <T> ResponseEntity<T> ok(T entity) {
+        return ResponseEntity.ok(entity);
     }
 }

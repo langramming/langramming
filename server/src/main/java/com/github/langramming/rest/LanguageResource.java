@@ -6,36 +6,36 @@ import com.github.langramming.rest.response.LanguageDTO;
 import com.github.langramming.rest.response.LanguagesDTO;
 import com.github.langramming.service.LanguageService;
 import com.github.langramming.util.ResponseHelper;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.apache.http.util.TextUtils.isBlank;
 
-@Singleton
-@Path("/language")
+@RestController
+@RequestMapping("/api/language")
 public class LanguageResource {
 
-    @Inject
-    private LanguageService languageService;
+    private final LanguageService languageService;
+    private final ResponseHelper responseHelper;
 
     @Inject
-    private ResponseHelper responseHelper;
+    public LanguageResource(LanguageService languageService, ResponseHelper responseHelper) {
+        this.languageService = languageService;
+        this.responseHelper = responseHelper;
+    }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getLanguages() {
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getLanguages() {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }
@@ -49,13 +49,11 @@ public class LanguageResource {
                 .languages(languageList)
                 .build();
 
-        return Response.ok(languagesDTO).build();
+        return responseHelper.ok(languagesDTO);
     }
 
-    @GET
-    @Path("/{code}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getLanguage(@PathParam("code") String code) {
+    @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getLanguage(@PathVariable("code") String code) {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }
@@ -64,16 +62,17 @@ public class LanguageResource {
             return responseHelper.badRequest();
         }
 
-        return languageService.getLanguageByCode(code)
-                .map(this::toDTO)
-                .map(responseHelper::ok)
-                .orElseGet(responseHelper::notFound);
+        Optional<Language> languageOpt = languageService.getLanguageByCode(code);
+
+        if (languageOpt.isPresent()) {
+            return responseHelper.ok(toDTO(languageOpt.get()));
+        }
+
+        return responseHelper.notFound();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createLanguage(LanguageRequest languageRequest) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createLanguage(LanguageRequest languageRequest) {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }

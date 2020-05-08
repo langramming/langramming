@@ -9,6 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class TelegramListener implements UpdatesListener {
+
     private final TelegramBot bot;
 
     @Override

@@ -48,7 +48,7 @@
                             </descriptors>
                             <archive>
                                 <manifest>
-                                    <mainClass>com.github.langramming.LangrammingMain</mainClass>
+                                    <mainClass>com.github.langramming.LangrammingApplication</mainClass>
                                     <addClasspath>true</addClasspath>
                                     <classpathPrefix>lib</classpathPrefix>
                                 </manifest>

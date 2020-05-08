@@ -6,16 +6,15 @@ import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
 import com.github.langramming.util.EnvironmentVariables;
 import com.github.langramming.util.ResponseHelper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
+import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,31 +25,34 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Path("/auth")
+@RestController
+@RequestMapping("/api/auth")
 public class AuthenticationResource {
 
     private static Set<Long> TEMPORARY_allowedTelegramUsers = new HashSet<>(
             Arrays.asList(112972102L)
     );
 
-    @Inject
-    private UserService userService;
+    private final UserService userService;
+    private final ResponseHelper responseHelper;
 
     @Inject
-    private ResponseHelper responseHelper;
+    public AuthenticationResource(UserService userService, ResponseHelper responseHelper) {
+        this.userService = userService;
+        this.responseHelper = responseHelper;
+    }
 
-    @GET
-    @Path("/login")
-    public Response login(@Context org.glassfish.grizzly.http.server.Request request, @Context UriInfo uriInfo) {
-        if (!verifyTelegramLogin(uriInfo)) {
+    @GetMapping("/login")
+    public ResponseEntity<ErrorDTO> login(HttpServletRequest httpServletRequest) {
+        if (!verifyTelegramLogin(httpServletRequest.getParameterMap())) {
             return responseHelper.badRequest();
         }
 
         long telegramId;
         String name;
         try {
-            telegramId = Long.parseLong(uriInfo.getQueryParameters().getFirst("id"));
-            name = uriInfo.getQueryParameters().getFirst("first_name");
+            telegramId = Long.parseLong(httpServletRequest.getParameter("id"));
+            name = httpServletRequest.getParameter("first_name");
         } catch (NumberFormatException ex) {
             return responseHelper.badRequest();
         }
@@ -69,12 +71,12 @@ public class AuthenticationResource {
         User user = userOpt.orElseGet(() ->
             userService.createUser(telegramId, name));
 
-        UserContextFilter.setLoggedInUser(request, user);
+        UserContextFilter.setLoggedInUser(httpServletRequest.getSession(), user);
 
         return responseHelper.redirect("/");
     }
 
-    private boolean verifyTelegramLogin(UriInfo uriInfo) {
+    private boolean verifyTelegramLogin(Map<String, String[]> parameterMap) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] secret = digest.digest(EnvironmentVariables.TELEGRAM_API_TOKEN.getBytes());
@@ -82,13 +84,13 @@ public class AuthenticationResource {
             Mac hmacSha256 = Mac.getInstance("HmacSHA256");
             hmacSha256.init(new SecretKeySpec(secret, "HmacSHA256"));
 
-            Map<String, String> queryParams = uriInfo.getQueryParameters()
+            Map<String, String> queryParams = parameterMap
                     .entrySet()
                     .stream()
-                    .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
+                    .filter(entry -> entry.getValue() != null && entry.getValue().length > 0)
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
-                            entry -> entry.getValue().get(0)
+                            entry -> entry.getValue()[0]
                     ));
 
             String hash = queryParams.remove("hash");

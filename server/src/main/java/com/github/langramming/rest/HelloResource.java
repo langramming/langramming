@@ -1,18 +1,18 @@
 package com.github.langramming.rest;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Example resource: this is exposed at "/api/hello"
  */
-@Path("/hello")
+@RestController
+@RequestMapping("/api/hello")
 public class HelloResource {
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public String sayHelloWorld() {
         // go to localhost:8080/hello to see this!
         return "Hello world!";
