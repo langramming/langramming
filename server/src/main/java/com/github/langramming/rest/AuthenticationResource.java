@@ -1,10 +1,10 @@
 package com.github.langramming.rest;
 
+import com.github.langramming.configuration.LangrammingTelegramConfiguration;
 import com.github.langramming.httpserver.UserContextFilter;
 import com.github.langramming.model.User;
 import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
-import com.github.langramming.util.EnvironmentVariables;
 import com.github.langramming.util.ResponseHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +35,16 @@ public class AuthenticationResource {
 
     private final UserService userService;
     private final ResponseHelper responseHelper;
+    private final LangrammingTelegramConfiguration telegramConfiguration;
 
     @Inject
-    public AuthenticationResource(UserService userService, ResponseHelper responseHelper) {
+    public AuthenticationResource(
+            UserService userService,
+            ResponseHelper responseHelper,
+            LangrammingTelegramConfiguration telegramConfiguration) {
         this.userService = userService;
         this.responseHelper = responseHelper;
+        this.telegramConfiguration = telegramConfiguration;
     }
 
     @GetMapping("/login")
@@ -79,7 +84,7 @@ public class AuthenticationResource {
     private boolean verifyTelegramLogin(Map<String, String[]> parameterMap) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] secret = digest.digest(EnvironmentVariables.TELEGRAM_API_TOKEN.getBytes());
+            byte[] secret = digest.digest(telegramConfiguration.getToken().getBytes());
 
             Mac hmacSha256 = Mac.getInstance("HmacSHA256");
             hmacSha256.init(new SecretKeySpec(secret, "HmacSHA256"));

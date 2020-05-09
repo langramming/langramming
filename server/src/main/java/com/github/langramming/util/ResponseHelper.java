@@ -3,6 +3,7 @@ package com.github.langramming.util;
 import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import javax.inject.Inject;
@@ -47,5 +48,11 @@ public class ResponseHelper {
 
     public <T> ResponseEntity<T> ok(T entity) {
         return ResponseEntity.ok(entity);
+    }
+
+    public <T> ResponseEntity<T> ok(T entity, MediaType mediaType) {
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .body(entity);
     }
 }

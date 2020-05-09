@@ -4,77 +4,53 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.langramming.model.User;
 import com.github.langramming.service.UserService;
-import com.github.langramming.util.EnvironmentVariables;
-import com.github.langramming.util.StreamUtil;
-import org.springframework.http.HttpStatus;
+import com.github.langramming.util.ResponseHelper;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Singleton
-public class FrontendResource extends HttpServlet {
+@Controller
+public class FrontendResource {
 
     private final FrontendService frontendService;
+    private final ResponseHelper responseHelper;
     private final UserService.UserProvider userProvider;
     private final ObjectMapper objectMapper;
 
     @Inject
     public FrontendResource(
             FrontendService frontendService,
-            UserService.UserProvider userProvider
-    ) {
+            ResponseHelper responseHelper,
+            UserService.UserProvider userProvider) {
         this.frontendService = frontendService;
+        this.responseHelper = responseHelper;
         this.userProvider = userProvider;
+
         this.objectMapper = new ObjectMapper();
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String asset = req.getRequestURI();
-        if (EnvironmentVariables.FRONTEND_PORT.isPresent()) {
-            frontendService.getAssetFromFrontendServer(
-                    asset,
-                    connection -> {
-                        resp.setStatus(connection.getResponseCode());
-                        resp.setContentType(connection.getContentType());
-                        copyAssetToResponse(asset, connection.getInputStream(), resp);
-                    },
-                    () -> {
-                        resp.setStatus(HttpStatus.NOT_FOUND.value());
-                        resp.setContentType(MediaType.TEXT_PLAIN_VALUE);
-                        StreamUtil.copy(new ByteArrayInputStream("Page not found!".getBytes()), resp.getOutputStream());
-                    });
-        }
+    @GetMapping("/")
+    public String getIndex() {
+        return "forward:/assets/index.html";
     }
 
-    private void copyAssetToResponse(String asset, InputStream inputStream, HttpServletResponse response) throws IOException {
-        boolean isHtml = asset.endsWith(".html") || asset.endsWith("/") || !asset.contains("/");
-
-        if (!isHtml) {
-            StreamUtil.copy(inputStream, response.getOutputStream());
-            return;
+    @GetMapping("/assets/{filename}")
+    public ResponseEntity<?> getAsset(@PathVariable("filename") String asset) throws IOException {
+        ResponseEntity<?> responseEntity = frontendService.getFrontendAsset(asset);
+        if (asset.equals("index.html") && responseEntity.getBody() instanceof String) {
+            String template = (String) responseEntity.getBody();
+            String content = replaceVariables(template);
+            responseEntity = responseHelper.ok(content, MediaType.TEXT_HTML);
         }
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(2048);
-        StreamUtil.copy(inputStream, baos);
-
-        String html = replaceVariables(baos.toString());
-
-        StreamUtil.copy(
-                new ByteArrayInputStream(html.getBytes()),
-                response.getOutputStream()
-        );
+        return responseEntity;
     }
 
     private String replaceVariables(String template) throws JsonProcessingException {

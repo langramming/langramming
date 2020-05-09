@@ -2,6 +2,7 @@
   <configuration default="false" name="Run web" type="js.build_tools.npm">
     <package-json value="$PROJECT_DIR$/web/package.json" />
     <command value="start" />
+    <arguments value="--public-url /assets" />
     <node-interpreter value="project" />
     <envs />
     <method v="2" />

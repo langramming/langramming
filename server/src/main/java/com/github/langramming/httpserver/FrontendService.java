@@ -1,81 +1,95 @@
 package com.github.langramming.httpserver;
 
-import com.github.langramming.util.EnvironmentVariables;
+import com.github.langramming.configuration.LangrammingFrontendConfiguration;
+import com.github.langramming.util.StreamUtil;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
+import java.net.URLConnection;
 
 @Singleton
 public class FrontendService {
 
-    private Optional<Integer> frontendPort;
+    private final LangrammingFrontendConfiguration frontendConfiguration;
 
     @Inject
-    public FrontendService() {
-        Optional<String> frontendPortString = EnvironmentVariables.FRONTEND_PORT;
-        this.frontendPort = frontendPortString.map(Integer::parseInt);
+    public FrontendService(LangrammingFrontendConfiguration frontendConfiguration) {
+        this.frontendConfiguration = frontendConfiguration;
     }
 
-    public void getAssetFromResources(String asset, IOConsumer<InputStream> ifExists, IORunnable ifNotExists) throws IOException {
-        String assetPath = "/assets/" + asset;
-        if (assetPath.contains("..") || assetPath.contains(".")) {
-            ifNotExists.run();
-            return;
+    public ResponseEntity<?> getFrontendAsset(String asset) throws IOException {
+        if (frontendConfiguration.getPort().isPresent()) {
+            return fromFrontendServer(asset);
         }
+        return fromClasspath(asset);
+    }
+
+    private ResponseEntity<?> fromClasspath(String asset) throws IOException {
+        String assetPath = "/assets/" + asset;
+        if (assetPath.contains("..")) {
+            return ResponseEntity.notFound().build();
+        }
+
         try (InputStream inputStream = getClass().getResourceAsStream(assetPath)) {
             if (inputStream != null) {
-                ifExists.accept(inputStream);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
+                StreamUtil.copy(inputStream, baos);
+
+                String contentType = URLConnection.guessContentTypeFromName(asset);
+                MediaType mediaType = MediaType.parseMediaType(contentType);
+
+                return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .body(baos.toString());
             } else {
-                ifNotExists.run();
+                return ResponseEntity.notFound().build();
             }
         }
     }
 
-    public void getAssetFromFrontendServer(String asset, IOConsumer<HttpURLConnection> ifExists, IORunnable ifNotExists) throws IOException {
+    private ResponseEntity<?> fromFrontendServer(String asset) throws IOException {
         URL resourceUrl = getFrontendServerUrl(asset);
         if (resourceUrl == null) {
-            ifNotExists.run();
-            return;
+            return this.fromClasspath(asset);
         }
 
         HttpURLConnection connection = (HttpURLConnection) resourceUrl.openConnection();
         int statusCode = connection.getResponseCode();
-        if (statusCode == 404 && !"/index.html".equals(asset)) {
-            resourceUrl = getFrontendServerUrl(asset);
-            if (resourceUrl != null) {
-                connection = (HttpURLConnection) resourceUrl.openConnection();
-            }
+        if (statusCode == 404) {
+            return ResponseEntity.notFound().build();
         }
 
-        ifExists.accept(connection);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
+        StreamUtil.copy(connection.getInputStream(), baos);
+
+        String contentType = connection.getContentType();
+        MediaType mediaType = MediaType.parseMediaType(contentType);
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .body(baos.toString());
     }
 
     private URL getFrontendServerUrl(String path) throws MalformedURLException {
-        if (frontendPort.isEmpty()) {
+        if (frontendConfiguration.getPort().isEmpty()) {
             return null;
         }
 
         return new URL(
                 String.format(
-                        "http://localhost:%d/%s",
-                        frontendPort.get(),
+                        "http://localhost:%d/assets/%s",
+                        frontendConfiguration.getPort().get(),
                         path
                 )
         );
-    }
-
-    public interface IOConsumer<T> {
-        void accept(T t) throws IOException;
-    }
-
-    public interface IORunnable {
-        void run() throws IOException;
     }
 
 }

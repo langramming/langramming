@@ -1,0 +1,10 @@
+langramming:
+    server:
+        url: "this should be set to the website url"
+    frontend:
+        port: 1234
+    telegram:
+        token: "set this to the telegram bot token"
+    spotify:
+        client-id: "set this to the spotify client id"
+        client-secret: "set this to the spotify client secret"
