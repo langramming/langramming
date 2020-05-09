@@ -1,6 +1,7 @@
 access.log
 application.yml
 langrammingdb.h2.mv.db
+langrammingdb.h2.trace.db
 
 ### Java ###
 # Compiled class file

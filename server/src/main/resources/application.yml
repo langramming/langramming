@@ -1,13 +1,36 @@
 # this file contains all the langramming config needed to start the server
 # set each property to what you want it to be
 # you should copy it to the root folder of the project and then fill all the values in
+
 langramming:
     server:
         url: "this should be set to the website url"
-    frontend:
-        port: 1234
     telegram:
         token: "set this to the telegram bot token"
     spotify:
         client-id: "set this to the spotify client id"
         client-secret: "set this to the spotify client secret"
+
+spring:
+    datasource:
+        driver-class-name: "org.h2.Driver"
+        url: "jdbc:h2:./langrammingdb.h2"
+    jpa:
+        hibernate:
+            # creates the DB
+            ddl-auto: create
+
+---
+# This config is only set during local development
+spring:
+    profiles: local
+    datasource:
+        username: "langramming"
+        password: "languages r cool"
+    jpa:
+        hibernate:
+            # creates the DB and applies any changes to the schema automatically
+            ddl-auto: update
+langramming:
+    frontend:
+        port: 1234
