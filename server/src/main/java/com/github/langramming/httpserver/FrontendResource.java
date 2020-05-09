@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -43,12 +45,28 @@ public class FrontendResource {
     }
 
     @GetMapping("/assets/{filename}")
-    public ResponseEntity<?> getAsset(@PathVariable("filename") String asset) throws IOException {
-        ResponseEntity<?> responseEntity = frontendService.getFrontendAsset(asset);
+    public ResponseEntity<?> getAsset(@PathVariable("filename") String asset, HttpServletResponse response) throws IOException {
+        if (frontendService.isFrontendServerEnabled()) {
+            Optional<ResponseEntity<?>> responseEntityOpt = frontendService.fromFrontendServer(asset, response);
+            if (responseEntityOpt.isPresent()) {
+                return filterResponseEntity(asset, responseEntityOpt.get());
+            }
+            return null;
+        } else {
+            ResponseEntity<?> responseEntity = frontendService.fromClasspath(asset);
+            return filterResponseEntity(asset, responseEntity);
+        }
+    }
+
+    private ResponseEntity<?> filterResponseEntity(String asset, ResponseEntity<?> responseEntity) throws JsonProcessingException {
         if (asset.equals("index.html") && responseEntity.getBody() instanceof String) {
             String template = (String) responseEntity.getBody();
             String content = replaceVariables(template);
-            responseEntity = responseHelper.ok(content, MediaType.TEXT_HTML);
+            MediaType mediaType = responseEntity.getHeaders().getContentType();
+            if (mediaType == null) {
+                mediaType = new MediaType("text", "html", StandardCharsets.UTF_8);
+            }
+            responseEntity = responseHelper.ok(content, mediaType);
         }
         return responseEntity;
     }
