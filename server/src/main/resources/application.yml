@@ -1,5 +1,6 @@
 # this file contains all the langramming config needed to start the server
 # set each property to what you want it to be
+# you should copy it to the root folder of the project and then fill all the values in
 langramming:
     server:
         url: "this should be set to the website url"
