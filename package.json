@@ -2,6 +2,8 @@
   "name": "langramming",
   "private": true,
   "license": "MIT",
+  "description": "The langramming project",
+  "repository": "https://github.com/langramming/langramming",
   "scripts": {
     "build": "mvn clean package",
     "start": "mvn clean spring-boot:run -Dspring-boot.run.profiles=local",

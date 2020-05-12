@@ -1,11 +1,8 @@
 {
-  "name": "langramming-website",
-  "version": "0.0.1",
-  "description": "The website for the langramming project",
-  "main": "dist/index.html",
-  "repository": "https://github.com/langramming/langramming",
-  "license": "MIT",
   "private": true,
+  "name": "web",
+  "version": "0.0.1",
+  "main": "dist/index.html",
   "scripts": {
     "build": "rm -rf build/ dist/ && parcel build public/index.html",
     "start": "parcel serve public/index.html"
