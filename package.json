@@ -8,5 +8,6 @@
     "server": "java -jar webapp/target/langramming-*.jar --spring.profiles.active=local",
     "server:debug": "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=:5005 -jar webapp/target/langramming-*.jar --spring.profiles.active=local",
     "web": "cd web && yarn start"
-  }
+  },
+  "workspaces": ["web"]
 }
