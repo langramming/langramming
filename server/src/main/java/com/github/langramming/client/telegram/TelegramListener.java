@@ -4,9 +4,11 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 public class TelegramListener implements UpdatesListener {
 
@@ -14,7 +16,7 @@ public class TelegramListener implements UpdatesListener {
 
     @Override
     public int process(List<Update> updateList) {
-        System.out.println("[Telegram] Received updates " + updateList);
+        log.debug("Received updates " + updateList);
         return CONFIRMED_UPDATES_ALL;
     }
 }
