@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {useAppContext} from "../../utils/context/use-app-context";
+import {useAppContext} from "../../utils/context/useAppContext";
 
 export const AuthenticatedHomepage = () => {
     const appContext = useAppContext();

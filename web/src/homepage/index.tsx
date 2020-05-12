@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useAppContext } from "../utils/context/use-app-context";
+import { useAppContext } from "../utils/context/useAppContext";
 
 import { AuthenticatedHomepage } from "./authenticated";
 import { UnauthenticatedHomepage } from "./unauthenticated";

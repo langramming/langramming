@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TelegramLoginButton } from "../../utils/ui/telegram-login-button";
+import { TelegramLoginButton } from "../../utils/ui/TelegramLoginButton";
 
 export const UnauthenticatedHomepage = () => (
     <main>
