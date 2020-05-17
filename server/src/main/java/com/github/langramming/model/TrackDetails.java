@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class TrackDetails {
-    private final MusicProviderType providerType;
+    private final TrackProviderType providerType;
     private final String id;
     private final String name;
     private final Album album;

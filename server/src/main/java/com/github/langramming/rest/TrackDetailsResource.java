@@ -1,6 +1,6 @@
 package com.github.langramming.rest;
 
-import com.github.langramming.model.MusicProviderType;
+import com.github.langramming.model.TrackProviderType;
 import com.github.langramming.model.TrackDetails;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class TrackDetailsResource {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public TrackDetails getTrackDetails(
-            @RequestParam("provider") @NotNull MusicProviderType provider,
+            @RequestParam("provider") @NotNull TrackProviderType provider,
             @RequestParam("id") @NotNull String id
     ) {
         TrackDetails.Artist artist = new TrackDetails.Artist("artist id", "artist name");
