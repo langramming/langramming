@@ -1,12 +1,15 @@
 package com.github.langramming.service;
 
+import com.github.langramming.model.TrackDetails;
 import com.github.langramming.model.TrackProvider;
 import com.github.langramming.model.TrackProviderType;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
 
 @Singleton
 public class TrackService {
@@ -19,6 +22,12 @@ public class TrackService {
 
         trackProviderList.forEach(provider ->
                 trackProviderEnumMap.put(provider.getType(), provider));
+    }
+
+    @Nonnull
+    public Optional<TrackDetails> getTrackDetails(@Nonnull TrackProviderType trackProviderType, @Nonnull String trackId) {
+        return Optional.ofNullable(trackProviderEnumMap.get(trackProviderType))
+                .flatMap(trackProvider -> trackProvider.getTrackDetails(trackId));
     }
 
 }
