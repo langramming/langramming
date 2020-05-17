@@ -7,20 +7,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity(name = "Artist")
-@Table(name = "artist_v1")
-public class ArtistEntity {
+@Entity(name = "TrackArtist")
+@Table(name = "track_artist_v1")
+public class TrackArtistEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    public Long id;
 
-    private String name;
+    public String name;
 
-    @ManyToOne
-    @JoinColumn(name = "provider_id")
-    private TrackProviderEntity provider;
+    public String provider;
 
-    private String providerArtistId;
+    public String providerArtistId;
 
 }

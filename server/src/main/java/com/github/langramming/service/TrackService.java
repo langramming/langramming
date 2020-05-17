@@ -26,6 +26,8 @@ public class TrackService {
 
     @Nonnull
     public Optional<TrackDetails> getTrackDetails(@Nonnull TrackProviderType trackProviderType, @Nonnull String trackId) {
+        // TODO: add database caching layer
+
         return Optional.ofNullable(trackProviderEnumMap.get(trackProviderType))
                 .flatMap(trackProvider -> trackProvider.getTrackDetails(trackId));
     }

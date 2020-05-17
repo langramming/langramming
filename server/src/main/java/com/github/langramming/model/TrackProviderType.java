@@ -13,17 +13,17 @@ public enum TrackProviderType {
     SPOTIFY("spotify");
 
     @JsonValue
-    private final String id;
+    private final String name;
 
-    TrackProviderType(String id) {
-        this.id = id;
+    TrackProviderType(String name) {
+        this.name = name;
     }
 
     private static final Map<String, TrackProviderType> musicProviderTypeCache = new HashMap<>();
 
     static {
         for (TrackProviderType trackProviderType : TrackProviderType.values()) {
-            musicProviderTypeCache.put(trackProviderType.getId().toLowerCase(), trackProviderType);
+            musicProviderTypeCache.put(trackProviderType.getName().toLowerCase(), trackProviderType);
         }
     }
 

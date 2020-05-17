@@ -13,14 +13,12 @@ public class TrackEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    public Long id;
 
-    private String name;
+    public String name;
 
-    @ManyToOne
-    @JoinColumn(name = "provider_id")
-    private TrackProviderEntity provider;
+    public String provider;
 
-    private String providerTrackId;
+    public String providerTrackId;
 
 }
