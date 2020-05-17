@@ -7,17 +7,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public interface TrackArtistRepository extends JpaRepository<TrackArtistEntity, Long> {
 
-    default Optional<TrackArtistEntity> getById(@Nonnull TrackProviderType trackProviderType, @Nonnull String artistId) {
+    default Optional<TrackArtistEntity> findById(@Nonnull TrackProviderType trackProviderType, @Nonnull String artistId) {
         TrackArtistEntity exampleEntity = new TrackArtistEntity();
         exampleEntity.provider = trackProviderType.getId();
         exampleEntity.providerArtistId = artistId;
 
         return findOne(Example.of(exampleEntity));
+    }
+
+    default Collection<TrackArtistEntity> findByIds(@Nonnull TrackProviderType trackProviderType, @Nonnull Collection<String> artistIds) {
+        return findAll().stream()
+                .filter(trackEntity -> trackProviderType.getId().equals(trackEntity.provider))
+                .filter(trackEntity -> artistIds.contains(trackEntity.providerArtistId))
+                .collect(Collectors.toSet());
     }
 
 }
