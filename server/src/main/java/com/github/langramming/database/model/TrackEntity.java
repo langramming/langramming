@@ -6,9 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity(name = "Track")
-@Table(name = "track_v1")
+@Table(name = "track_v1", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"provider", "providerTrackId"})
+})
 public class TrackEntity {
 
     @Id

@@ -6,9 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity(name = "TrackArtist")
-@Table(name = "track_artist_v1")
+@Table(name = "track_artist_v1", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"provider", "providerArtistId"})
+})
 public class TrackArtistEntity {
 
     @Id
