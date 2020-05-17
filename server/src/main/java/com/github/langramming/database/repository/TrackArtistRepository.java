@@ -14,7 +14,7 @@ public interface TrackArtistRepository extends JpaRepository<TrackArtistEntity, 
 
     default Optional<TrackArtistEntity> getById(@Nonnull TrackProviderType trackProviderType, @Nonnull String artistId) {
         TrackArtistEntity exampleEntity = new TrackArtistEntity();
-        exampleEntity.provider = trackProviderType.getName();
+        exampleEntity.provider = trackProviderType.getId();
         exampleEntity.providerArtistId = artistId;
 
         return findOne(Example.of(exampleEntity));

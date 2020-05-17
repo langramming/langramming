@@ -14,7 +14,7 @@ public interface TrackAlbumRepository extends JpaRepository<TrackAlbumEntity, Lo
 
     default Optional<TrackAlbumEntity> getById(@Nonnull TrackProviderType trackProviderType, @Nonnull String albumId) {
         TrackAlbumEntity exampleEntity = new TrackAlbumEntity();
-        exampleEntity.provider = trackProviderType.getName();
+        exampleEntity.provider = trackProviderType.getId();
         exampleEntity.providerAlbumId = albumId;
 
         return findOne(Example.of(exampleEntity));

@@ -14,7 +14,7 @@ public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
 
     default Optional<TrackEntity> getById(@Nonnull TrackProviderType trackProviderType, @Nonnull String trackId) {
         TrackEntity exampleEntity = new TrackEntity();
-        exampleEntity.provider = trackProviderType.getName();
+        exampleEntity.provider = trackProviderType.getId();
         exampleEntity.providerTrackId = trackId;
 
         return findOne(Example.of(exampleEntity));

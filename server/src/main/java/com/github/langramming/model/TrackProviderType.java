@@ -10,12 +10,14 @@ import java.util.Map;
 @Getter
 public enum TrackProviderType {
 
-    SPOTIFY("spotify");
+    SPOTIFY("spotify", "Spotify");
 
     @JsonValue
+    private final String id;
     private final String name;
 
-    TrackProviderType(String name) {
+    TrackProviderType(String id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -23,7 +25,7 @@ public enum TrackProviderType {
 
     static {
         for (TrackProviderType trackProviderType : TrackProviderType.values()) {
-            musicProviderTypeCache.put(trackProviderType.getName().toLowerCase(), trackProviderType);
+            musicProviderTypeCache.put(trackProviderType.getId().toLowerCase(), trackProviderType);
         }
     }
 
