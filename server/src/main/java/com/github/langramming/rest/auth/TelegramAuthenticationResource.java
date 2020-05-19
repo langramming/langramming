@@ -1,4 +1,4 @@
-package com.github.langramming.rest;
+package com.github.langramming.rest.auth;
 
 import com.github.langramming.configuration.LangrammingTelegramConfiguration;
 import com.github.langramming.httpserver.UserContextFilter;
@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/auth")
-public class AuthenticationResource {
+@RequestMapping("/api/auth/telegram")
+public class TelegramAuthenticationResource {
 
     private static Set<Long> TEMPORARY_allowedTelegramUsers = new HashSet<>(
             Arrays.asList(112972102L)
@@ -38,7 +38,7 @@ public class AuthenticationResource {
     private final LangrammingTelegramConfiguration telegramConfiguration;
 
     @Inject
-    public AuthenticationResource(
+    public TelegramAuthenticationResource(
             UserService userService,
             ResponseHelper responseHelper,
             LangrammingTelegramConfiguration telegramConfiguration) {

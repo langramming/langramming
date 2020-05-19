@@ -8,4 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LangrammingSpotifyConfiguration {
     private String clientId;
     private String clientSecret;
+    private String redirectUri;
 }
