@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 public interface TrackArtistRepository extends JpaRepository<TrackArtistEntity, Long> {
 
     default Optional<TrackArtistEntity> findById(@Nonnull TrackProviderType trackProviderType, @Nonnull String artistId) {
-        TrackArtistEntity exampleEntity = new TrackArtistEntity();
-        exampleEntity.provider = trackProviderType.getId();
-        exampleEntity.providerArtistId = artistId;
+        TrackArtistEntity exampleEntity = TrackArtistEntity.builder()
+                .provider(trackProviderType.getId())
+                .providerArtistId(artistId)
+                .build();
 
         return findOne(Example.of(exampleEntity));
     }

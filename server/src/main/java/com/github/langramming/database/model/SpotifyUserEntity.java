@@ -8,27 +8,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Track")
-@Table(name = "track_v1", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"provider", "providerTrackId"})
-})
-public class TrackEntity {
-
+@Entity(name = "SpotifyUser")
+@Table(name = "spotify_user_v1")
+public class SpotifyUserEntity {
     @Id
     @GeneratedValue
     public Long id;
 
-    public String name;
+    @OneToOne
+    @JoinColumn(name = "telegram_user_id", unique = true)
+    public TelegramUserEntity telegram_user;
 
-    public String provider;
+    public String token_type;
 
-    public String providerTrackId;
+    public String scope;
 
+    public String access_token;
+
+    public String refresh_token;
+
+    public Long expires_at;
 }

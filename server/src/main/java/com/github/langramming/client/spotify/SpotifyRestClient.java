@@ -29,7 +29,7 @@ public class SpotifyRestClient {
 
     private URI getRedirectUri(String serverUrl) {
         String baseUrl = serverUrl + (serverUrl.endsWith("/") ? "" : "/");
-        return SpotifyHttpManager.makeUri(baseUrl + "api/auth/spotify");
+        return SpotifyHttpManager.makeUri(baseUrl + "api/auth/spotify/redirect");
     }
 
 }

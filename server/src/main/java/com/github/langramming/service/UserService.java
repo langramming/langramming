@@ -14,8 +14,12 @@ import java.util.Optional;
 @Singleton
 public class UserService {
 
+    private final TelegramUserRepository userRepository;
+
     @Inject
-    private TelegramUserRepository userRepository;
+    public UserService(TelegramUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Optional<User> getUser(long id) {
         return userRepository.findById(id)
@@ -23,17 +27,19 @@ public class UserService {
     }
 
     public Optional<User> getUserByTelegramId(long telegramId) {
-        TelegramUserEntity exampleEntity = new TelegramUserEntity();
-        exampleEntity.telegramId = telegramId;
+        TelegramUserEntity exampleEntity = TelegramUserEntity.builder()
+                .telegramId(telegramId)
+                .build();;
 
         return userRepository.findOne(Example.of(exampleEntity))
                 .map(this::toUser);
     }
 
     public User createUser(long telegramId, String name) {
-        TelegramUserEntity newUserEntity = new TelegramUserEntity();
-        newUserEntity.telegramId = telegramId;
-        newUserEntity.name = name;
+        TelegramUserEntity newUserEntity = TelegramUserEntity.builder()
+                .telegramId(telegramId)
+                .name(name)
+                .build();
 
         return toUser(userRepository.save(newUserEntity));
     }

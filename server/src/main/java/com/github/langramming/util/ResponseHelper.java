@@ -13,8 +13,12 @@ import java.net.URI;
 @Singleton
 public class ResponseHelper {
 
+    private final UserService.UserProvider userProvider;
+
     @Inject
-    private UserService.UserProvider userProvider;
+    public ResponseHelper(UserService.UserProvider userProvider) {
+        this.userProvider = userProvider;
+    }
 
     public boolean isLoggedIn() {
         return userProvider.get().isPresent();
@@ -41,9 +45,17 @@ public class ResponseHelper {
     }
 
     public <T> ResponseEntity<T> redirect(String path) {
+        return redirect(URI.create(path));
+    }
+
+    public <T> ResponseEntity<T> redirect(URI uri) {
         return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
-                .location(URI.create(path))
+                .location(uri)
                 .build();
+    }
+
+    public <T> ResponseEntity<T> redirectToError(LangrammingClientError clientError) {
+        return redirect("/?error=" + clientError.getCode());
     }
 
     public <T> ResponseEntity<T> ok(T entity) {

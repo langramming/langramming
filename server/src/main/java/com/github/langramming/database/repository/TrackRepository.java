@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
 
     default Optional<TrackEntity> findById(@Nonnull TrackProviderType trackProviderType, @Nonnull String trackId) {
-        TrackEntity exampleEntity = new TrackEntity();
-        exampleEntity.provider = trackProviderType.getId();
-        exampleEntity.providerTrackId = trackId;
+        TrackEntity exampleEntity = TrackEntity.builder()
+                .provider(trackProviderType.getId())
+                .providerTrackId(trackId)
+                .build();
 
         return findOne(Example.of(exampleEntity));
     }

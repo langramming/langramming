@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @Singleton
 public class LanguageService {
 
+    private final LanguageRepository languageRepository;
+
     @Inject
-    private LanguageRepository languageRepository;
+    public LanguageService(LanguageRepository languageRepository) {
+        this.languageRepository = languageRepository;
+    }
 
     public List<Language> getLanguages() {
         return languageRepository.findAll()
@@ -25,17 +29,19 @@ public class LanguageService {
     }
 
     public Optional<Language> getLanguageByCode(String code) {
-        LanguageEntity exampleEntity = new LanguageEntity();
-        exampleEntity.code = code;
+        LanguageEntity exampleEntity = LanguageEntity.builder()
+                .code(code)
+                .build();
 
         return languageRepository.findOne(Example.of(exampleEntity))
                 .map(this::toLanguage);
     }
 
     public Language createLanguage(String code, String name) {
-        LanguageEntity newLanguageEntity = new LanguageEntity();
-        newLanguageEntity.code = code;
-        newLanguageEntity.name = name;
+        LanguageEntity newLanguageEntity = LanguageEntity.builder()
+                .code(code)
+                .name(name)
+                .build();
 
         return toLanguage(languageRepository.save(newLanguageEntity));
     }

@@ -1,5 +1,9 @@
 package com.github.langramming.database.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "TaggedTrackLanguage")
 @Table(name = "track_language_v1", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"track_id", "language_id", "tagged_by_id"})
