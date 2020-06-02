@@ -1,6 +1,6 @@
 package com.github.langramming.database.repository;
 
-import com.github.langramming.database.model.TrackAlbumEntity;
+import com.github.langramming.database.model.AlbumEntity;
 import com.github.langramming.model.TrackProviderType;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,10 +12,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public interface TrackAlbumRepository extends JpaRepository<TrackAlbumEntity, Long> {
+public interface AlbumRepository extends JpaRepository<AlbumEntity, Long> {
 
-    default Optional<TrackAlbumEntity> findById(@Nonnull TrackProviderType trackProviderType, @Nonnull String albumId) {
-        TrackAlbumEntity exampleEntity = TrackAlbumEntity.builder()
+    default Optional<AlbumEntity> findById(@Nonnull TrackProviderType trackProviderType, @Nonnull String albumId) {
+        AlbumEntity exampleEntity = AlbumEntity.builder()
                 .provider(trackProviderType.getId())
                 .providerAlbumId(albumId)
                 .build();
@@ -23,7 +23,7 @@ public interface TrackAlbumRepository extends JpaRepository<TrackAlbumEntity, Lo
         return findOne(Example.of(exampleEntity));
     }
 
-    default Collection<TrackAlbumEntity> findByIds(@Nonnull TrackProviderType trackProviderType, @Nonnull Collection<String> albumIds) {
+    default Collection<AlbumEntity> findByIds(@Nonnull TrackProviderType trackProviderType, @Nonnull Collection<String> albumIds) {
         return findAll().stream()
                 .filter(trackEntity -> trackProviderType.getId().equals(trackEntity.provider))
                 .filter(trackEntity -> albumIds.contains(trackEntity.providerAlbumId))

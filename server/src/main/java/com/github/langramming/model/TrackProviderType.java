@@ -1,6 +1,5 @@
 package com.github.langramming.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
@@ -12,7 +11,6 @@ public enum TrackProviderType {
 
     SPOTIFY("spotify", "Spotify");
 
-    @JsonValue
     private final String id;
     private final String name;
 
@@ -21,17 +19,17 @@ public enum TrackProviderType {
         this.name = name;
     }
 
-    private static final Map<String, TrackProviderType> musicProviderTypeCache = new HashMap<>();
+    @JsonValue
+    public String getId() {
+        return id;
+    }
+
+    private static final Map<String, TrackProviderType> trackProviderTypeCache = new HashMap<>();
 
     static {
         for (TrackProviderType trackProviderType : TrackProviderType.values()) {
-            musicProviderTypeCache.put(trackProviderType.getId().toLowerCase(), trackProviderType);
+            trackProviderTypeCache.put(trackProviderType.getId().toLowerCase(), trackProviderType);
         }
-    }
-
-    @JsonCreator
-    public static TrackProviderType fromString(String providerType) {
-        return providerType == null ? null : musicProviderTypeCache.get(providerType.toLowerCase());
     }
 
 }

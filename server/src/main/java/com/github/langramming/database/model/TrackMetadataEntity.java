@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,27 +18,29 @@ import javax.persistence.UniqueConstraint;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "TaggedTrackLanguage")
-@Table(name = "track_language_v1", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"track_id", "language_id", "tagged_by_id"})
+@Entity(name = "TrackMetadata")
+@Table(name = "track_metadata_v1", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "track_id")
 })
-public class TrackLanguageEntity {
+public class TrackMetadataEntity {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Long id;
+    public Long id;
 
     @ManyToOne
     @JoinColumn(name = "track_id")
-    private TrackEntity track;
+    public TrackEntity track;
 
-    @ManyToOne
-    @JoinColumn(name = "language_id")
-    private LanguageEntity language;
+    @Column(name = "metadata_type")
+    @Enumerated(EnumType.STRING)
+    public TrackMetadataType trackMetadataType;
 
-    @ManyToOne
-    @JoinColumn(name = "tagged_by_id")
-    private TelegramUserEntity tagged_by;
+    @Column(name = "value")
+    public Long value;
 
+    public enum TrackMetadataType {
+        ALBUM, ARTIST
+    }
 }

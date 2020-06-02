@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,20 +16,24 @@ import javax.persistence.UniqueConstraint;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "TrackAlbum")
-@Table(name = "track_album_v1", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"provider", "providerAlbumId"})
+@Entity(name = "Album")
+@Table(name = "album_v1", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"provider", "provider_album_id"})
 })
-public class TrackAlbumEntity {
+public class AlbumEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     public Long id;
 
+    @Column(name = "name")
     public String name;
 
+    @Column(name = "provider")
     public String provider;
 
+    @Column(name = "provider_album_id")
     public String providerAlbumId;
 
 }

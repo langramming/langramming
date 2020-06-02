@@ -20,12 +20,13 @@ public class LanguageEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     public Long id;
 
-    @Column(unique = true)
+    @Column(name = "code", unique = true)
     public String code;
 
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     public String name;
 
 }

@@ -50,7 +50,7 @@ public class SpotifyAuthenticationResource {
             return responseHelper.unauthorized();
         }
 
-        AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyRestClient.getSpotifyApi()
+        AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyRestClient.getUnauthenticatedSpotifyApi()
                 .authorizationCodeUri()
                 .scope(SPOTIFY_SCOPES)
                 .show_dialog(false)
@@ -80,7 +80,7 @@ public class SpotifyAuthenticationResource {
         }
 
         String code = codeOpt.get();
-        AuthorizationCodeRequest authorizationCodeRequest = spotifyRestClient.getSpotifyApi()
+        AuthorizationCodeRequest authorizationCodeRequest = spotifyRestClient.getUnauthenticatedSpotifyApi()
                 .authorizationCode(code)
                 .build();
 

@@ -13,7 +13,7 @@ public class TrackDTO {
     public TrackProviderType provider;
     public String id;
     public String name;
-    public TrackAlbumDTO album;
+    public List<TrackAlbumDTO> album;
     public List<TrackArtistDTO> artists;
 
 }

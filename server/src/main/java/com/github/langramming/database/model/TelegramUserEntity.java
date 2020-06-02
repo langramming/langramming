@@ -20,9 +20,10 @@ public class TelegramUserEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     public Long id;
 
-    @Column(unique = true)
+    @Column(name = "telegram_id", unique = true)
     public Long telegramId;
 
     public String name;

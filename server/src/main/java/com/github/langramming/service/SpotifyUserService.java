@@ -3,6 +3,7 @@ package com.github.langramming.service;
 import com.github.langramming.database.model.SpotifyUserEntity;
 import com.github.langramming.database.model.TelegramUserEntity;
 import com.github.langramming.database.repository.SpotifyUserRepository;
+import com.github.langramming.model.SpotifyUser;
 import com.github.langramming.model.User;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import org.springframework.data.domain.Example;
@@ -27,20 +28,20 @@ public class SpotifyUserService {
         this.spotifyUserRepository = spotifyUserRepository;
     }
 
-    public void createOrUpdateUser(AuthorizationCodeCredentials credentials) {
+    public Optional<SpotifyUser> getCurrentSpotifyUser() {
+        Optional<User> userOpt = userProvider.get();
+        return userOpt
+                .flatMap(user -> findCurrentSpotifyUser(user.getId()))
+                .map(this::toSpotifyUser);
+    }
+
+    public SpotifyUser createOrUpdateUser(AuthorizationCodeCredentials credentials) {
         Optional<User> userOpt = userProvider.get();
         if (userOpt.isEmpty()) {
-            return;
+            throw new IllegalStateException("no logged in user");
         }
 
-        Optional<SpotifyUserEntity> existingUserEntity = spotifyUserRepository.findOne(
-                Example.of(
-                        SpotifyUserEntity.builder()
-                                .telegram_user(TelegramUserEntity.builder()
-                                        .id(userOpt.get().getId())
-                                        .build())
-                                .build())
-        );
+        Optional<SpotifyUserEntity> existingUserEntity = findCurrentSpotifyUser(userOpt.get().getId());
 
         SpotifyUserEntity spotifyUserEntity = SpotifyUserEntity.builder()
                 .id(existingUserEntity.map(ent -> ent.id).orElse(null))
@@ -56,6 +57,27 @@ public class SpotifyUserService {
                         .build())
                 .build();
 
-        spotifyUserRepository.save(spotifyUserEntity);
+        return toSpotifyUser(spotifyUserRepository.save(spotifyUserEntity));
+    }
+
+    private Optional<SpotifyUserEntity> findCurrentSpotifyUser(long userId) {
+        return spotifyUserRepository.findOne(
+                Example.of(
+                        SpotifyUserEntity.builder()
+                                .telegram_user(TelegramUserEntity.builder()
+                                        .id(userId)
+                                        .build())
+                                .build())
+        );
+    }
+
+    private SpotifyUser toSpotifyUser(SpotifyUserEntity spotifyUserEntity) {
+        return SpotifyUser.builder()
+                .id(spotifyUserEntity.id)
+                .userId(spotifyUserEntity.telegram_user.id)
+                .accessToken(spotifyUserEntity.access_token)
+                .refreshToken(spotifyUserEntity.refresh_token)
+                .expiresAt(spotifyUserEntity.expires_at)
+                .build();
     }
 }
