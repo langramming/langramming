@@ -1,6 +1,7 @@
 import * as React from "react";
 
-import { useAppContext } from "../../utils/context/useAppContext";
+import { useAppContext } from "../../../common/context/useAppContext";
+import { SpotifyLoginButton } from "../../../common/ui/SpotifyLoginButton";
 
 export const AuthenticatedHomepage = () => {
   const appContext = useAppContext();
@@ -9,6 +10,7 @@ export const AuthenticatedHomepage = () => {
     <main>
       <p>Welcome to Langramming!</p>
       <p>You're logged in as {appContext.user!.name}!</p>
+      {!appContext.user?.isSpotifyAuthed && <SpotifyLoginButton />}
     </main>
   );
 };

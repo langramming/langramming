@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.langramming.model.User;
 import com.github.langramming.service.UserService;
+import com.github.langramming.util.JsonUtil;
 import com.github.langramming.util.ResponseHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class FrontendResource {
         this.frontendModelProvider = frontendModelProvider;
         this.responseHelper = responseHelper;
 
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = JsonUtil.createObjectMapper();
     }
 
     @GetMapping("/")

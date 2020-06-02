@@ -2,6 +2,7 @@ interface LangrammingData {
   user: {
     id: number;
     name: string;
+    isSpotifyAuthed: boolean;
   } | null;
 }
 

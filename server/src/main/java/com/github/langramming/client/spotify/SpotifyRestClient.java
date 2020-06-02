@@ -49,13 +49,21 @@ public class SpotifyRestClient {
 
         if (spotifyUser.getExpiresAt() <= Instant.now().getEpochSecond()) {
             try {
-                AuthorizationCodeCredentials authorizationCodeCredentials = spotifyApiBuilder().build()
+                AuthorizationCodeCredentials credentials = spotifyApiBuilder().build()
                         .authorizationCodeRefresh()
                         .refresh_token(spotifyUser.getRefreshToken())
                         .build()
                         .execute();
 
-                spotifyUser = spotifyUserService.createOrUpdateUser(authorizationCodeCredentials);
+                spotifyUser = spotifyUserService.createOrUpdateUser(
+                        new AuthorizationCodeCredentials.Builder()
+                                .setScope(credentials.getScope())
+                                .setTokenType(credentials.getTokenType())
+                                .setExpiresIn(credentials.getExpiresIn())
+                                .setAccessToken(credentials.getAccessToken())
+                                .setRefreshToken(spotifyUser.getRefreshToken())
+                                .build()
+                );
             } catch (SpotifyWebApiException | IOException ex) {
                 ex.printStackTrace();
                 throw new IllegalStateException("Failed to refresh Spotify token", ex);

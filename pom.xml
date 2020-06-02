@@ -56,6 +56,13 @@
                 <version>0.9.12</version>
             </dependency>
 
+            <!-- Jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jdk8</artifactId>
+                <version>2.9.6</version>
+            </dependency>
+
             <!-- Dependency Injection -->
             <dependency>
                 <groupId>javax.inject</groupId>

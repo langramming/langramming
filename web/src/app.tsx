@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Homepage } from "./homepage";
+import { Homepage } from "./pages/homepage";
 
 export const App = () => (
   <>
