@@ -6,6 +6,7 @@ import com.github.langramming.rest.response.TrackAlbumDTO;
 import com.github.langramming.rest.response.TrackArtistDTO;
 import com.github.langramming.rest.response.TrackDTO;
 import com.github.langramming.service.TrackService;
+import com.github.langramming.util.ResponseHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +24,23 @@ import java.util.stream.Collectors;
 public class TrackDetailsResource {
 
     private final TrackService trackService;
+    private final ResponseHelper responseHelper;
 
     @Inject
-    public TrackDetailsResource(TrackService trackService) {
+    public TrackDetailsResource(TrackService trackService, ResponseHelper responseHelper) {
         this.trackService = trackService;
+        this.responseHelper = responseHelper;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrackDTO> getTrackDetails(
+    public ResponseEntity<?> getTrackDetails(
             @RequestParam("provider") @NotNull TrackProviderType trackProviderType,
             @RequestParam("id") @NotNull String trackId
     ) {
+        if (!responseHelper.isLoggedIn()) {
+            return responseHelper.unauthorized();
+        }
+
         Optional<TrackDetails> trackDetailsOpt = trackService.getTrackDetails(trackProviderType, trackId);
 
         if (trackDetailsOpt.isEmpty()) {

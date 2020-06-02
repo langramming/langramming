@@ -29,7 +29,7 @@ public class UserService {
     public Optional<User> getUserByTelegramId(long telegramId) {
         TelegramUserEntity exampleEntity = TelegramUserEntity.builder()
                 .telegramId(telegramId)
-                .build();;
+                .build();
 
         return userRepository.findOne(Example.of(exampleEntity))
                 .map(this::toUser);

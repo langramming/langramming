@@ -23,18 +23,18 @@ import java.util.Optional;
 public class FrontendResource {
 
     private final FrontendService frontendService;
+    private final FrontendModelProvider frontendModelProvider;
     private final ResponseHelper responseHelper;
-    private final UserService.UserProvider userProvider;
     private final ObjectMapper objectMapper;
 
     @Inject
     public FrontendResource(
             FrontendService frontendService,
-            ResponseHelper responseHelper,
-            UserService.UserProvider userProvider) {
+            FrontendModelProvider frontendModelProvider,
+            ResponseHelper responseHelper) {
         this.frontendService = frontendService;
+        this.frontendModelProvider = frontendModelProvider;
         this.responseHelper = responseHelper;
-        this.userProvider = userProvider;
 
         this.objectMapper = new ObjectMapper();
     }
@@ -72,12 +72,8 @@ public class FrontendResource {
     }
 
     private String replaceVariables(String template) throws JsonProcessingException {
-        Optional<User> user = userProvider.get();
-
-        Map<String, Object> langrammingData = new HashMap<>();
-        langrammingData.put("user", user.orElse(null));
-
-        String jsonObject = objectMapper.writeValueAsString(langrammingData);
+        FrontendModel frontendModel = frontendModelProvider.getFrontendModel();
+        String jsonObject = objectMapper.writeValueAsString(frontendModel);
 
         return template.replace(
                 "<!-- {{LANGRAMMING_DATA}} -->",
