@@ -1,10 +1,9 @@
 package com.github.langramming.service;
 
-import com.github.langramming.database.model.TelegramUserEntity;
+import com.github.langramming.database.model.UserEntity;
 import com.github.langramming.database.repository.TelegramUserRepository;
 import com.github.langramming.httpserver.UserContextFilter;
 import com.github.langramming.model.User;
-import org.springframework.data.domain.Example;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -27,16 +26,12 @@ public class UserService {
     }
 
     public Optional<User> getUserByTelegramId(long telegramId) {
-        TelegramUserEntity exampleEntity = TelegramUserEntity.builder()
-                .telegramId(telegramId)
-                .build();
-
-        return userRepository.findOne(Example.of(exampleEntity))
+        return userRepository.findByTelegramId(telegramId)
                 .map(this::toUser);
     }
 
     public User createUser(long telegramId, String name) {
-        TelegramUserEntity newUserEntity = TelegramUserEntity.builder()
+        UserEntity newUserEntity = UserEntity.builder()
                 .telegramId(telegramId)
                 .name(name)
                 .build();
@@ -45,15 +40,15 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        Optional<TelegramUserEntity> userEntityOpt = userRepository.findById(user.getId());
+        Optional<UserEntity> userEntityOpt = userRepository.findById(user.getId());
         if (userEntityOpt.isPresent()) {
-            TelegramUserEntity userEntity = userEntityOpt.get();
+            UserEntity userEntity = userEntityOpt.get();
             userEntity.name = user.getName();
             userRepository.save(userEntity);
         }
     }
 
-    private User toUser(TelegramUserEntity userEntity) {
+    private User toUser(UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.id)
                 .telegramId(userEntity.telegramId)

@@ -1,13 +1,19 @@
 package com.github.langramming.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.langramming.model.Language;
 
-@Builder
 @JsonAutoDetect
 public class LanguageDTO {
+    @JsonProperty("code")
+    public final String code;
 
-    public String code;
-    public String name;
+    @JsonProperty("name")
+    public final String name;
 
+    public LanguageDTO(Language language) {
+        this.code = language.code;
+        this.name = language.name;
+    }
 }

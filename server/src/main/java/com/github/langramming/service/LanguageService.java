@@ -3,7 +3,6 @@ package com.github.langramming.service;
 import com.github.langramming.database.model.LanguageEntity;
 import com.github.langramming.database.repository.LanguageRepository;
 import com.github.langramming.model.Language;
-import org.springframework.data.domain.Example;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,11 +28,7 @@ public class LanguageService {
     }
 
     public Optional<Language> getLanguageByCode(String code) {
-        LanguageEntity exampleEntity = LanguageEntity.builder()
-                .code(code)
-                .build();
-
-        return languageRepository.findOne(Example.of(exampleEntity))
+        return languageRepository.findByCode(code)
                 .map(this::toLanguage);
     }
 

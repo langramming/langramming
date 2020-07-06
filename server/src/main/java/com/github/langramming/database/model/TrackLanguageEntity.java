@@ -37,6 +37,6 @@ public class TrackLanguageEntity {
 
     @ManyToOne
     @JoinColumn(name = "tagged_by_id")
-    private TelegramUserEntity tagged_by;
+    private UserEntity tagged_by;
 
 }

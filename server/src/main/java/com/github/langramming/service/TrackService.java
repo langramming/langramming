@@ -11,7 +11,6 @@ import com.github.langramming.database.repository.TrackRepository;
 import com.github.langramming.model.TrackDetails;
 import com.github.langramming.model.TrackProvider;
 import com.github.langramming.model.TrackProviderType;
-import org.springframework.data.domain.Example;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -54,14 +53,7 @@ public class TrackService {
     public Optional<TrackDetails> getTrackDetails(@Nonnull TrackProviderType trackProviderType, @Nonnull String trackId) {
         Optional<TrackEntity> trackEntityOpt = trackRepository.findById(trackProviderType, trackId);
         if (trackEntityOpt.isPresent()) {
-            List<TrackMetadataEntity> trackMetadataEntities = trackMetadataRepository.findAll(
-                    Example.of(
-                            TrackMetadataEntity.builder()
-                                    .track(TrackEntity.builder()
-                                            .id(trackEntityOpt.get().id)
-                                            .build())
-                                    .build())
-            );
+            List<TrackMetadataEntity> trackMetadataEntities = trackMetadataRepository.findAllByTrackId(trackEntityOpt.get().id);
 
             return trackEntityOpt.map(
                     trackEntity -> toTrackDetails(trackProviderType, trackEntity, trackMetadataEntities)

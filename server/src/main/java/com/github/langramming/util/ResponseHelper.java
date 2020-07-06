@@ -2,6 +2,7 @@ package com.github.langramming.util;
 
 import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
+import io.atlassian.fugue.Either;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,14 @@ public class ResponseHelper {
                 .body(ErrorDTO.of("Not found"));
     }
 
+    public ResponseEntity<ErrorDTO> serverError(Exception exception) {
+        exception.printStackTrace();
+        String message = exception.getMessage() != null ? exception.getMessage() : "An error occurred";
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorDTO.of(message));
+    }
+
     public <T> ResponseEntity<T> redirect(String path) {
         return redirect(URI.create(path));
     }
@@ -66,5 +75,9 @@ public class ResponseHelper {
         return ResponseEntity.ok()
                 .contentType(mediaType)
                 .body(entity);
+    }
+
+    public <E extends Exception, T> ResponseEntity<?> fromEither(Either<E, T> either) {
+        return either.fold(this::serverError, this::ok);
     }
 }

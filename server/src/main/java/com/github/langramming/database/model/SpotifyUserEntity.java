@@ -24,21 +24,21 @@ public class SpotifyUserEntity {
     public Long id;
 
     @OneToOne
-    @JoinColumn(name = "telegram_user_id", unique = true)
-    public TelegramUserEntity telegram_user;
+    @JoinColumn(name = "user_id", unique = true)
+    public UserEntity user;
 
     @Column(name = "token_type")
-    public String token_type;
+    public String tokenType;
 
     @Column(name = "scope")
     public String scope;
 
     @Column(name = "access_token")
-    public String access_token;
+    public String accessToken;
 
     @Column(name = "refresh_token")
-    public String refresh_token;
+    public String refreshToken;
 
     @Column(name = "expires_at")
-    public Long expires_at;
+    public Long expiresAt;
 }

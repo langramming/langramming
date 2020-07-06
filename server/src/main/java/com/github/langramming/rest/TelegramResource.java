@@ -13,7 +13,6 @@ import javax.inject.Inject;
 @RestController
 @RequestMapping("/api/telegram")
 public class TelegramResource {
-
     private final TelegramBotClient telegramBotClient;
 
     @Inject
@@ -25,9 +24,6 @@ public class TelegramResource {
     public TelegramDTO getTelegramInfo() {
         GetMeResponse botInfo = telegramBotClient.getTelegramBotInfo();
 
-        return TelegramDTO.builder()
-                .username(botInfo.user().username())
-                .build();
+        return new TelegramDTO(botInfo);
     }
-
 }

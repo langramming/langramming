@@ -9,14 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "TelegramUser")
-@Table(name = "telegram_user_v1")
-public class TelegramUserEntity {
+@Entity(name = "User")
+@Table(name = "user_v1")
+public class UserEntity {
 
     @Id
     @GeneratedValue

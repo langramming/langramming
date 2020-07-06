@@ -22,6 +22,10 @@ spring:
         properties:
             hibernate:
                 dialect: "org.hibernate.dialect.SQLiteDialect"
+    jackson:
+        date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+        time-zone: UTC
+        locale: en_AU
 
 ---
 # This config is only set during local development

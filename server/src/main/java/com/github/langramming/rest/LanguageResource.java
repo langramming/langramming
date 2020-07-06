@@ -6,6 +6,7 @@ import com.github.langramming.rest.response.LanguageDTO;
 import com.github.langramming.rest.response.LanguagesDTO;
 import com.github.langramming.service.LanguageService;
 import com.github.langramming.util.ResponseHelper;
+import io.atlassian.fugue.Option;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.apache.http.util.TextUtils.isBlank;
 
@@ -41,16 +41,9 @@ public class LanguageResource {
             return responseHelper.unauthorized();
         }
 
-        List<LanguageDTO> languageList = languageService.getLanguages()
-                .stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        List<Language> languages = languageService.getLanguages();
 
-        LanguagesDTO languagesDTO = LanguagesDTO.builder()
-                .languages(languageList)
-                .build();
-
-        return responseHelper.ok(languagesDTO);
+        return responseHelper.ok(new LanguagesDTO(languages));
     }
 
     @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,11 +58,9 @@ public class LanguageResource {
 
         Optional<Language> languageOpt = languageService.getLanguageByCode(code);
 
-        if (languageOpt.isPresent()) {
-            return responseHelper.ok(toDTO(languageOpt.get()));
-        }
-
-        return responseHelper.notFound();
+        return Option.fromOptional(languageOpt)
+                .map(LanguageDTO::new)
+                .fold(responseHelper::notFound, responseHelper::ok);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -83,14 +74,7 @@ public class LanguageResource {
         }
 
         Language language = languageService.createLanguage(languageRequest.code, languageRequest.name);
-        return responseHelper.ok(toDTO(language));
-    }
-
-    private LanguageDTO toDTO(Language language) {
-        return LanguageDTO.builder()
-                .code(language.code)
-                .name(language.name)
-                .build();
+        return responseHelper.ok(new LanguageDTO(language));
     }
 
 }
