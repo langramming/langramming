@@ -10,12 +10,14 @@ import ModalDialog, {
 import Textfield from "@atlaskit/textfield";
 
 interface LanguageSelectCreateModalProps {
+  isSaving: boolean;
   newOption: string | null;
   onRegister: (value: { name: string; code: string }) => void;
   onClose: () => void;
 }
 
 export const LanguageSelectRegisterModal = ({
+  isSaving,
   newOption,
   onRegister,
   onClose,
@@ -47,7 +49,7 @@ export const LanguageSelectRegisterModal = ({
                   }}
                 >
                   <ButtonGroup>
-                    <Button appearance="primary" type="submit">
+                    <Button appearance="primary" type="submit" isLoading={isSaving}>
                       Register
                     </Button>
                     <Button appearance="default" onClick={onClose}>

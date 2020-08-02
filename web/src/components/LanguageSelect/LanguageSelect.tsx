@@ -21,16 +21,20 @@ interface LanguageOption {
 
 interface LanguageSelectState {
   filterString: string;
-
+  isSaving: boolean;
   newOptions: Language[];
   newOption: string | null;
+  selectedOption: LanguageOption | null | undefined;
 }
 
 type LanguageSelectStateAction =
   | { type: "CREATE_START"; name: string }
-  | { type: "CREATE_SAVE"; language: Language }
+  | { type: "CREATE_SAVE_BEGIN" }
+  | { type: "CREATE_SAVE_SUCCESS"; language: Language }
+  | { type: "CREATE_SAVE_FAIL" }
   | { type: "CREATE_CANCEL" }
-  | { type: "FILTER"; filterString: string };
+  | { type: "FILTER"; filterString: string }
+  | { type: "SELECT"; selectedOption: LanguageOption | null | undefined };
 
 const languageSelectReducer: React.Reducer<
   LanguageSelectState,
@@ -43,9 +47,22 @@ const languageSelectReducer: React.Reducer<
         newOption: action.name,
       };
     }
-    case "CREATE_SAVE": {
+    case "CREATE_SAVE_BEGIN": {
       return {
         ...prevState,
+        isSaving: true,
+      }
+    }
+    case "CREATE_SAVE_FAIL": {
+      return {
+        ...prevState,
+        isSaving: false,
+      }
+    }
+    case "CREATE_SAVE_SUCCESS": {
+      return {
+        ...prevState,
+        isSaving: false,
         newOption: null,
         newOptions: [...prevState.newOptions, action.language],
       };
@@ -62,13 +79,13 @@ const languageSelectReducer: React.Reducer<
         filterString: action.filterString,
       };
     }
+    case "SELECT": {
+      return {
+        ...prevState,
+        selectedOption: action.selectedOption,
+      }
+    }
   }
-};
-
-const initialLanguageSelectState: LanguageSelectState = {
-  newOption: null,
-  newOptions: [],
-  filterString: "",
 };
 
 export const LanguageSelect = ({
@@ -80,23 +97,22 @@ export const LanguageSelect = ({
 
   const [state, dispatch] = React.useReducer(
     languageSelectReducer,
-    initialLanguageSelectState
+    {
+      filterString: "",
+      isSaving: false,
+      selectedOption: defaultValue ? { label: defaultValue.name, value: defaultValue } : null,
+      newOption: null,
+      newOptions: [],
+    }
   );
-
-  const defaultOption: LanguageOption | null = React.useMemo(() => {
-    return defaultValue == null
-      ? null
-      : {
-          label: `${defaultValue.name} (${defaultValue.code})`,
-          value: defaultValue,
-        };
-  }, [defaultValue]);
 
   const handleOnChange = React.useCallback(
     (value: ValueType<LanguageOption>) => {
       if (value == null || "value" in value) {
+        dispatch({ type: "SELECT", selectedOption: value });
         onChange(value?.value);
       } else {
+        dispatch({ type: "SELECT", selectedOption: value[0] });
         onChange(value[0].value);
       }
     },
@@ -116,13 +132,22 @@ export const LanguageSelect = ({
       return validationResult;
     }
 
-    dispatch({ type: "CREATE_SAVE", language });
+    dispatch({ type: "CREATE_SAVE_BEGIN" });
     fetch("/api/language", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(language),
+    }).then(response => {
+      if (response.ok) {
+        dispatch({ type: "CREATE_SAVE_SUCCESS", language });
+        handleOnChange({ label: language.name, value: language });
+      } else {
+        dispatch({ type: "CREATE_SAVE_FAIL" });
+      }
+    }).catch(() => {
+      dispatch({ type: "CREATE_SAVE_FAIL" });
     });
-  }, []);
+  }, [handleOnChange]);
 
   const handleOnCreateCancel = React.useCallback(
     () => dispatch({ type: "CREATE_CANCEL" }),
@@ -153,7 +178,7 @@ export const LanguageSelect = ({
         allowCreateWhileLoading={false}
         autoFocus={autoFocus}
         closeMenuOnSelect
-        defaultValue={defaultOption}
+        value={state.selectedOption}
         formatOptionLabel={(option) =>
           option.value.code != null
             ? `${option.label} (${option.value.code})`
@@ -167,6 +192,7 @@ export const LanguageSelect = ({
         placeholder="Select a language..."
       />
       <LanguageSelectRegisterModal
+        isSaving={state.isSaving}
         newOption={state.newOption}
         onRegister={handleOnCreateSave}
         onClose={handleOnCreateCancel}
