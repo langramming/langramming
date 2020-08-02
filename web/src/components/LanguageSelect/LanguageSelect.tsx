@@ -154,7 +154,11 @@ export const LanguageSelect = ({
         autoFocus={autoFocus}
         closeMenuOnSelect
         defaultValue={defaultOption}
-        formatOptionLabel={(option) => `${option.label} (${option.value.code})`}
+        formatOptionLabel={(option) =>
+          option.value.code != null
+            ? `${option.label} (${option.value.code})`
+            : option.label
+        }
         inputValue={state.filterString}
         onChange={handleOnChange}
         onCreateOption={handleOnCreate}
