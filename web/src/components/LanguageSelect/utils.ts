@@ -25,3 +25,17 @@ export const isValid = (validationResult: LanguageValidation): boolean => {
     (message) => message === undefined
   );
 };
+
+export const createLanguage = (language: Language): Promise<Response> => {
+  return fetch("/api/language", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(language),
+  }).then((response) => {
+    if (response.ok) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(new Error("Failed to create language" + response));
+    }
+  });
+};

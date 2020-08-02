@@ -49,7 +49,11 @@ export const LanguageSelectRegisterModal = ({
                   }}
                 >
                   <ButtonGroup>
-                    <Button appearance="primary" type="submit" isLoading={isSaving}>
+                    <Button
+                      appearance="primary"
+                      type="submit"
+                      isLoading={isSaving}
+                    >
                       Register
                     </Button>
                     <Button appearance="default" onClick={onClose}>
@@ -65,9 +69,15 @@ export const LanguageSelectRegisterModal = ({
         <Field name="name" isRequired defaultValue={newOption ?? ""}>
           {({ fieldProps, error }) => (
             <>
-              <Textfield {...fieldProps} placeholder="Language name" autoFocus />
+              <Textfield
+                {...fieldProps}
+                placeholder="Language name"
+                autoFocus
+              />
               {!error && (
-                <HelperMessage>{"The language name, e.g. English"}</HelperMessage>
+                <HelperMessage>
+                  {"The language name, e.g. English"}
+                </HelperMessage>
               )}
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </>
@@ -78,7 +88,9 @@ export const LanguageSelectRegisterModal = ({
             <>
               <Textfield {...fieldProps} placeholder="Language code" />
               {!error && (
-                <HelperMessage>{"The language code, e.g. en or en_US"}</HelperMessage>
+                <HelperMessage>
+                  {"The language code, e.g. en or en_US"}
+                </HelperMessage>
               )}
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </>

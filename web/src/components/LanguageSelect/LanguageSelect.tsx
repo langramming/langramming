@@ -6,7 +6,7 @@ import { Language, LanguageResponse } from "../../types/Language";
 import { useFetch } from "../../common/fetch/useFetch";
 
 import { LanguageSelectRegisterModal } from "./LanguageSelectRegisterModal";
-import { isValid, validate } from "./utils";
+import { createLanguage, isValid, validate } from "./utils";
 
 export interface LanguageSelectProps {
   autoFocus?: boolean;
@@ -49,13 +49,13 @@ const languageSelectReducer: React.Reducer<
       return {
         ...prevState,
         isSaving: true,
-      }
+      };
     }
     case "CREATE_SAVE_FAIL": {
       return {
         ...prevState,
         isSaving: false,
-      }
+      };
     }
     case "CREATE_SAVE_SUCCESS": {
       return {
@@ -75,7 +75,7 @@ const languageSelectReducer: React.Reducer<
       return {
         ...prevState,
         selectedOption: action.selectedOption,
-      }
+      };
     }
   }
 };
@@ -87,15 +87,14 @@ export const LanguageSelect = ({
 }: LanguageSelectProps): JSX.Element => {
   const languageApiState = useFetch<LanguageResponse>("/api/language");
 
-  const [state, dispatch] = React.useReducer(
-    languageSelectReducer,
-    {
-      isSaving: false,
-      selectedOption: defaultValue ? { label: defaultValue.name, value: defaultValue } : null,
-      newOption: null,
-      newOptions: [],
-    }
-  );
+  const [state, dispatch] = React.useReducer(languageSelectReducer, {
+    isSaving: false,
+    selectedOption: defaultValue
+      ? { label: defaultValue.name, value: defaultValue }
+      : null,
+    newOption: null,
+    newOptions: [],
+  });
 
   const handleOnChange = React.useCallback(
     (value: ValueType<LanguageOption>) => {
@@ -114,31 +113,30 @@ export const LanguageSelect = ({
     dispatch({ type: "CREATE_START", name: inputValue });
   }, []);
 
-  const handleOnCreateSave = React.useCallback((language: Language): {
-    language?: string;
-    name?: string;
-  } | void => {
-    const validationResult = validate(language);
-    if (!isValid(validationResult)) {
-      return validationResult;
-    }
-
-    dispatch({ type: "CREATE_SAVE_BEGIN" });
-    fetch("/api/language", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(language),
-    }).then(response => {
-      if (response.ok) {
-        dispatch({ type: "CREATE_SAVE_SUCCESS", language });
-        handleOnChange({ label: language.name, value: language });
-      } else {
-        dispatch({ type: "CREATE_SAVE_FAIL" });
+  const handleOnCreateSave = React.useCallback(
+    (
+      language: Language
+    ): {
+      language?: string;
+      name?: string;
+    } | void => {
+      const validationResult = validate(language);
+      if (!isValid(validationResult)) {
+        return validationResult;
       }
-    }).catch(() => {
-      dispatch({ type: "CREATE_SAVE_FAIL" });
-    });
-  }, [handleOnChange]);
+
+      dispatch({ type: "CREATE_SAVE_BEGIN" });
+      createLanguage(language)
+        .then(() => {
+          dispatch({ type: "CREATE_SAVE_SUCCESS", language });
+          handleOnChange({ label: language.name, value: language });
+        })
+        .catch(() => {
+          dispatch({ type: "CREATE_SAVE_FAIL" });
+        });
+    },
+    [handleOnChange]
+  );
 
   const handleOnCreateCancel = React.useCallback(
     () => dispatch({ type: "CREATE_CANCEL" }),
