@@ -2,12 +2,6 @@ package com.github.langramming.httpserver;
 
 import com.github.langramming.configuration.LangrammingFrontendConfiguration;
 import com.github.langramming.util.StreamUtil;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,14 +11,20 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @Singleton
 public class FrontendService {
-
     private final LangrammingFrontendConfiguration frontendConfiguration;
 
     @Inject
-    public FrontendService(LangrammingFrontendConfiguration frontendConfiguration) {
+    public FrontendService(
+        LangrammingFrontendConfiguration frontendConfiguration
+    ) {
         this.frontendConfiguration = frontendConfiguration;
     }
 
@@ -38,18 +38,28 @@ public class FrontendService {
             return ResponseEntity.notFound().build();
         }
 
-        try (InputStream inputStream = getClass().getResourceAsStream(assetPath)) {
+        try (
+            InputStream inputStream = getClass().getResourceAsStream(assetPath)
+        ) {
             if (inputStream != null) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 StreamUtil.copy(inputStream, baos);
 
-                String contentType = URLConnection.guessContentTypeFromName(asset);
+                String contentType = URLConnection.guessContentTypeFromName(
+                    asset
+                );
                 MediaType mediaType = MediaType.parseMediaType(contentType);
                 if (mediaType.getCharset() == null) {
-                    mediaType = new MediaType(mediaType.getType(), mediaType.getSubtype(), StandardCharsets.UTF_8);
+                    mediaType =
+                        new MediaType(
+                            mediaType.getType(),
+                            mediaType.getSubtype(),
+                            StandardCharsets.UTF_8
+                        );
                 }
 
-                return ResponseEntity.ok()
+                return ResponseEntity
+                    .ok()
                     .contentType(mediaType)
                     .body(baos.toString());
             } else {
@@ -58,7 +68,11 @@ public class FrontendService {
         }
     }
 
-    public Optional<ResponseEntity<?>> fromFrontendServer(String asset, HttpServletResponse response) throws IOException {
+    public Optional<ResponseEntity<?>> fromFrontendServer(
+        String asset,
+        HttpServletResponse response
+    )
+        throws IOException {
         URL resourceUrl = getFrontendServerUrl(asset);
         if (resourceUrl == null) {
             return Optional.of(this.fromClasspath(asset));
@@ -81,9 +95,7 @@ public class FrontendService {
             MediaType mediaType = MediaType.parseMediaType(contentType);
 
             return Optional.of(
-                    ResponseEntity.ok()
-                            .contentType(mediaType)
-                            .body(baos.toString())
+                ResponseEntity.ok().contentType(mediaType).body(baos.toString())
             );
         } else {
             response.setStatus(connection.getResponseCode());
@@ -91,7 +103,11 @@ public class FrontendService {
 
             // hot path: directly copy the frontend response into the response
             // we shouldn't do any filtering here, as it will really slow down load times
-            StreamUtil.copy(1024 * 512, connection.getInputStream(), response.getOutputStream());
+            StreamUtil.copy(
+                1024 * 512,
+                connection.getInputStream(),
+                response.getOutputStream()
+            );
             return Optional.empty();
         }
     }
@@ -102,12 +118,11 @@ public class FrontendService {
         }
 
         return new URL(
-                String.format(
-                        "http://localhost:%d/assets/%s",
-                        frontendConfiguration.getPort().get(),
-                        path
-                )
+            String.format(
+                "http://localhost:%d/assets/%s",
+                frontendConfiguration.getPort().get(),
+                path
+            )
         );
     }
-
 }

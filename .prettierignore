@@ -1,7 +1,11 @@
 node_modules/
+
+server/target/
+
 web/.cache/
 web/dist/
 web/node/
 web/node_modules/
 web/target/
+
 webapp/target/

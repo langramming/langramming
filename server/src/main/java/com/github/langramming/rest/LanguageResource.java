@@ -1,5 +1,7 @@
 package com.github.langramming.rest;
 
+import static org.apache.http.util.TextUtils.isBlank;
+
 import com.github.langramming.model.Language;
 import com.github.langramming.rest.request.LanguageRequest;
 import com.github.langramming.rest.response.LanguageDTO;
@@ -7,6 +9,9 @@ import com.github.langramming.rest.response.LanguagesDTO;
 import com.github.langramming.service.LanguageService;
 import com.github.langramming.util.ResponseHelper;
 import io.atlassian.fugue.Option;
+import java.util.List;
+import java.util.Optional;
+import javax.inject.Inject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,21 +21,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
-
-import static org.apache.http.util.TextUtils.isBlank;
-
 @RestController
 @RequestMapping("/api/language")
 public class LanguageResource {
-
     private final LanguageService languageService;
     private final ResponseHelper responseHelper;
 
     @Inject
-    public LanguageResource(LanguageService languageService, ResponseHelper responseHelper) {
+    public LanguageResource(
+        LanguageService languageService,
+        ResponseHelper responseHelper
+    ) {
         this.languageService = languageService;
         this.responseHelper = responseHelper;
     }
@@ -56,15 +57,23 @@ public class LanguageResource {
             return responseHelper.badRequest();
         }
 
-        Optional<Language> languageOpt = languageService.getLanguageByCode(code);
+        Optional<Language> languageOpt = languageService.getLanguageByCode(
+            code
+        );
 
-        return Option.fromOptional(languageOpt)
-                .map(LanguageDTO::new)
-                .fold(responseHelper::notFound, responseHelper::ok);
+        return Option
+            .fromOptional(languageOpt)
+            .map(LanguageDTO::new)
+            .fold(responseHelper::notFound, responseHelper::ok);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createLanguage(@RequestBody LanguageRequest languageRequest) {
+    @PostMapping(
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> createLanguage(
+        @RequestBody LanguageRequest languageRequest
+    ) {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }
@@ -73,8 +82,10 @@ public class LanguageResource {
             return responseHelper.badRequest();
         }
 
-        Language language = languageService.createLanguage(languageRequest.code, languageRequest.name);
+        Language language = languageService.createLanguage(
+            languageRequest.code,
+            languageRequest.name
+        );
         return responseHelper.ok(new LanguageDTO(language));
     }
-
 }

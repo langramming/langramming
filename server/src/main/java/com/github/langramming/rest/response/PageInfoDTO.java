@@ -2,10 +2,9 @@ package com.github.langramming.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.Builder;
 
 @Builder
 @JsonAutoDetect

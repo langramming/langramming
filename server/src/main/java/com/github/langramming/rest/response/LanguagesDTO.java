@@ -3,10 +3,9 @@ package com.github.langramming.rest.response;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.langramming.model.Language;
-import lombok.Builder;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Builder;
 
 @JsonAutoDetect
 public class LanguagesDTO {
@@ -14,7 +13,9 @@ public class LanguagesDTO {
     public List<LanguageDTO> languages;
 
     public LanguagesDTO(List<Language> languages) {
-        this.languages = languages.stream()
+        this.languages =
+            languages
+                .stream()
                 .map(LanguageDTO::new)
                 .collect(Collectors.toList());
     }

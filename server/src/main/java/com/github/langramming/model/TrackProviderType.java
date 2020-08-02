@@ -1,14 +1,12 @@
 package com.github.langramming.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 
 @Getter
 public enum TrackProviderType {
-
     SPOTIFY("spotify", "Spotify");
 
     private final String id;
@@ -28,8 +26,10 @@ public enum TrackProviderType {
 
     static {
         for (TrackProviderType trackProviderType : TrackProviderType.values()) {
-            trackProviderTypeCache.put(trackProviderType.getId().toLowerCase(), trackProviderType);
+            trackProviderTypeCache.put(
+                trackProviderType.getId().toLowerCase(),
+                trackProviderType
+            );
         }
     }
-
 }

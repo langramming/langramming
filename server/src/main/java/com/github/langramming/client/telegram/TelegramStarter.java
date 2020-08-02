@@ -5,12 +5,10 @@ import javax.inject.Singleton;
 
 @Singleton
 public class TelegramStarter {
-
     @Inject
     private TelegramBotClient telegramBotClient;
 
     public void start() {
         telegramBotClient.login();
     }
-
 }

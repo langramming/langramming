@@ -1,15 +1,14 @@
 package com.github.langramming.database.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Builder
 @NoArgsConstructor
@@ -17,7 +16,6 @@ import javax.persistence.UniqueConstraint;
 @Entity(name = "Language")
 @Table(name = "language_v1")
 public class LanguageEntity {
-
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -28,5 +26,4 @@ public class LanguageEntity {
 
     @Column(name = "name", unique = true)
     public String name;
-
 }

@@ -11,10 +11,6 @@ import com.github.langramming.database.repository.TrackRepository;
 import com.github.langramming.model.TrackDetails;
 import com.github.langramming.model.TrackProvider;
 import com.github.langramming.model.TrackProviderType;
-
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
@@ -22,10 +18,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class TrackService {
-
     private final EnumMap<TrackProviderType, TrackProvider> trackProviderEnumMap;
     private final TrackRepository trackRepository;
     private final TrackMetadataRepository trackMetadataRepository;
@@ -34,153 +32,250 @@ public class TrackService {
 
     @Inject
     public TrackService(
-            TrackRepository trackRepository,
-            TrackMetadataRepository trackMetadataRepository,
-            AlbumRepository albumRepository,
-            ArtistRepository artistRepository,
-            List<TrackProvider> trackProviderList) {
+        TrackRepository trackRepository,
+        TrackMetadataRepository trackMetadataRepository,
+        AlbumRepository albumRepository,
+        ArtistRepository artistRepository,
+        List<TrackProvider> trackProviderList
+    ) {
         this.trackRepository = trackRepository;
         this.trackMetadataRepository = trackMetadataRepository;
         this.albumRepository = albumRepository;
         this.artistRepository = artistRepository;
 
         this.trackProviderEnumMap = new EnumMap<>(TrackProviderType.class);
-        trackProviderList.forEach(provider ->
-                trackProviderEnumMap.put(provider.getType(), provider));
+        trackProviderList.forEach(
+            provider -> trackProviderEnumMap.put(provider.getType(), provider)
+        );
     }
 
     @Nonnull
-    public Optional<TrackDetails> getTrackDetails(@Nonnull TrackProviderType trackProviderType, @Nonnull String trackId) {
-        Optional<TrackEntity> trackEntityOpt = trackRepository.findById(trackProviderType, trackId);
+    public Optional<TrackDetails> getTrackDetails(
+        @Nonnull TrackProviderType trackProviderType,
+        @Nonnull String trackId
+    ) {
+        Optional<TrackEntity> trackEntityOpt = trackRepository.findById(
+            trackProviderType,
+            trackId
+        );
         if (trackEntityOpt.isPresent()) {
-            List<TrackMetadataEntity> trackMetadataEntities = trackMetadataRepository.findAllByTrackId(trackEntityOpt.get().id);
+            List<TrackMetadataEntity> trackMetadataEntities = trackMetadataRepository.findAllByTrackId(
+                trackEntityOpt.get().id
+            );
 
             return trackEntityOpt.map(
-                    trackEntity -> toTrackDetails(trackProviderType, trackEntity, trackMetadataEntities)
+                trackEntity ->
+                    toTrackDetails(
+                        trackProviderType,
+                        trackEntity,
+                        trackMetadataEntities
+                    )
             );
         }
 
-        Optional<TrackDetails> trackDetailsOpt = Optional.ofNullable(trackProviderEnumMap.get(trackProviderType))
-                .flatMap(trackProvider -> trackProvider.getTrackDetails(trackId));
+        Optional<TrackDetails> trackDetailsOpt = Optional
+            .ofNullable(trackProviderEnumMap.get(trackProviderType))
+            .flatMap(trackProvider -> trackProvider.getTrackDetails(trackId));
 
         trackDetailsOpt.ifPresent(this::persistTrack);
 
         return trackDetailsOpt;
     }
 
-    private TrackDetails toTrackDetails(TrackProviderType trackProviderType, TrackEntity trackEntity, List<TrackMetadataEntity> trackMetadataEntities) {
-        return TrackDetails.builder()
-                .id(trackEntity.providerTrackId)
-                .name(trackEntity.name)
-                .providerType(trackProviderType)
-                .albums(getAlbums(trackMetadataEntities))
-                .artists(getArtists(trackMetadataEntities))
-                .build();
+    private TrackDetails toTrackDetails(
+        TrackProviderType trackProviderType,
+        TrackEntity trackEntity,
+        List<TrackMetadataEntity> trackMetadataEntities
+    ) {
+        return TrackDetails
+            .builder()
+            .id(trackEntity.providerTrackId)
+            .name(trackEntity.name)
+            .providerType(trackProviderType)
+            .albums(getAlbums(trackMetadataEntities))
+            .artists(getArtists(trackMetadataEntities))
+            .build();
     }
 
-    private List<TrackDetails.Album> getAlbums(List<TrackMetadataEntity> trackMetadataEntities) {
-        List<Long> albumIds = trackMetadataEntities.stream()
-                .filter(md -> md.trackMetadataType == TrackMetadataEntity.TrackMetadataType.ALBUM)
-                .map(md -> md.value)
-                .collect(Collectors.toList());
+    private List<TrackDetails.Album> getAlbums(
+        List<TrackMetadataEntity> trackMetadataEntities
+    ) {
+        List<Long> albumIds = trackMetadataEntities
+            .stream()
+            .filter(
+                md ->
+                    md.trackMetadataType ==
+                    TrackMetadataEntity.TrackMetadataType.ALBUM
+            )
+            .map(md -> md.value)
+            .collect(Collectors.toList());
 
-        return albumRepository.findAllById(albumIds).stream()
-                .map(album -> TrackDetails.Album.builder()
+        return albumRepository
+            .findAllById(albumIds)
+            .stream()
+            .map(
+                album ->
+                    TrackDetails
+                        .Album.builder()
                         .id(album.providerAlbumId)
                         .name(album.name)
-                        .build())
-                .collect(Collectors.toList());
+                        .build()
+            )
+            .collect(Collectors.toList());
     }
 
-    private List<TrackDetails.Artist> getArtists(List<TrackMetadataEntity> trackMetadataEntities) {
-        List<Long> artistIds = trackMetadataEntities.stream()
-                .filter(md -> md.trackMetadataType == TrackMetadataEntity.TrackMetadataType.ARTIST)
-                .map(md -> md.value)
-                .collect(Collectors.toList());
+    private List<TrackDetails.Artist> getArtists(
+        List<TrackMetadataEntity> trackMetadataEntities
+    ) {
+        List<Long> artistIds = trackMetadataEntities
+            .stream()
+            .filter(
+                md ->
+                    md.trackMetadataType ==
+                    TrackMetadataEntity.TrackMetadataType.ARTIST
+            )
+            .map(md -> md.value)
+            .collect(Collectors.toList());
 
-        return artistRepository.findAllById(artistIds).stream()
-                .map(artist -> TrackDetails.Artist.builder()
+        return artistRepository
+            .findAllById(artistIds)
+            .stream()
+            .map(
+                artist ->
+                    TrackDetails
+                        .Artist.builder()
                         .id(artist.providerArtistId)
                         .name(artist.name)
-                        .build())
-                .collect(Collectors.toList());
+                        .build()
+            )
+            .collect(Collectors.toList());
     }
 
     private void persistTrack(TrackDetails trackDetails) {
         TrackProviderType trackProvider = trackDetails.getProviderType();
         TrackEntity trackEntity = trackRepository.save(
-                TrackEntity.builder()
-                        .provider(trackProvider.getId())
-                        .providerTrackId(trackDetails.getId())
-                        .name(trackDetails.getName())
-                        .build()
+            TrackEntity
+                .builder()
+                .provider(trackProvider.getId())
+                .providerTrackId(trackDetails.getId())
+                .name(trackDetails.getName())
+                .build()
         );
 
-        Collection<AlbumEntity> albumEntities = persistAlbums(trackProvider, trackDetails.getAlbums());
-        Collection<ArtistEntity> artistEntities = persistArtists(trackProvider, trackDetails.getArtists());
+        Collection<AlbumEntity> albumEntities = persistAlbums(
+            trackProvider,
+            trackDetails.getAlbums()
+        );
+        Collection<ArtistEntity> artistEntities = persistArtists(
+            trackProvider,
+            trackDetails.getArtists()
+        );
 
         trackMetadataRepository.saveAll(
-                Stream.concat(
-                        albumEntities.stream()
-                                .map(albumEntity -> TrackMetadataEntity.builder()
-                                        .track(trackEntity)
-                                        .trackMetadataType(TrackMetadataEntity.TrackMetadataType.ALBUM)
-                                        .value(albumEntity.id)
-                                        .build()),
-                        artistEntities.stream()
-                                .map(artistEntity -> TrackMetadataEntity.builder()
-                                        .track(trackEntity)
-                                        .trackMetadataType(TrackMetadataEntity.TrackMetadataType.ARTIST)
-                                        .value(artistEntity.id)
-                                        .build())
-                ).collect(Collectors.toList())
+            Stream
+                .concat(
+                    albumEntities
+                        .stream()
+                        .map(
+                            albumEntity ->
+                                TrackMetadataEntity
+                                    .builder()
+                                    .track(trackEntity)
+                                    .trackMetadataType(
+                                        TrackMetadataEntity.TrackMetadataType.ALBUM
+                                    )
+                                    .value(albumEntity.id)
+                                    .build()
+                        ),
+                    artistEntities
+                        .stream()
+                        .map(
+                            artistEntity ->
+                                TrackMetadataEntity
+                                    .builder()
+                                    .track(trackEntity)
+                                    .trackMetadataType(
+                                        TrackMetadataEntity.TrackMetadataType.ARTIST
+                                    )
+                                    .value(artistEntity.id)
+                                    .build()
+                        )
+                )
+                .collect(Collectors.toList())
         );
     }
 
-    private Collection<AlbumEntity> persistAlbums(TrackProviderType trackProvider, List<TrackDetails.Album> albums) {
+    private Collection<AlbumEntity> persistAlbums(
+        TrackProviderType trackProvider,
+        List<TrackDetails.Album> albums
+    ) {
         Collection<AlbumEntity> existingAlbumEntities = albumRepository.findByIds(
             trackProvider,
-            albums.stream().map(TrackDetails.Album::getId).collect(Collectors.toList()));
-        Set<String> savedAlbumIds = existingAlbumEntities.stream().map(a -> a.providerAlbumId).collect(Collectors.toSet());
+            albums
+                .stream()
+                .map(TrackDetails.Album::getId)
+                .collect(Collectors.toList())
+        );
+        Set<String> savedAlbumIds = existingAlbumEntities
+            .stream()
+            .map(a -> a.providerAlbumId)
+            .collect(Collectors.toSet());
 
         List<AlbumEntity> newAlbumEntities = albumRepository.saveAll(
-                albums.stream()
-                        .filter(album -> !savedAlbumIds.contains(album.getId()))
-                        .map(album -> AlbumEntity.builder()
-                                .provider(trackProvider.getId())
-                                .providerAlbumId(album.getId())
-                                .name(album.getName())
-                                .build())
-                        .collect(Collectors.toList())
+            albums
+                .stream()
+                .filter(album -> !savedAlbumIds.contains(album.getId()))
+                .map(
+                    album ->
+                        AlbumEntity
+                            .builder()
+                            .provider(trackProvider.getId())
+                            .providerAlbumId(album.getId())
+                            .name(album.getName())
+                            .build()
+                )
+                .collect(Collectors.toList())
         );
 
-        return Stream.concat(
-                existingAlbumEntities.stream(),
-                newAlbumEntities.stream()
-        ).collect(Collectors.toSet());
+        return Stream
+            .concat(existingAlbumEntities.stream(), newAlbumEntities.stream())
+            .collect(Collectors.toSet());
     }
 
-    private Collection<ArtistEntity> persistArtists(TrackProviderType trackProvider, List<TrackDetails.Artist> artists) {
+    private Collection<ArtistEntity> persistArtists(
+        TrackProviderType trackProvider,
+        List<TrackDetails.Artist> artists
+    ) {
         Collection<ArtistEntity> existingArtistEntities = artistRepository.findByIds(
             trackProvider,
-            artists.stream().map(TrackDetails.Artist::getId).collect(Collectors.toList()));
-        Set<String> savedArtistIds = existingArtistEntities.stream().map(a -> a.providerArtistId).collect(Collectors.toSet());
+            artists
+                .stream()
+                .map(TrackDetails.Artist::getId)
+                .collect(Collectors.toList())
+        );
+        Set<String> savedArtistIds = existingArtistEntities
+            .stream()
+            .map(a -> a.providerArtistId)
+            .collect(Collectors.toSet());
 
         List<ArtistEntity> newAlbumEntities = artistRepository.saveAll(
-                artists.stream()
-                        .filter(artist -> !savedArtistIds.contains(artist.getId()))
-                        .map(artist -> ArtistEntity.builder()
-                                .provider(trackProvider.getId())
-                                .providerArtistId(artist.getId())
-                                .name(artist.getName())
-                                .build())
-                        .collect(Collectors.toList())
+            artists
+                .stream()
+                .filter(artist -> !savedArtistIds.contains(artist.getId()))
+                .map(
+                    artist ->
+                        ArtistEntity
+                            .builder()
+                            .provider(trackProvider.getId())
+                            .providerArtistId(artist.getId())
+                            .name(artist.getName())
+                            .build()
+                )
+                .collect(Collectors.toList())
         );
 
-        return Stream.concat(
-                existingArtistEntities.stream(),
-                newAlbumEntities.stream()
-        ).collect(Collectors.toSet());
+        return Stream
+            .concat(existingArtistEntities.stream(), newAlbumEntities.stream())
+            .collect(Collectors.toSet());
     }
-
 }

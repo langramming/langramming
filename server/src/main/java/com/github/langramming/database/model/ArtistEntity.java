@@ -1,9 +1,5 @@
 package com.github.langramming.database.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,16 +8,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "Artist")
-@Table(name = "artist_v1", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"provider", "provider_artist_id"})
-})
+@Table(
+    name = "artist_v1",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "provider", "provider_artist_id" }),
+    }
+)
 public class ArtistEntity {
-
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -35,5 +36,4 @@ public class ArtistEntity {
 
     @Column(name = "provider_artist_id")
     public String providerArtistId;
-
 }

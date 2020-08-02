@@ -1,1 +1,10 @@
-{}
+{
+  "overrides": [
+    {
+      "files": ["*.java"],
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
+}

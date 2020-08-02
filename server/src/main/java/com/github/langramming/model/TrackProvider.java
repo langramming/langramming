@@ -1,13 +1,13 @@
 package com.github.langramming.model;
 
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 public interface TrackProvider {
+    @Nonnull
+    TrackProviderType getType();
 
-    @Nonnull TrackProviderType getType();
-
-    @Nonnull Optional<TrackDetails> getTrackDetails(@NotNull String trackId);
-
+    @Nonnull
+    Optional<TrackDetails> getTrackDetails(@NotNull String trackId);
 }

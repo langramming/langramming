@@ -2,7 +2,8 @@ package com.github.langramming.httpserver;
 
 import com.github.langramming.model.User;
 import com.github.langramming.service.UserService;
-
+import java.io.IOException;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.Filter;
@@ -12,13 +13,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.Optional;
 
 @Singleton
 public class UserContextFilter implements Filter {
-
-    private static final String USER_CONTEXT_KEY = UserContextFilter.class.getName() + "__USER";
+    private static final String USER_CONTEXT_KEY =
+        UserContextFilter.class.getName() + "__USER";
     private static final ThreadLocal<User> userLocal = new ThreadLocal<>();
 
     public static Optional<User> getLoggedInUser() {
@@ -35,7 +34,12 @@ public class UserContextFilter implements Filter {
     private UserService userService;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(
+        ServletRequest servletRequest,
+        ServletResponse servletResponse,
+        FilterChain filterChain
+    )
+        throws IOException, ServletException {
         try {
             if (servletRequest instanceof HttpServletRequest) {
                 HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;

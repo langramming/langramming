@@ -1,15 +1,15 @@
 {
-  "private": true,
   "name": "web",
   "version": "0.0.1",
+  "private": true,
   "main": "dist/index.html",
-  "scripts": {
-    "build": "rm -rf build/ dist/ && parcel build public/index.html",
-    "start": "parcel serve public/index.html"
-  },
   "engines": {
     "node": "^13.12.0",
     "yarn": "^1.22.4"
+  },
+  "scripts": {
+    "build": "rm -rf build/ dist/ && parcel build public/index.html",
+    "start": "parcel serve public/index.html"
   },
   "dependencies": {
     "react": "^16.13.1",

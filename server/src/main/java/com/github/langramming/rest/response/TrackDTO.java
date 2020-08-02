@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.langramming.model.TrackDetails;
 import com.github.langramming.model.TrackProviderType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @JsonAutoDetect
 public class TrackDTO {
@@ -31,10 +30,16 @@ public class TrackDTO {
         this.provider = trackDetails.getProviderType();
         this.id = trackDetails.getId();
         this.name = trackDetails.getName();
-        this.album = trackDetails.getAlbums().stream()
+        this.album =
+            trackDetails
+                .getAlbums()
+                .stream()
                 .map(TrackAlbumDTO::new)
                 .collect(Collectors.toList());
-        this.artists = trackDetails.getArtists().stream()
+        this.artists =
+            trackDetails
+                .getArtists()
+                .stream()
                 .map(TrackArtistDTO::new)
                 .collect(Collectors.toList());
     }

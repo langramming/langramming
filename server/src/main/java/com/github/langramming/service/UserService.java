@@ -4,15 +4,13 @@ import com.github.langramming.database.model.UserEntity;
 import com.github.langramming.database.repository.TelegramUserRepository;
 import com.github.langramming.httpserver.UserContextFilter;
 import com.github.langramming.model.User;
-
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import java.util.Optional;
 
 @Singleton
 public class UserService {
-
     private final TelegramUserRepository userRepository;
 
     @Inject
@@ -21,26 +19,27 @@ public class UserService {
     }
 
     public Optional<User> getUser(long id) {
-        return userRepository.findById(id)
-                .map(this::toUser);
+        return userRepository.findById(id).map(this::toUser);
     }
 
     public Optional<User> getUserByTelegramId(long telegramId) {
-        return userRepository.findByTelegramId(telegramId)
-                .map(this::toUser);
+        return userRepository.findByTelegramId(telegramId).map(this::toUser);
     }
 
     public User createUser(long telegramId, String name) {
-        UserEntity newUserEntity = UserEntity.builder()
-                .telegramId(telegramId)
-                .name(name)
-                .build();
+        UserEntity newUserEntity = UserEntity
+            .builder()
+            .telegramId(telegramId)
+            .name(name)
+            .build();
 
         return toUser(userRepository.save(newUserEntity));
     }
 
     public void updateUser(User user) {
-        Optional<UserEntity> userEntityOpt = userRepository.findById(user.getId());
+        Optional<UserEntity> userEntityOpt = userRepository.findById(
+            user.getId()
+        );
         if (userEntityOpt.isPresent()) {
             UserEntity userEntity = userEntityOpt.get();
             userEntity.name = user.getName();
@@ -49,11 +48,12 @@ public class UserService {
     }
 
     private User toUser(UserEntity userEntity) {
-        return User.builder()
-                .id(userEntity.id)
-                .telegramId(userEntity.telegramId)
-                .name(userEntity.name)
-                .build();
+        return User
+            .builder()
+            .id(userEntity.id)
+            .telegramId(userEntity.telegramId)
+            .name(userEntity.name)
+            .build();
     }
 
     @Singleton
@@ -64,5 +64,4 @@ public class UserService {
             return UserContextFilter.getLoggedInUser();
         }
     }
-
 }
