@@ -6,7 +6,7 @@ const validateCode = (code: string): string | undefined => {
   if (code.trim() === "") {
     return "Language code cannot be empty";
   }
-  if (!/[a-z]{2,3}(_[A-Z]{2,3})?/.test(code)) {
+  if (!/^[a-z]{2,3}(_[A-Z]{2,3})?$/.test(code)) {
     return "Language code must be like en or en_US";
   }
   return undefined;
