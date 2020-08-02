@@ -65,7 +65,7 @@ export const LanguageSelectRegisterModal = ({
             <>
               <Textfield {...fieldProps} placeholder="Language name" />
               {!error && (
-                <HelperMessage>{"Enter the language name here"}</HelperMessage>
+                <HelperMessage>{"The language name, e.g. English"}</HelperMessage>
               )}
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </>
@@ -76,7 +76,7 @@ export const LanguageSelectRegisterModal = ({
             <>
               <Textfield {...fieldProps} placeholder="Language code" />
               {!error && (
-                <HelperMessage>{"Enter the language code here"}</HelperMessage>
+                <HelperMessage>{"The language code, e.g. en or en_US"}</HelperMessage>
               )}
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </>
