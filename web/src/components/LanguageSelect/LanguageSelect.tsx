@@ -20,7 +20,6 @@ interface LanguageOption {
 }
 
 interface LanguageSelectState {
-  filterString: string;
   isSaving: boolean;
   newOptions: Language[];
   newOption: string | null;
@@ -33,7 +32,6 @@ type LanguageSelectStateAction =
   | { type: "CREATE_SAVE_SUCCESS"; language: Language }
   | { type: "CREATE_SAVE_FAIL" }
   | { type: "CREATE_CANCEL" }
-  | { type: "FILTER"; filterString: string }
   | { type: "SELECT"; selectedOption: LanguageOption | null | undefined };
 
 const languageSelectReducer: React.Reducer<
@@ -73,12 +71,6 @@ const languageSelectReducer: React.Reducer<
         newOption: null,
       };
     }
-    case "FILTER": {
-      return {
-        ...prevState,
-        filterString: action.filterString,
-      };
-    }
     case "SELECT": {
       return {
         ...prevState,
@@ -98,7 +90,6 @@ export const LanguageSelect = ({
   const [state, dispatch] = React.useReducer(
     languageSelectReducer,
     {
-      filterString: "",
       isSaving: false,
       selectedOption: defaultValue ? { label: defaultValue.name, value: defaultValue } : null,
       newOption: null,
@@ -154,10 +145,6 @@ export const LanguageSelect = ({
     []
   );
 
-  const handleOnInputChange = React.useCallback((inputValue: string) => {
-    dispatch({ type: "FILTER", filterString: inputValue });
-  }, []);
-
   const languageOptions = React.useMemo(
     () => [
       ...(languageApiState.data?.languages ?? []).map((language) => ({
@@ -178,18 +165,16 @@ export const LanguageSelect = ({
         allowCreateWhileLoading={false}
         autoFocus={autoFocus}
         closeMenuOnSelect
-        value={state.selectedOption}
         formatOptionLabel={(option) =>
           option.value.code != null
             ? `${option.label} (${option.value.code})`
             : option.label
         }
-        inputValue={state.filterString}
         onChange={handleOnChange}
         onCreateOption={handleOnCreate}
-        onInputChange={handleOnInputChange}
         options={languageOptions}
         placeholder="Select a language..."
+        value={state.selectedOption}
       />
       <LanguageSelectRegisterModal
         isSaving={state.isSaving}
