@@ -3,41 +3,41 @@
 # you should copy it to the root folder of the project and then fill all the values in
 
 langramming:
-    server:
-        url: "this should be set to the website url"
-    telegram:
-        token: "set this to the telegram bot token"
-    spotify:
-        client-id: "set this to the spotify client id"
-        client-secret: "set this to the spotify client secret"
+  server:
+    url: "this should be set to the website url"
+  telegram:
+    token: "set this to the telegram bot token"
+  spotify:
+    client-id: "set this to the spotify client id"
+    client-secret: "set this to the spotify client secret"
 
 spring:
-    datasource:
-        driver-class-name: "org.sqlite.JDBC"
-        url: "jdbc:sqlite:langrammingdb.sqlite"
-    jpa:
-        hibernate:
-            # creates the DB
-            ddl-auto: create
-        properties:
-            hibernate:
-                dialect: "org.hibernate.dialect.SQLiteDialect"
-    jackson:
-        date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
-        time-zone: UTC
-        locale: en_AU
+  datasource:
+    driver-class-name: "org.sqlite.JDBC"
+    url: "jdbc:sqlite:langrammingdb.sqlite"
+  jpa:
+    hibernate:
+      # creates the DB
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.SQLiteDialect"
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    time-zone: UTC
+    locale: en_AU
 
 ---
 # This config is only set during local development
 spring:
-    profiles: local
-    datasource:
-        username: "langramming"
-        password: "languages r cool"
-    jpa:
-        hibernate:
-            # creates the DB and applies any changes to the schema automatically
-            ddl-auto: update
+  profiles: local
+  datasource:
+    username: "langramming"
+    password: "languages r cool"
+  jpa:
+    hibernate:
+      # creates the DB and applies any changes to the schema automatically
+      ddl-auto: update
 langramming:
-    frontend:
-        port: 1234
+  frontend:
+    port: 1234

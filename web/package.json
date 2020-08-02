@@ -23,8 +23,7 @@
   "devDependencies": {
     "@types/react": "^16.9.32",
     "@types/react-dom": "^16.9.6",
-    "parcel": "^1.12.4",
-    "prettier": "^2.0.5",
-    "typescript": "^3.8.3"
+    "@types/react-select": "^3.0.15",
+    "parcel": "^1.12.4"
   }
 }
