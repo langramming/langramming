@@ -37,14 +37,12 @@ export const useFetch = <T>(uri: string): State<T> => {
   });
 
   useEffect(() => {
-    if (!loading && !data && !error) {
-      dispatch({ type: "LOADING" });
-      fetch(uri)
-        .then((response) => response.json())
-        .then((data) => dispatch({ type: "DATA", data }))
-        .catch((error) => dispatch({ type: "ERROR", error }));
-    }
-  }, [loading, data, error, dispatch]);
+    dispatch({ type: "LOADING" });
+    fetch(uri)
+      .then((response) => response.json())
+      .then((data) => dispatch({ type: "DATA", data }))
+      .catch((error) => dispatch({ type: "ERROR", error }));
+  }, [uri]);
 
   return { loading, data, error };
 };

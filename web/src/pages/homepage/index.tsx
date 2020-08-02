@@ -5,7 +5,7 @@ import { useAppContext } from "../../common/context/useAppContext";
 import { AuthenticatedHomepage } from "./authenticated";
 import { UnauthenticatedHomepage } from "./unauthenticated";
 
-export const Homepage = () => {
+export const Homepage = (): JSX.Element => {
   const appContext = useAppContext();
 
   if (appContext.user) {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useFetch } from "../common/fetch/useFetch";
 
-export const TelegramLoginButton = () => {
+export const TelegramLoginButton = (): JSX.Element => {
   const [ref, setRef] = React.useState<HTMLDivElement | null>(null);
   const telegramInfo = useFetch<{ username: string }>("/api/telegram");
 
@@ -24,7 +24,7 @@ export const TelegramLoginButton = () => {
     }
 
     // if no ref, nothing to clean up
-    return () => {};
+    return undefined;
   }, [ref, telegramInfo]);
 
   return <div ref={setRef} />;
