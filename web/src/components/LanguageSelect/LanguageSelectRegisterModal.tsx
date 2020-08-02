@@ -65,7 +65,7 @@ export const LanguageSelectRegisterModal = ({
         <Field name="name" isRequired defaultValue={newOption ?? ""}>
           {({ fieldProps, error }) => (
             <>
-              <Textfield {...fieldProps} placeholder="Language name" />
+              <Textfield {...fieldProps} placeholder="Language name" autoFocus />
               {!error && (
                 <HelperMessage>{"The language name, e.g. English"}</HelperMessage>
               )}
