@@ -3,10 +3,10 @@ import * as React from "react";
 import Button, { ButtonGroup } from "@atlaskit/button";
 import Form, { Field, ErrorMessage, HelperMessage } from "@atlaskit/form";
 import ModalDialog, {
+  ContainerComponentProps,
   ModalFooter,
   ModalTransition,
 } from "@atlaskit/modal-dialog";
-import { ContainerProps } from "@atlaskit/modal-dialog/components/Container";
 import Textfield from "@atlaskit/textfield";
 
 interface LanguageSelectCreateModalProps {
@@ -28,7 +28,7 @@ export const LanguageSelectRegisterModal = ({
         heading="Register new language"
         onClose={onClose}
         components={{
-          Container({ children }: ContainerProps) {
+          Container({ children }: ContainerComponentProps) {
             return (
               <Form onSubmit={onRegister}>
                 {({ formProps }) => <form {...formProps}>{children}</form>}
