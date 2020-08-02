@@ -16,10 +16,25 @@
     "@typescript-eslint/parser": "^3.7.1",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^6.11.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "prettier-plugin-java": "^0.8.0",
     "prettier-plugin-package": "^1.0.0",
     "typescript": "^3.9.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{json,js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.java": [
+      "prettier --write"
+    ]
   },
   "workspaces": [
     "web"
