@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { useAppContext } from "../../../common/context/useAppContext";
-import { SpotifyLoginButton } from "../../../common/ui/SpotifyLoginButton";
+import { SpotifyLoginButton } from "../../../components/SpotifyLoginButton";
 
 export const AuthenticatedHomepage = () => {
   const appContext = useAppContext();

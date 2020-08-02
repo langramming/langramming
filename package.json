@@ -9,7 +9,9 @@
     "start": "mvn clean spring-boot:run -Dspring-boot.run.profiles=local",
     "server": "java -jar webapp/target/langramming-*.jar --spring.profiles.active=local",
     "server:debug": "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=:5005 -jar webapp/target/langramming-*.jar --spring.profiles.active=local",
-    "web": "cd web && yarn start"
+    "web": "yarn workspace web start"
   },
-  "workspaces": ["web"]
+  "workspaces": [
+    "web"
+  ]
 }
