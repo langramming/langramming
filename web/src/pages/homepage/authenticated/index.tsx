@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { useAppContext } from "../../../common/context/useAppContext";
 import { SpotifyLoginButton } from "../../../components/SpotifyLoginButton";
-import { LanguageSelect } from '../../../components/LanguageSelect';
+import { LanguageSelect } from "../../../components/LanguageSelect/LanguageSelect";
 
 export const AuthenticatedHomepage = (): JSX.Element => {
   const appContext = useAppContext();
@@ -13,7 +13,13 @@ export const AuthenticatedHomepage = (): JSX.Element => {
       <p>{`Welcome to Langramming!`}</p>
       <p>{`You're logged in as ${user.name}!`}</p>
       {!user.isSpotifyAuthed && <SpotifyLoginButton />}
-      {user.isSpotifyAuthed && <LanguageSelect onChange={value => alert(JSON.stringify(value))} />}
+      {user.isSpotifyAuthed && (
+        <LanguageSelect
+          onChange={(value) => {
+            alert(JSON.stringify(value));
+          }}
+        />
+      )}
     </main>
   );
 };

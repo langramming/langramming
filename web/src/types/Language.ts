@@ -4,5 +4,5 @@ export interface Language {
 }
 
 export interface LanguageResponse {
-  languages: Language[]
+  languages: Language[];
 }

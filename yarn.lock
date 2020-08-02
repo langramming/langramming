@@ -41,6 +41,20 @@
     fbjs "^1.0.0"
     mkdirp "^0.5.1"
 
+"@atlaskit/form@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@atlaskit/form/-/form-8.1.0.tgz#ce478a67cccb0a0d4280391f206ae76ca9aaa3fa"
+  integrity sha512-mTwfkg/cbzMFG0HvCUjCn55zACS85BByrWzNcJeFHIt0FI6A8FgBjoC3ReZrHX3IsDbIBBk4/55qf95I62TRfA==
+  dependencies:
+    "@atlaskit/icon" "^21.0.0"
+    "@atlaskit/theme" "^10.0.0"
+    final-form "^4.14.1"
+    final-form-focus "^1.1.0"
+    lodash.set "^4.3.2"
+    react-uid "^2.2.0"
+    tiny-invariant "^0.0.3"
+    tslib "^1.9.3"
+
 "@atlaskit/icon@^21.0.0":
   version "21.0.1"
   resolved "https://registry.yarnpkg.com/@atlaskit/icon/-/icon-21.0.1.tgz#9b6ff1be563b98f46f710547e661eeac2bf203a9"
@@ -107,6 +121,16 @@
   resolved "https://registry.yarnpkg.com/@atlaskit/spinner/-/spinner-15.0.0.tgz#bbf00803003ed4b674c27557d2b26198045ea5b0"
   integrity sha512-y0D5PN/mddbNSJ0PaVAC962hbYT+RwgYtzcuY3cq0shXiDe6UIWRPcDSZ01f2GpimjZG7LbbsmpetYv43XX1Xg==
   dependencies:
+    "@atlaskit/theme" "^10.0.0"
+    "@emotion/core" "^10.0.9"
+    tslib "^1.9.3"
+
+"@atlaskit/textfield@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@atlaskit/textfield/-/textfield-4.0.0.tgz#22b4cfab764e06bbcf253616b571d00b30885fc2"
+  integrity sha512-QCPH6zP08i7YRvzjAeokI/EA1X/stx6T2RVhXi9YbPTJA29C12eBolqXc9jwHVytArtqpRUUG7jpfv32scMYbQ==
+  dependencies:
+    "@atlaskit/analytics-next" "^7.0.0"
     "@atlaskit/theme" "^10.0.0"
     "@emotion/core" "^10.0.9"
     tslib "^1.9.3"
@@ -957,7 +981,7 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.0", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
   version "7.11.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.0.tgz#f10245877042a815e07f7e693faff0ae9d3a2aac"
   integrity sha512-qArkXsjJq7H+T86WrIFV0Fnu/tNOkZ4cgXmjkzAu3b/58D5mFIO8JH/y77t7C9q0OdDRdh9s7Ue5GasYssxtXw==
@@ -3145,6 +3169,18 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
+final-form-focus@^1.1.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/final-form-focus/-/final-form-focus-1.1.2.tgz#8ea5c4bd802e220cebaa47a587bb0be164eb6806"
+  integrity sha512-Gd+Bd2Ll7ijo3/sd6kJ/bwLkhc2bUJPxTON6fIqee/008EJpACWhT+zoWCm9q6NcfMcWRS+Sp5ikRX8iqdXeGQ==
+
+final-form@^4.14.1:
+  version "4.20.1"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.20.1.tgz#525a7f7f27f55c28d8994b157b24d6104fc560e9"
+  integrity sha512-IIsOK3JRxJrN72OBj7vFWZxtGt3xc1bYwJVPchjVWmDol9DlzMSAOPB+vwe75TUYsw1JaH0fTQnIgwSQZQ9Acg==
+  dependencies:
+    "@babel/runtime" "^7.10.0"
+
 find-root@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/find-root/-/find-root-1.1.0.tgz#abcfc8ba76f708c42a97b3d685b7e9450bfb9ce4"
@@ -4208,6 +4244,11 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
+lodash.set@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
+  integrity sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
