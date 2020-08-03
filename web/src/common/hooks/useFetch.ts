@@ -6,13 +6,16 @@ type ActionType<T> =
   | { type: "DATA"; data: T }
   | { type: "ERROR"; error: Error };
 
-interface State<T> {
+export interface FetchState<T> {
   loading: boolean;
   data: T | null;
   error: Error | null;
 }
 
-const reducer = <T>(prevState: State<T>, action: ActionType<T>): State<T> => {
+const reducer = <T>(
+  prevState: FetchState<T>,
+  action: ActionType<T>
+): FetchState<T> => {
   if (action.type === "LOADING") {
     return { ...prevState, loading: true };
   }
@@ -25,11 +28,11 @@ const reducer = <T>(prevState: State<T>, action: ActionType<T>): State<T> => {
   return prevState;
 };
 
-export const useFetch = <T>(uri: string): State<T> => {
+export const useFetch = <T>(uri: string): FetchState<T> => {
   const castReducer = reducer as (
-    prevState: State<T>,
+    prevState: FetchState<T>,
     action: ActionType<T>
-  ) => State<T>;
+  ) => FetchState<T>;
   const [{ loading, data, error }, dispatch] = React.useReducer(castReducer, {
     loading: false,
     data: null,

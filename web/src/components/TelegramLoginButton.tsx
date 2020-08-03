@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useFetch } from "../common/fetch/useFetch";
+import { useFetch } from "../common/hooks/useFetch";
 
 export const TelegramLoginButton = (): JSX.Element => {
   const [ref, setRef] = React.useState<HTMLDivElement | null>(null);

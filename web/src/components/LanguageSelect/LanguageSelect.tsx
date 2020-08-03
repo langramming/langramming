@@ -3,7 +3,7 @@ import { ValueType } from "react-select";
 import { CreatableSelect } from "@atlaskit/select";
 
 import { Language, LanguageResponse } from "../../types/Language";
-import { useFetch } from "../../common/fetch/useFetch";
+import { useFetch } from "../../common/hooks/useFetch";
 
 import { LanguageSelectRegisterModal } from "./LanguageSelectRegisterModal";
 import { createLanguage, isValid, validate } from "./utils";

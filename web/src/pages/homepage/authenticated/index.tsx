@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { useAppContext } from "../../../common/context/useAppContext";
+import { useAppContext } from "../../../common/hooks/useAppContext";
 import { SpotifyLoginButton } from "../../../components/SpotifyLoginButton";
 import { LanguageSelect } from "../../../components/LanguageSelect/LanguageSelect";
 
