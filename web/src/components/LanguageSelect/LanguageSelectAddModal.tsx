@@ -12,14 +12,14 @@ import Textfield from "@atlaskit/textfield";
 interface LanguageSelectCreateModalProps {
   isSaving: boolean;
   newOption: string | null;
-  onRegister: (value: { name: string; code: string }) => void;
+  onAdd: (value: { name: string; code: string }) => void;
   onClose: () => void;
 }
 
-export const LanguageSelectRegisterModal = ({
+export const LanguageSelectAddModal = ({
   isSaving,
   newOption,
-  onRegister,
+  onAdd,
   onClose,
 }: LanguageSelectCreateModalProps): JSX.Element => (
   <ModalTransition>
@@ -27,12 +27,12 @@ export const LanguageSelectRegisterModal = ({
       <ModalDialog
         shouldCloseOnEscapePress
         shouldCloseOnOverlayClick
-        heading="Register new language"
+        heading="Add new language"
         onClose={onClose}
         components={{
           Container({ children }: ContainerComponentProps) {
             return (
-              <Form onSubmit={onRegister}>
+              <Form onSubmit={onAdd}>
                 {({ formProps }) => <form {...formProps}>{children}</form>}
               </Form>
             );
@@ -54,7 +54,7 @@ export const LanguageSelectRegisterModal = ({
                       type="submit"
                       isLoading={isSaving}
                     >
-                      Register
+                      Add
                     </Button>
                     <Button appearance="default" onClick={onClose}>
                       Cancel

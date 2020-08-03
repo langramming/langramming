@@ -5,7 +5,7 @@ import { CreatableSelect } from "@atlaskit/select";
 import { Language, LanguageResponse } from "../../types/Language";
 import { useFetch } from "../../common/hooks/useFetch";
 
-import { LanguageSelectRegisterModal } from "./LanguageSelectRegisterModal";
+import { LanguageSelectAddModal } from "./LanguageSelectAddModal";
 import { createLanguage, isValid, validate } from "./utils";
 
 export interface LanguageSelectProps {
@@ -163,6 +163,7 @@ export const LanguageSelect = ({
         allowCreateWhileLoading={false}
         autoFocus={autoFocus}
         closeMenuOnSelect
+        formatCreateLabel={(inputValue: string) => `Add "${inputValue}"`}
         formatOptionLabel={(option) =>
           option.value.code != null
             ? `${option.label} (${option.value.code})`
@@ -174,10 +175,10 @@ export const LanguageSelect = ({
         placeholder="Select a language..."
         value={state.selectedOption}
       />
-      <LanguageSelectRegisterModal
+      <LanguageSelectAddModal
         isSaving={state.isSaving}
         newOption={state.newOption}
-        onRegister={handleOnCreateSave}
+        onAdd={handleOnCreateSave}
         onClose={handleOnCreateCancel}
       />
     </>
