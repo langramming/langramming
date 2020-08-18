@@ -19,25 +19,25 @@ import lombok.NoArgsConstructor;
 public class SpotifyUserEntity {
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     public UserEntity user;
 
-    @Column(name = "token_type")
+    @Column(name = "token_type", nullable = false)
     public String tokenType;
 
-    @Column(name = "scope")
+    @Column(name = "scope", nullable = false)
     public String scope;
 
-    @Column(name = "access_token")
+    @Column(name = "access_token", nullable = false)
     public String accessToken;
 
-    @Column(name = "refresh_token")
+    @Column(name = "refresh_token", nullable = false)
     public String refreshToken;
 
-    @Column(name = "expires_at")
+    @Column(name = "expires_at", nullable = false)
     public Long expiresAt;
 }

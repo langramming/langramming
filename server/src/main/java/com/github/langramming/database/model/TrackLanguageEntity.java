@@ -27,18 +27,18 @@ import lombok.NoArgsConstructor;
 public class TrackLanguageEntity {
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "track_id")
+    @JoinColumn(name = "track_id", nullable = false)
     private TrackEntity track;
 
     @ManyToOne
-    @JoinColumn(name = "language_id")
+    @JoinColumn(name = "language_id", nullable = false)
     private LanguageEntity language;
 
     @ManyToOne
-    @JoinColumn(name = "tagged_by_id")
+    @JoinColumn(name = "tagged_by_id", nullable = false)
     private UserEntity tagged_by;
 }

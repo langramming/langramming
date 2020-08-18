@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.langramming.model.TrackDetails;
 import com.github.langramming.model.TrackProviderType;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 
 @JsonAutoDetect
 public class TrackDTO {
@@ -21,21 +20,16 @@ public class TrackDTO {
     public final String name;
 
     @JsonProperty("album")
-    public final List<TrackAlbumDTO> album;
+    public final Optional<TrackAlbumDTO> album;
 
-    @JsonProperty("artist")
+    @JsonProperty("artists")
     public final List<TrackArtistDTO> artists;
 
     public TrackDTO(TrackDetails trackDetails) {
         this.provider = trackDetails.getProviderType();
         this.id = trackDetails.getId();
         this.name = trackDetails.getName();
-        this.album =
-            trackDetails
-                .getAlbums()
-                .stream()
-                .map(TrackAlbumDTO::new)
-                .collect(Collectors.toList());
+        this.album = trackDetails.getAlbum().map(TrackAlbumDTO::new);
         this.artists =
             trackDetails
                 .getArtists()

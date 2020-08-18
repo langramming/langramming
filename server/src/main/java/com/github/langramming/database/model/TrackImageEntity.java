@@ -17,12 +17,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "TrackMetadata")
+@Entity(name = "TrackImage")
 @Table(
-    name = "track_metadata_v1",
-    uniqueConstraints = { @UniqueConstraint(columnNames = "track_id") }
+    name = "track_image_v1",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "track_id", "width", "height" }),
+    }
 )
-public class TrackMetadataEntity {
+public class TrackImageEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -32,12 +34,11 @@ public class TrackMetadataEntity {
     @JoinColumn(name = "track_id")
     public TrackEntity track;
 
-    @Column(name = "metadata_type")
-    @Enumerated(EnumType.STRING)
-    public TrackMetadataType trackMetadataType;
+    @Column(name = "width")
+    public Integer width;
 
-    @Column(name = "value")
-    public Long value;
+    @Column(name = "height")
+    public Integer height;
 
     public enum TrackMetadataType {
         ALBUM,

@@ -17,11 +17,12 @@ import lombok.NoArgsConstructor;
 public class UserEntity {
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public Long id;
 
-    @Column(name = "telegram_id", unique = true)
+    @Column(name = "telegram_id", unique = true, nullable = false)
     public Long telegramId;
 
+    @Column(name = "name", nullable = false)
     public String name;
 }

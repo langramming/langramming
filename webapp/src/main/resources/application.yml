@@ -11,6 +11,10 @@ langramming:
     client-id: "set this to the spotify client id"
     client-secret: "set this to the spotify client secret"
 
+logging:
+  level:
+    com.github.langramming: INFO
+
 spring:
   datasource:
     driver-class-name: "org.sqlite.JDBC"

@@ -8,6 +8,7 @@ import com.github.langramming.service.SpotifyUserService;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
+import com.wrapper.spotify.model_objects.specification.Image;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import java.io.IOException;
@@ -20,8 +21,10 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 
 @Singleton
+@Slf4j
 public class SpotifyTrackProvider implements TrackProvider {
     private final SpotifyRestClient spotifyRestClient;
     private final SpotifyUserService spotifyUserService;
@@ -68,16 +71,41 @@ public class SpotifyTrackProvider implements TrackProvider {
                 .providerType(TrackProviderType.SPOTIFY)
                 .id(track.getId())
                 .name(track.getName())
-                .albums(toTrackDetailsAlbums(track.getAlbum()))
+                .images(toTrackDetailsImage(track.getAlbum().getImages()))
+                .urls(toTrackDetailsUrls(track))
+                .album(toTrackDetailsAlbum(track.getAlbum()))
                 .artists(toTrackDetailsArtists(track.getArtists()))
                 .build()
         );
     }
 
-    private List<TrackDetails.Album> toTrackDetailsAlbums(
+    private TrackDetails.Urls toTrackDetailsUrls(Track track) {
+        return TrackDetails
+            .Urls.builder()
+            .preview(track.getPreviewUrl())
+            .url(track.getExternalUrls().getExternalUrls().get("spotify"))
+            .build();
+    }
+
+    private List<TrackDetails.Image> toTrackDetailsImage(Image[] images) {
+        return Stream
+            .of(images)
+            .map(
+                image ->
+                    TrackDetails
+                        .Image.builder()
+                        .height(image.getHeight())
+                        .width(image.getWidth())
+                        .url(image.getUrl())
+                        .build()
+            )
+            .collect(Collectors.toList());
+    }
+
+    private Optional<TrackDetails.Album> toTrackDetailsAlbum(
         AlbumSimplified album
     ) {
-        return Collections.singletonList(
+        return Optional.of(
             TrackDetails
                 .Album.builder()
                 .id(album.getId())
