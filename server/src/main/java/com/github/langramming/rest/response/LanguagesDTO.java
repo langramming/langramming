@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.langramming.model.Language;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.Builder;
 
 @JsonAutoDetect
 public class LanguagesDTO {

@@ -14,6 +14,7 @@ public interface ArtistRepository extends JpaRepository<ArtistEntity, Long> {
         @Nonnull String trackProviderId,
         @Nonnull String artistId
     );
+
     Collection<ArtistEntity> findByProviderAndProviderArtistIdIn(
         @Nonnull String trackProviderId,
         @Nonnull Collection<String> artistIds

@@ -25,6 +25,9 @@ public class TrackDTO {
     @JsonProperty("artists")
     public final List<TrackArtistDTO> artists;
 
+    @JsonProperty("images")
+    public final List<TrackImageDTO> images;
+
     public TrackDTO(TrackDetails trackDetails) {
         this.provider = trackDetails.getProviderType();
         this.id = trackDetails.getId();
@@ -35,6 +38,12 @@ public class TrackDTO {
                 .getArtists()
                 .stream()
                 .map(TrackArtistDTO::new)
+                .collect(Collectors.toList());
+        this.images =
+            trackDetails
+                .getImages()
+                .stream()
+                .map(TrackImageDTO::new)
                 .collect(Collectors.toList());
     }
 }

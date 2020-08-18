@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import { useAppContext } from "../../../common/hooks/useAppContext";
-import { SpotifyLoginButton } from "../../../components/SpotifyLoginButton";
-import { LanguageSelect } from "../../../components/LanguageSelect/LanguageSelect";
+import { SpotifyAuthed } from "./SpotifyAuthed";
+import { SpotifyUnauthed } from "./SpotifyUnauthed";
 
 export const AuthenticatedHomepage = (): JSX.Element => {
   const appContext = useAppContext();
@@ -12,14 +12,7 @@ export const AuthenticatedHomepage = (): JSX.Element => {
     <main>
       <p>{`Welcome to Langramming!`}</p>
       <p>{`You're logged in as ${user.name}!`}</p>
-      {!user.isSpotifyAuthed && <SpotifyLoginButton />}
-      {user.isSpotifyAuthed && (
-        <LanguageSelect
-          onChange={(value) => {
-            alert(JSON.stringify(value));
-          }}
-        />
-      )}
+      {user.isSpotifyAuthed ? <SpotifyAuthed /> : <SpotifyUnauthed />}
     </main>
   );
 };

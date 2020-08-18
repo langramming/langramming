@@ -14,6 +14,7 @@ public interface AlbumRepository extends JpaRepository<AlbumEntity, Long> {
         @Nonnull String trackProviderId,
         @Nonnull String albumId
     );
+
     Collection<AlbumEntity> findByProviderAndProviderAlbumIdIn(
         @Nonnull String trackProviderId,
         @Nonnull Collection<String> albumIds

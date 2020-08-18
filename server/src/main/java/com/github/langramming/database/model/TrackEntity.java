@@ -1,7 +1,6 @@
 package com.github.langramming.database.model;
 
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.persistence.Column;
@@ -13,7 +12,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -67,9 +65,9 @@ public class TrackEntity {
     )
     public List<ArtistEntity> artists;
 
-    @OneToMany(mappedBy = "track")
-    public List<TrackImageEntity> trackImages;
+    @OneToMany
+    public List<TrackImageEntity> images;
 
     @OneToMany(mappedBy = "track")
-    public List<TrackLanguageEntity> trackLanguages;
+    public List<TrackLanguageEntity> languages;
 }

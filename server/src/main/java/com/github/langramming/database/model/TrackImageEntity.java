@@ -2,8 +2,6 @@ package com.github.langramming.database.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,9 +18,9 @@ import lombok.NoArgsConstructor;
 @Entity(name = "TrackImage")
 @Table(
     name = "track_image_v1",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "track_id", "width", "height" }),
-    }
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = { "track_id", "width", "height" }
+    )
 )
 public class TrackImageEntity {
     @Id
@@ -31,7 +29,7 @@ public class TrackImageEntity {
     public Long id;
 
     @ManyToOne
-    @JoinColumn(name = "track_id")
+    @JoinColumn(name = "track_id", referencedColumnName = "id")
     public TrackEntity track;
 
     @Column(name = "width")
@@ -40,8 +38,6 @@ public class TrackImageEntity {
     @Column(name = "height")
     public Integer height;
 
-    public enum TrackMetadataType {
-        ALBUM,
-        ARTIST,
-    }
+    @Column(name = "url")
+    public String url;
 }

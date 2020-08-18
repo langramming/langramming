@@ -14,6 +14,7 @@ public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
         @Nonnull String trackProviderId,
         @Nonnull String trackId
     );
+
     Collection<TrackEntity> findByProviderAndProviderTrackIdIn(
         @Nonnull String trackProviderId,
         @Nonnull Collection<String> trackIds

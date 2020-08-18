@@ -12,7 +12,6 @@ import com.wrapper.spotify.model_objects.specification.Image;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,7 +70,7 @@ public class SpotifyTrackProvider implements TrackProvider {
                 .providerType(TrackProviderType.SPOTIFY)
                 .id(track.getId())
                 .name(track.getName())
-                .images(toTrackDetailsImage(track.getAlbum().getImages()))
+                .images(toTrackDetailsImages(track.getAlbum().getImages()))
                 .urls(toTrackDetailsUrls(track))
                 .album(toTrackDetailsAlbum(track.getAlbum()))
                 .artists(toTrackDetailsArtists(track.getArtists()))
@@ -87,7 +86,7 @@ public class SpotifyTrackProvider implements TrackProvider {
             .build();
     }
 
-    private List<TrackDetails.Image> toTrackDetailsImage(Image[] images) {
+    private List<TrackDetails.Image> toTrackDetailsImages(Image[] images) {
         return Stream
             .of(images)
             .map(

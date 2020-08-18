@@ -3,7 +3,6 @@ package com.github.langramming.rest.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Nonnull;
-import lombok.AllArgsConstructor;
 
 public class LanguageRequest {
 

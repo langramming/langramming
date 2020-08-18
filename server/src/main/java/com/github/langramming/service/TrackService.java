@@ -3,19 +3,25 @@ package com.github.langramming.service;
 import com.github.langramming.database.model.AlbumEntity;
 import com.github.langramming.database.model.ArtistEntity;
 import com.github.langramming.database.model.TrackEntity;
+import com.github.langramming.database.model.TrackImageEntity;
 import com.github.langramming.database.repository.AlbumRepository;
 import com.github.langramming.database.repository.ArtistRepository;
+import com.github.langramming.database.repository.TrackImageRepository;
 import com.github.langramming.database.repository.TrackRepository;
 import com.github.langramming.model.TrackDetails;
 import com.github.langramming.model.TrackProvider;
 import com.github.langramming.model.TrackProviderType;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.springframework.transaction.annotation.Transactional;
 
 @Singleton
 public class TrackService {
@@ -23,17 +29,20 @@ public class TrackService {
     private final TrackRepository trackRepository;
     private final AlbumRepository albumRepository;
     private final ArtistRepository artistRepository;
+    private final TrackImageRepository trackImageRepository;
 
     @Inject
     public TrackService(
         TrackRepository trackRepository,
         AlbumRepository albumRepository,
         ArtistRepository artistRepository,
+        TrackImageRepository trackImageRepository,
         List<TrackProvider> trackProviderList
     ) {
         this.trackRepository = trackRepository;
         this.albumRepository = albumRepository;
         this.artistRepository = artistRepository;
+        this.trackImageRepository = trackImageRepository;
 
         this.trackProviderEnumMap = new EnumMap<>(TrackProviderType.class);
         trackProviderList.forEach(
@@ -102,19 +111,19 @@ public class TrackService {
             .build();
     }
 
-    private void persistTrack(TrackDetails trackDetails) {
+    @Transactional
+    public void persistTrack(TrackDetails trackDetails) {
         TrackProviderType trackProvider = trackDetails.getProviderType();
 
         Optional<AlbumEntity> albumOpt = trackDetails
             .getAlbum()
             .map(album -> persistAlbum(trackProvider, album));
-        List<ArtistEntity> artists = trackDetails
-            .getArtists()
-            .stream()
-            .map(artist -> persistArtist(trackProvider, artist))
-            .collect(Collectors.toList());
+        List<ArtistEntity> artists = persistArtists(
+            trackProvider,
+            trackDetails.getArtists()
+        );
 
-        trackRepository.save(
+        TrackEntity trackEntity = trackRepository.save(
             TrackEntity
                 .builder()
                 .provider(trackProvider.getId())
@@ -124,6 +133,8 @@ public class TrackService {
                 .artists(artists)
                 .build()
         );
+
+        persistImages(trackEntity, trackDetails.getImages());
     }
 
     private AlbumEntity persistAlbum(
@@ -148,25 +159,77 @@ public class TrackService {
         );
     }
 
-    private ArtistEntity persistArtist(
+    private List<ArtistEntity> persistArtists(
         TrackProviderType trackProvider,
-        TrackDetails.Artist artist
+        List<TrackDetails.Artist> artists
     ) {
-        Optional<ArtistEntity> existingArtist = artistRepository.findById(
+        Collection<ArtistEntity> existingArtists = artistRepository.findByIds(
             trackProvider,
-            artist.getId()
+            artists
+                .stream()
+                .map(TrackDetails.Artist::getId)
+                .collect(Collectors.toList())
         );
 
-        return existingArtist.orElseGet(
-            () ->
-                artistRepository.save(
-                    ArtistEntity
-                        .builder()
-                        .provider(trackProvider.getId())
-                        .providerArtistId(artist.getId())
-                        .name(artist.getName())
-                        .build()
+        Set<String> existingArtistIds = existingArtists
+            .stream()
+            .map(artist -> artist.providerArtistId)
+            .collect(Collectors.toSet());
+
+        List<ArtistEntity> newArtists = artistRepository.saveAll(
+            artists
+                .stream()
+                .filter(artist -> !existingArtistIds.contains(artist.getId()))
+                .map(
+                    artist ->
+                        ArtistEntity
+                            .builder()
+                            .provider(trackProvider.getId())
+                            .providerArtistId(artist.getId())
+                            .name(artist.getName())
+                            .build()
                 )
+                .collect(Collectors.toList())
+        );
+
+        return Stream
+            .concat(existingArtists.stream(), newArtists.stream())
+            .collect(Collectors.toList());
+    }
+
+    private void persistImages(
+        TrackEntity trackEntity,
+        List<TrackDetails.Image> images
+    ) {
+        Collection<TrackImageEntity> existingImages = trackImageRepository.findAllByTrack(
+            trackEntity
+        );
+
+        trackImageRepository.saveAll(
+            images
+                .stream()
+                .filter(
+                    image -> {
+                        for (TrackImageEntity existing : existingImages) {
+                            return (
+                                existing.width != image.getWidth() ||
+                                existing.height != image.getHeight()
+                            );
+                        }
+                        return true;
+                    }
+                )
+                .map(
+                    image ->
+                        TrackImageEntity
+                            .builder()
+                            .track(trackEntity)
+                            .width(image.getWidth())
+                            .height(image.getHeight())
+                            .url(image.getUrl())
+                            .build()
+                )
+                .collect(Collectors.toList())
         );
     }
 }
