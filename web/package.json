@@ -29,7 +29,9 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.32",
+    "@types/react-audio-player": "^0.11.0",
     "@types/react-dom": "^16.9.6",
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "react-audio-player": "^0.13.0"
   }
 }
