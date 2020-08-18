@@ -71,17 +71,16 @@ public class SpotifyTrackProvider implements TrackProvider {
                 .id(track.getId())
                 .name(track.getName())
                 .images(toTrackDetailsImages(track.getAlbum().getImages()))
-                .urls(toTrackDetailsUrls(track))
+                .links(toTrackDetailsLinks(track))
                 .album(toTrackDetailsAlbum(track.getAlbum()))
                 .artists(toTrackDetailsArtists(track.getArtists()))
                 .build()
         );
     }
 
-    private TrackDetails.Urls toTrackDetailsUrls(Track track) {
+    private TrackDetails.Links toTrackDetailsLinks(Track track) {
         return TrackDetails
-            .Urls.builder()
-            .preview(track.getPreviewUrl())
+            .Links.builder()
             .url(track.getExternalUrls().getExternalUrls().get("spotify"))
             .build();
     }

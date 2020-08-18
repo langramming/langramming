@@ -11,7 +11,7 @@ public class TrackDetails {
     private final TrackProviderType providerType;
     private final String id;
     private final String name;
-    private final Urls urls;
+    private final Links links;
     private final List<Image> images;
     private final Optional<Album> album;
     private final List<Artist> artists;
@@ -34,9 +34,8 @@ public class TrackDetails {
 
     @Data
     @Builder
-    public static class Urls {
+    public static class Links {
         private final String url;
-        private final String preview;
     }
 
     @Data

@@ -176,7 +176,11 @@ public class RecentTracksResource {
                                     track ->
                                         new RecentSpotifyTrackDTO(
                                             track.right(),
-                                            track.left().getPlayedAt()
+                                            track.left().getPlayedAt(),
+                                            track
+                                                .left()
+                                                .getTrack()
+                                                .getPreviewUrl()
                                         )
                                 )
                                 .collect(Collectors.toList())

@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { Track } from "../../types/Track";
+import { RecentTrack } from "../../types/RecentTracks";
 
 interface TrackCarouselItemProps {
-  track: Track;
+  track: RecentTrack;
 }
 
 export const TrackCarouselItem = ({ track }: TrackCarouselItemProps) => {

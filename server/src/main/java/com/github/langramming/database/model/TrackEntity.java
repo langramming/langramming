@@ -46,6 +46,9 @@ public class TrackEntity {
     @Column(name = "provider_track_id", nullable = false)
     public String providerTrackId;
 
+    @Column(name = "url", nullable = false)
+    public String url;
+
     @Nullable
     @ManyToOne
     @JoinColumn(name = "album", referencedColumnName = "id", updatable = false)
@@ -65,7 +68,7 @@ public class TrackEntity {
     )
     public List<ArtistEntity> artists;
 
-    @OneToMany
+    @OneToMany(mappedBy = "track")
     public List<TrackImageEntity> images;
 
     @OneToMany(mappedBy = "track")

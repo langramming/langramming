@@ -83,6 +83,7 @@ public class TrackService {
             .id(trackEntity.providerTrackId)
             .name(trackEntity.name)
             .providerType(trackProviderType)
+            .links(TrackDetails.Links.builder().url(trackEntity.url).build())
             .album(
                 Optional
                     .ofNullable(trackEntity.album)
@@ -108,6 +109,20 @@ public class TrackService {
                     )
                     .collect(Collectors.toList())
             )
+            .images(
+                trackEntity
+                    .images.stream()
+                    .map(
+                        image ->
+                            TrackDetails
+                                .Image.builder()
+                                .width(image.width)
+                                .height(image.height)
+                                .url(image.url)
+                                .build()
+                    )
+                    .collect(Collectors.toList())
+            )
             .build();
     }
 
@@ -129,6 +144,7 @@ public class TrackService {
                 .provider(trackProvider.getId())
                 .providerTrackId(trackDetails.getId())
                 .name(trackDetails.getName())
+                .url(trackDetails.getLinks().getUrl())
                 .album(albumOpt.orElse(null))
                 .artists(artists)
                 .build()

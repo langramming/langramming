@@ -6,10 +6,9 @@ import { TrackCarousel } from "../../../components/TrackCarousel";
 
 export const SpotifyAuthed = () => {
   const recentTracks = useRecentTracks("spotify");
-  const tracks = React.useMemo(
-    () => recentTracks?.data?.items?.map(({ track }) => track) ?? [],
-    [recentTracks.data]
-  );
+  const tracks = React.useMemo(() => recentTracks.data?.items ?? [], [
+    recentTracks.data,
+  ]);
 
   return (
     <>

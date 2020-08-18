@@ -1,15 +1,22 @@
 import * as React from "react";
 
-import { Track } from "../../types/Track";
+import { RecentTrack } from "../../types/RecentTracks";
 
 import { TrackCarouselItem } from "./TrackCarouselItem";
 
 interface TrackCarouselProps {
-  tracks: Track[];
+  tracks: RecentTrack[];
 }
 
 export const TrackCarousel = ({ tracks }: TrackCarouselProps) => {
-  return tracks.map((track) => (
-    <TrackCarouselItem key={`${track.provider}/${track.id}`} track={track} />
-  ));
+  return (
+    <>
+      {tracks.map((track) => (
+        <TrackCarouselItem
+          key={`${track.track.provider}/${track.track.id}`}
+          track={track}
+        />
+      ))}
+    </>
+  );
 };

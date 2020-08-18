@@ -19,6 +19,9 @@ public class TrackDTO {
     @JsonProperty("name")
     public final String name;
 
+    @JsonProperty("url")
+    public final String url;
+
     @JsonProperty("album")
     public final Optional<TrackAlbumDTO> album;
 
@@ -32,6 +35,7 @@ public class TrackDTO {
         this.provider = trackDetails.getProviderType();
         this.id = trackDetails.getId();
         this.name = trackDetails.getName();
+        this.url = trackDetails.getLinks().getUrl();
         this.album = trackDetails.getAlbum().map(TrackAlbumDTO::new);
         this.artists =
             trackDetails
