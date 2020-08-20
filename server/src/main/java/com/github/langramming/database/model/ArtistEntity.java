@@ -20,9 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "Artist")
 @Table(
     name = "artist_v1",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "provider", "provider_artist_id" }),
-    }
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "provider", "provider_artist_id" }) }
 )
 public class ArtistEntity {
     @Id
@@ -42,14 +40,8 @@ public class ArtistEntity {
     @ManyToMany
     @JoinTable(
         name = "track_artists_v1",
-        joinColumns = @JoinColumn(
-            name = "artist_id",
-            referencedColumnName = "id"
-        ),
-        inverseJoinColumns = @JoinColumn(
-            name = "track_id",
-            referencedColumnName = "id"
-        )
+        joinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "track_id", referencedColumnName = "id")
     )
     public List<TrackEntity> tracks;
 }

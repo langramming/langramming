@@ -1,12 +1,12 @@
-import * as React from "react";
-import { ValueType } from "react-select";
-import { CreatableSelect } from "@atlaskit/select";
+import * as React from 'react';
+import { ValueType } from 'react-select';
+import { CreatableSelect } from '@atlaskit/select';
 
-import { Language, LanguageResponse } from "../../types/Language";
-import { useFetch } from "../../common/hooks/useFetch";
+import { Language, LanguageResponse } from '../../types/Language';
+import { useFetch } from '../../common/hooks/useFetch';
 
-import { LanguageSelectAddModal } from "./LanguageSelectAddModal";
-import { createLanguage, isValid, validate } from "./utils";
+import { LanguageSelectAddModal } from './LanguageSelectAddModal';
+import { createLanguage, isValid, validate } from './utils';
 
 export interface LanguageSelectProps {
   autoFocus?: boolean;
@@ -27,37 +27,37 @@ interface LanguageSelectState {
 }
 
 type LanguageSelectStateAction =
-  | { type: "CREATE_START"; name: string }
-  | { type: "CREATE_SAVE_BEGIN" }
-  | { type: "CREATE_SAVE_SUCCESS"; language: Language }
-  | { type: "CREATE_SAVE_FAIL" }
-  | { type: "CREATE_CANCEL" }
-  | { type: "SELECT"; selectedOption: LanguageOption | null | undefined };
+  | { type: 'CREATE_START'; name: string }
+  | { type: 'CREATE_SAVE_BEGIN' }
+  | { type: 'CREATE_SAVE_SUCCESS'; language: Language }
+  | { type: 'CREATE_SAVE_FAIL' }
+  | { type: 'CREATE_CANCEL' }
+  | { type: 'SELECT'; selectedOption: LanguageOption | null | undefined };
 
-const languageSelectReducer: React.Reducer<
-  LanguageSelectState,
-  LanguageSelectStateAction
-> = (prevState, action) => {
+const languageSelectReducer: React.Reducer<LanguageSelectState, LanguageSelectStateAction> = (
+  prevState,
+  action,
+) => {
   switch (action.type) {
-    case "CREATE_START": {
+    case 'CREATE_START': {
       return {
         ...prevState,
         newOption: action.name,
       };
     }
-    case "CREATE_SAVE_BEGIN": {
+    case 'CREATE_SAVE_BEGIN': {
       return {
         ...prevState,
         isSaving: true,
       };
     }
-    case "CREATE_SAVE_FAIL": {
+    case 'CREATE_SAVE_FAIL': {
       return {
         ...prevState,
         isSaving: false,
       };
     }
-    case "CREATE_SAVE_SUCCESS": {
+    case 'CREATE_SAVE_SUCCESS': {
       return {
         ...prevState,
         isSaving: false,
@@ -65,13 +65,13 @@ const languageSelectReducer: React.Reducer<
         newOptions: [...prevState.newOptions, action.language],
       };
     }
-    case "CREATE_CANCEL": {
+    case 'CREATE_CANCEL': {
       return {
         ...prevState,
         newOption: null,
       };
     }
-    case "SELECT": {
+    case 'SELECT': {
       return {
         ...prevState,
         selectedOption: action.selectedOption,
@@ -85,37 +85,35 @@ export const LanguageSelect = ({
   defaultValue,
   onChange,
 }: LanguageSelectProps): JSX.Element => {
-  const languageApiState = useFetch<LanguageResponse>("/api/language");
+  const languageApiState = useFetch<LanguageResponse>('/api/language');
 
   const [state, dispatch] = React.useReducer(languageSelectReducer, {
     isSaving: false,
-    selectedOption: defaultValue
-      ? { label: defaultValue.name, value: defaultValue }
-      : null,
+    selectedOption: defaultValue ? { label: defaultValue.name, value: defaultValue } : null,
     newOption: null,
     newOptions: [],
   });
 
   const handleOnChange = React.useCallback(
     (value: ValueType<LanguageOption>) => {
-      if (value == null || "value" in value) {
-        dispatch({ type: "SELECT", selectedOption: value });
+      if (value == null || 'value' in value) {
+        dispatch({ type: 'SELECT', selectedOption: value });
         onChange(value?.value);
       } else {
-        dispatch({ type: "SELECT", selectedOption: value[0] });
+        dispatch({ type: 'SELECT', selectedOption: value[0] });
         onChange(value[0].value);
       }
     },
-    [onChange]
+    [onChange],
   );
 
   const handleOnCreate = React.useCallback((inputValue: string) => {
-    dispatch({ type: "CREATE_START", name: inputValue });
+    dispatch({ type: 'CREATE_START', name: inputValue });
   }, []);
 
   const handleOnCreateSave = React.useCallback(
     (
-      language: Language
+      language: Language,
     ): {
       language?: string;
       name?: string;
@@ -125,23 +123,20 @@ export const LanguageSelect = ({
         return validationResult;
       }
 
-      dispatch({ type: "CREATE_SAVE_BEGIN" });
+      dispatch({ type: 'CREATE_SAVE_BEGIN' });
       createLanguage(language)
         .then(() => {
-          dispatch({ type: "CREATE_SAVE_SUCCESS", language });
+          dispatch({ type: 'CREATE_SAVE_SUCCESS', language });
           handleOnChange({ label: language.name, value: language });
         })
         .catch(() => {
-          dispatch({ type: "CREATE_SAVE_FAIL" });
+          dispatch({ type: 'CREATE_SAVE_FAIL' });
         });
     },
-    [handleOnChange]
+    [handleOnChange],
   );
 
-  const handleOnCreateCancel = React.useCallback(
-    () => dispatch({ type: "CREATE_CANCEL" }),
-    []
-  );
+  const handleOnCreateCancel = React.useCallback(() => dispatch({ type: 'CREATE_CANCEL' }), []);
 
   const languageOptions = React.useMemo(
     () => [
@@ -154,7 +149,7 @@ export const LanguageSelect = ({
         value: language,
       })),
     ],
-    [languageApiState.data, state.newOptions]
+    [languageApiState.data, state.newOptions],
   );
 
   return (
@@ -165,9 +160,7 @@ export const LanguageSelect = ({
         closeMenuOnSelect
         formatCreateLabel={(inputValue: string) => `Add "${inputValue}"`}
         formatOptionLabel={(option) =>
-          option.value.code != null
-            ? `${option.label} (${option.value.code})`
-            : option.label
+          option.value.code != null ? `${option.label} (${option.value.code})` : option.label
         }
         onChange={handleOnChange}
         onCreateOption={handleOnCreate}

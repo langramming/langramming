@@ -1,1 +1,1 @@
-export { TrackCarousel } from "./TrackCarousel";
+export { TrackCarousel } from './TrackCarousel';

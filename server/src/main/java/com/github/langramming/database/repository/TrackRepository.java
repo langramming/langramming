@@ -24,19 +24,13 @@ public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull String trackId
     ) {
-        return findByProviderAndProviderTrackId(
-            trackProviderType.getId(),
-            trackId
-        );
+        return findByProviderAndProviderTrackId(trackProviderType.getId(), trackId);
     }
 
     default Collection<TrackEntity> findByIds(
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull Collection<String> trackIds
     ) {
-        return findByProviderAndProviderTrackIdIn(
-            trackProviderType.getId(),
-            trackIds
-        );
+        return findByProviderAndProviderTrackIdIn(trackProviderType.getId(), trackIds);
     }
 }

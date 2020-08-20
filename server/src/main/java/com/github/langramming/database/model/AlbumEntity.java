@@ -18,9 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "Album")
 @Table(
     name = "album_v1",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "provider", "provider_album_id" }),
-    }
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "provider", "provider_album_id" }) }
 )
 public class AlbumEntity {
     @Id

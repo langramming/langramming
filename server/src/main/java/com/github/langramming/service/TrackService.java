@@ -55,10 +55,7 @@ public class TrackService {
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull String trackId
     ) {
-        Optional<TrackEntity> trackEntityOpt = trackRepository.findById(
-            trackProviderType,
-            trackId
-        );
+        Optional<TrackEntity> trackEntityOpt = trackRepository.findById(trackProviderType, trackId);
         if (trackEntityOpt.isPresent()) {
             return trackEntityOpt.map(
                 trackEntity -> toTrackDetails(trackProviderType, trackEntity)
@@ -133,10 +130,7 @@ public class TrackService {
         Optional<AlbumEntity> albumOpt = trackDetails
             .getAlbum()
             .map(album -> persistAlbum(trackProvider, album));
-        List<ArtistEntity> artists = persistArtists(
-            trackProvider,
-            trackDetails.getArtists()
-        );
+        List<ArtistEntity> artists = persistArtists(trackProvider, trackDetails.getArtists());
 
         TrackEntity trackEntity = trackRepository.save(
             TrackEntity
@@ -153,10 +147,7 @@ public class TrackService {
         persistImages(trackEntity, trackDetails.getImages());
     }
 
-    private AlbumEntity persistAlbum(
-        TrackProviderType trackProvider,
-        TrackDetails.Album album
-    ) {
+    private AlbumEntity persistAlbum(TrackProviderType trackProvider, TrackDetails.Album album) {
         Optional<AlbumEntity> existingAlbum = albumRepository.findById(
             trackProvider,
             album.getId()
@@ -181,10 +172,7 @@ public class TrackService {
     ) {
         Collection<ArtistEntity> existingArtists = artistRepository.findByIds(
             trackProvider,
-            artists
-                .stream()
-                .map(TrackDetails.Artist::getId)
-                .collect(Collectors.toList())
+            artists.stream().map(TrackDetails.Artist::getId).collect(Collectors.toList())
         );
 
         Set<String> existingArtistIds = existingArtists
@@ -213,10 +201,7 @@ public class TrackService {
             .collect(Collectors.toList());
     }
 
-    private void persistImages(
-        TrackEntity trackEntity,
-        List<TrackDetails.Image> images
-    ) {
+    private void persistImages(TrackEntity trackEntity, List<TrackDetails.Image> images) {
         Collection<TrackImageEntity> existingImages = trackImageRepository.findAllByTrack(
             trackEntity
         );

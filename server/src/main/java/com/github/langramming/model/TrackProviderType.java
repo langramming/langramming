@@ -26,10 +26,7 @@ public enum TrackProviderType {
 
     static {
         for (TrackProviderType trackProviderType : TrackProviderType.values()) {
-            trackProviderTypeCache.put(
-                trackProviderType.getId().toLowerCase(),
-                trackProviderType
-            );
+            trackProviderTypeCache.put(trackProviderType.getId().toLowerCase(), trackProviderType);
         }
     }
 }

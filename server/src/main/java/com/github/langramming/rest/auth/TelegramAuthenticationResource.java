@@ -47,9 +47,7 @@ public class TelegramAuthenticationResource {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<ErrorDTO> login(
-        HttpServletRequest httpServletRequest
-    ) {
+    public ResponseEntity<ErrorDTO> login(HttpServletRequest httpServletRequest) {
         if (!verifyTelegramLogin(httpServletRequest.getParameterMap())) {
             return responseHelper.badRequest();
         }
@@ -76,14 +74,9 @@ public class TelegramAuthenticationResource {
             }
         );
 
-        User user = userOpt.orElseGet(
-            () -> userService.createUser(telegramId, name)
-        );
+        User user = userOpt.orElseGet(() -> userService.createUser(telegramId, name));
 
-        UserContextFilter.setLoggedInUser(
-            httpServletRequest.getSession(),
-            user
-        );
+        UserContextFilter.setLoggedInUser(httpServletRequest.getSession(), user);
 
         return responseHelper.redirect("/");
     }
@@ -91,9 +84,7 @@ public class TelegramAuthenticationResource {
     private boolean verifyTelegramLogin(Map<String, String[]> parameterMap) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] secret = digest.digest(
-                telegramConfiguration.getToken().getBytes()
-            );
+            byte[] secret = digest.digest(telegramConfiguration.getToken().getBytes());
 
             Mac hmacSha256 = Mac.getInstance("HmacSHA256");
             hmacSha256.init(new SecretKeySpec(secret, "HmacSHA256"));
@@ -101,16 +92,8 @@ public class TelegramAuthenticationResource {
             Map<String, String> queryParams = parameterMap
                 .entrySet()
                 .stream()
-                .filter(
-                    entry ->
-                        entry.getValue() != null && entry.getValue().length > 0
-                )
-                .collect(
-                    Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue()[0]
-                    )
-                );
+                .filter(entry -> entry.getValue() != null && entry.getValue().length > 0)
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()[0]));
 
             String hash = queryParams.remove("hash");
             if (hash == null) {
@@ -121,10 +104,7 @@ public class TelegramAuthenticationResource {
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
-                .map(
-                    entry ->
-                        String.format("%s=%s", entry.getKey(), entry.getValue())
-                )
+                .map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining("\n"));
 
             byte[] hashedBytes = hmacSha256.doFinal(dataCheckString.getBytes());

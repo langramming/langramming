@@ -12,10 +12,6 @@ public class LanguagesDTO {
     public List<LanguageDTO> languages;
 
     public LanguagesDTO(List<Language> languages) {
-        this.languages =
-            languages
-                .stream()
-                .map(LanguageDTO::new)
-                .collect(Collectors.toList());
+        this.languages = languages.stream().map(LanguageDTO::new).collect(Collectors.toList());
     }
 }

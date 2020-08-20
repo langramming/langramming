@@ -24,19 +24,13 @@ public interface ArtistRepository extends JpaRepository<ArtistEntity, Long> {
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull String artistId
     ) {
-        return findByProviderAndProviderArtistId(
-            trackProviderType.getId(),
-            artistId
-        );
+        return findByProviderAndProviderArtistId(trackProviderType.getId(), artistId);
     }
 
     default Collection<ArtistEntity> findByIds(
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull Collection<String> artistIds
     ) {
-        return findByProviderAndProviderArtistIdIn(
-            trackProviderType.getId(),
-            artistIds
-        );
+        return findByProviderAndProviderArtistIdIn(trackProviderType.getId(), artistIds);
     }
 }

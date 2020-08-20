@@ -1,1 +1,1 @@
-export { AudioPlayer } from "./AudioPlayer";
+export { AudioPlayer } from './AudioPlayer';

@@ -21,10 +21,7 @@ public class FrontendModelProvider {
     }
 
     public FrontendModel getFrontendModel() {
-        return FrontendModel
-            .builder()
-            .user(userProvider.get().map(this::toUserModel))
-            .build();
+        return FrontendModel.builder().user(userProvider.get().map(this::toUserModel)).build();
     }
 
     private FrontendModel.FrontendUserModel toUserModel(User user) {
@@ -32,9 +29,7 @@ public class FrontendModelProvider {
             .FrontendUserModel.builder()
             .id(user.getId())
             .name(user.getName())
-            .isSpotifyAuthed(
-                spotifyUserService.getCurrentSpotifyUser().isPresent()
-            )
+            .isSpotifyAuthed(spotifyUserService.getCurrentSpotifyUser().isPresent())
             .build();
     }
 }

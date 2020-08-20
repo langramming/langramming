@@ -19,9 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(
     name = "track_language_v1",
     uniqueConstraints = {
-        @UniqueConstraint(
-            columnNames = { "track_id", "language_id", "tagged_by_id" }
-        ),
+        @UniqueConstraint(columnNames = { "track_id", "language_id", "tagged_by_id" }),
     }
 )
 public class TrackLanguageEntity {

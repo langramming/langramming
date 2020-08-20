@@ -28,10 +28,7 @@ public class LanguageResource {
     private final ResponseHelper responseHelper;
 
     @Inject
-    public LanguageResource(
-        LanguageService languageService,
-        ResponseHelper responseHelper
-    ) {
+    public LanguageResource(LanguageService languageService, ResponseHelper responseHelper) {
         this.languageService = languageService;
         this.responseHelper = responseHelper;
     }
@@ -57,9 +54,7 @@ public class LanguageResource {
             return responseHelper.badRequest();
         }
 
-        Optional<Language> languageOpt = languageService.getLanguageByCode(
-            code
-        );
+        Optional<Language> languageOpt = languageService.getLanguageByCode(code);
 
         return Option
             .fromOptional(languageOpt)
@@ -71,9 +66,7 @@ public class LanguageResource {
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> createLanguage(
-        @RequestBody LanguageRequest languageRequest
-    ) {
+    public ResponseEntity<?> createLanguage(@RequestBody LanguageRequest languageRequest) {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }

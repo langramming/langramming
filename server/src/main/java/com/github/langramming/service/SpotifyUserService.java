@@ -33,9 +33,7 @@ public class SpotifyUserService {
             .map(this::toSpotifyUser);
     }
 
-    public SpotifyUser createOrUpdateUser(
-        AuthorizationCodeCredentials credentials
-    ) {
+    public SpotifyUser createOrUpdateUser(AuthorizationCodeCredentials credentials) {
         Optional<User> userOpt = userProvider.get();
         if (userOpt.isEmpty()) {
             throw new IllegalStateException("no logged in user");
@@ -52,10 +50,7 @@ public class SpotifyUserService {
             .tokenType(credentials.getTokenType())
             .scope(credentials.getScope())
             .expiresAt(
-                Instant
-                    .now()
-                    .plus(credentials.getExpiresIn(), ChronoUnit.SECONDS)
-                    .getEpochSecond()
+                Instant.now().plus(credentials.getExpiresIn(), ChronoUnit.SECONDS).getEpochSecond()
             )
             .accessToken(credentials.getAccessToken())
             .refreshToken(credentials.getRefreshToken())

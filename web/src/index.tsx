@@ -1,7 +1,7 @@
-import React from "react";
-import { render } from "react-dom";
-import "@atlaskit/css-reset";
+import React from 'react';
+import { render } from 'react-dom';
+import '@atlaskit/css-reset';
 
-import { App } from "./app";
+import { App } from './app';
 
-render(<App />, document.getElementById("content"));
+render(<App />, document.getElementById('content'));

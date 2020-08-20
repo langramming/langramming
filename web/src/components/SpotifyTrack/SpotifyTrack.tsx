@@ -1,7 +1,7 @@
-import * as React from "react";
-import styled from "styled-components";
-import { Track } from "../../types/Track";
-import { AudioPlayer } from "../AudioPlayer";
+import * as React from 'react';
+import styled from 'styled-components';
+import { Track } from '../../types/Track';
+import { AudioPlayer } from '../AudioPlayer';
 
 interface SpotifyTrackProps {
   track: Track;
@@ -32,7 +32,7 @@ export const SpotifyTrack = ({ track, previewUrl }: SpotifyTrackProps) => (
     />
     <TrackDetailsContainer>
       <h6>{track.name}</h6>
-      <p>{track.artists.map((artist) => artist.name).join(", ")}</p>
+      <p>{track.artists.map((artist) => artist.name).join(', ')}</p>
       <AudioPlayer src={previewUrl} />
     </TrackDetailsContainer>
   </TrackContainer>

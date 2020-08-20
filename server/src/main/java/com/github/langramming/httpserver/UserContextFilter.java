@@ -16,8 +16,7 @@ import javax.servlet.http.HttpSession;
 
 @Singleton
 public class UserContextFilter implements Filter {
-    private static final String USER_CONTEXT_KEY =
-        UserContextFilter.class.getName() + "__USER";
+    private static final String USER_CONTEXT_KEY = UserContextFilter.class.getName() + "__USER";
     private static final ThreadLocal<User> userLocal = new ThreadLocal<>();
 
     public static Optional<User> getLoggedInUser() {

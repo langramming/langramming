@@ -1,1 +1,1 @@
-export { SpotifyTrack } from "./SpotifyTrack";
+export { SpotifyTrack } from './SpotifyTrack';

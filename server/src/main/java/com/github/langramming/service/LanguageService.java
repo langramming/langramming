@@ -31,11 +31,7 @@ public class LanguageService {
     }
 
     public Language createLanguage(String code, String name) {
-        LanguageEntity newLanguageEntity = LanguageEntity
-            .builder()
-            .code(code)
-            .name(name)
-            .build();
+        LanguageEntity newLanguageEntity = LanguageEntity.builder().code(code).name(name).build();
 
         return toLanguage(languageRepository.save(newLanguageEntity));
     }

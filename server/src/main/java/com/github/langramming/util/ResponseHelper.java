@@ -24,27 +24,19 @@ public class ResponseHelper {
     }
 
     public ResponseEntity<ErrorDTO> badRequest() {
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(ErrorDTO.of("Bad request"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDTO.of("Bad request"));
     }
 
     public ResponseEntity<ErrorDTO> unauthorized() {
-        return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body(ErrorDTO.of("Unauthorized"));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorDTO.of("Unauthorized"));
     }
 
     public ResponseEntity<ErrorDTO> forbidden() {
-        return ResponseEntity
-            .status(HttpStatus.FORBIDDEN)
-            .body(ErrorDTO.of("Forbidden"));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorDTO.of("Forbidden"));
     }
 
     public ResponseEntity<ErrorDTO> notFound() {
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ErrorDTO.of("Not found"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorDTO.of("Not found"));
     }
 
     public ResponseEntity<ErrorDTO> serverError(Exception exception) {
@@ -53,9 +45,7 @@ public class ResponseHelper {
             ? exception.getMessage()
             : "An error occurred";
 
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorDTO.of(message));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorDTO.of(message));
     }
 
     public <T> ResponseEntity<T> redirect(String path) {
@@ -63,15 +53,10 @@ public class ResponseHelper {
     }
 
     public <T> ResponseEntity<T> redirect(URI uri) {
-        return ResponseEntity
-            .status(HttpStatus.TEMPORARY_REDIRECT)
-            .location(uri)
-            .build();
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(uri).build();
     }
 
-    public <T> ResponseEntity<T> redirectToError(
-        LangrammingClientError clientError
-    ) {
+    public <T> ResponseEntity<T> redirectToError(LangrammingClientError clientError) {
         return redirect("/?error=" + clientError.getCode());
     }
 
@@ -83,9 +68,7 @@ public class ResponseHelper {
         return ResponseEntity.ok().contentType(mediaType).body(entity);
     }
 
-    public <E extends Exception, T> ResponseEntity<?> fromEither(
-        Either<E, T> either
-    ) {
+    public <E extends Exception, T> ResponseEntity<?> fromEither(Either<E, T> either) {
         return either.fold(this::serverError, this::ok);
     }
 }

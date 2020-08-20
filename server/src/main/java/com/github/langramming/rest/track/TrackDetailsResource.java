@@ -23,10 +23,7 @@ public class TrackDetailsResource {
     private final ResponseHelper responseHelper;
 
     @Inject
-    public TrackDetailsResource(
-        TrackService trackService,
-        ResponseHelper responseHelper
-    ) {
+    public TrackDetailsResource(TrackService trackService, ResponseHelper responseHelper) {
         this.trackService = trackService;
         this.responseHelper = responseHelper;
     }

@@ -4,12 +4,12 @@
 
 langramming:
   server:
-    url: "this should be set to the website url"
+    url: 'this should be set to the website url'
   telegram:
-    token: "set this to the telegram bot token"
+    token: 'set this to the telegram bot token'
   spotify:
-    client-id: "set this to the spotify client id"
-    client-secret: "set this to the spotify client secret"
+    client-id: 'set this to the spotify client id'
+    client-secret: 'set this to the spotify client secret'
 
 logging:
   level:
@@ -17,15 +17,15 @@ logging:
 
 spring:
   datasource:
-    driver-class-name: "org.sqlite.JDBC"
-    url: "jdbc:sqlite:langrammingdb.sqlite"
+    driver-class-name: 'org.sqlite.JDBC'
+    url: 'jdbc:sqlite:langrammingdb.sqlite'
   jpa:
     generate-ddl: false
     hibernate:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: "org.hibernate.dialect.SQLiteDialect"
+        dialect: 'org.hibernate.dialect.SQLiteDialect'
   jackson:
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
     time-zone: UTC
@@ -36,8 +36,8 @@ spring:
 spring:
   profiles: local
   datasource:
-    username: "langramming"
-    password: "languages r cool"
+    username: 'langramming'
+    password: 'languages r cool'
   jpa:
     hibernate:
       # creates the DB and applies any changes to the schema automatically

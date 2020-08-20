@@ -16,11 +16,7 @@ public class RecentSpotifyTrackDTO {
     @JsonProperty("previewUrl")
     public final String previewUrl;
 
-    public RecentSpotifyTrackDTO(
-        TrackDetails trackDetails,
-        Date playedAt,
-        String previewUrl
-    ) {
+    public RecentSpotifyTrackDTO(TrackDetails trackDetails, Date playedAt, String previewUrl) {
         this.track = new TrackDTO(trackDetails);
         this.playedAt = playedAt;
         this.previewUrl = previewUrl;

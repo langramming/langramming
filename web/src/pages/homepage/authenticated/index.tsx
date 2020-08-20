@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { useAppContext } from "../../../common/hooks/useAppContext";
-import { SpotifyAuthed } from "./SpotifyAuthed";
-import { SpotifyUnauthed } from "./SpotifyUnauthed";
+import { useAppContext } from '../../../common/hooks/useAppContext';
+import { SpotifyAuthed } from './SpotifyAuthed';
+import { SpotifyUnauthed } from './SpotifyUnauthed';
 
 export const AuthenticatedHomepage = (): JSX.Element => {
   const appContext = useAppContext();

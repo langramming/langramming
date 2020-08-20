@@ -71,10 +71,7 @@ public class SpotifyRestClient {
                     );
             } catch (SpotifyWebApiException | IOException ex) {
                 ex.printStackTrace();
-                throw new IllegalStateException(
-                    "Failed to refresh Spotify token",
-                    ex
-                );
+                throw new IllegalStateException("Failed to refresh Spotify token", ex);
             }
         }
 
@@ -86,8 +83,6 @@ public class SpotifyRestClient {
 
     private static URI getRedirectUri(String serverUrl) {
         String baseUrl = serverUrl + (serverUrl.endsWith("/") ? "" : "/");
-        return SpotifyHttpManager.makeUri(
-            baseUrl + "api/auth/spotify/redirect"
-        );
+        return SpotifyHttpManager.makeUri(baseUrl + "api/auth/spotify/redirect");
     }
 }

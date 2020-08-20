@@ -17,18 +17,14 @@ public class TelegramBotClient implements DisposableBean {
     private GetMeResponse telegramBotInfo;
 
     @Inject
-    public TelegramBotClient(
-        LangrammingTelegramConfiguration telegramConfiguration
-    ) {
+    public TelegramBotClient(LangrammingTelegramConfiguration telegramConfiguration) {
         this.telegramConfiguration = telegramConfiguration;
     }
 
     public void login() {
         String botToken = telegramConfiguration.getToken();
         this.telegramBot = new TelegramBot(botToken);
-        this.telegramBot.setUpdatesListener(
-                new TelegramListener(this.telegramBot)
-            );
+        this.telegramBot.setUpdatesListener(new TelegramListener(this.telegramBot));
         this.telegramBotInfo = telegramBot.execute(new GetMe());
 
         log.info("Logged in as @" + telegramBotInfo.user().username());

@@ -22,9 +22,7 @@ public class FrontendService {
     private final LangrammingFrontendConfiguration frontendConfiguration;
 
     @Inject
-    public FrontendService(
-        LangrammingFrontendConfiguration frontendConfiguration
-    ) {
+    public FrontendService(LangrammingFrontendConfiguration frontendConfiguration) {
         this.frontendConfiguration = frontendConfiguration;
     }
 
@@ -38,16 +36,12 @@ public class FrontendService {
             return ResponseEntity.notFound().build();
         }
 
-        try (
-            InputStream inputStream = getClass().getResourceAsStream(assetPath)
-        ) {
+        try (InputStream inputStream = getClass().getResourceAsStream(assetPath)) {
             if (inputStream != null) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 StreamUtil.copy(inputStream, baos);
 
-                String contentType = URLConnection.guessContentTypeFromName(
-                    asset
-                );
+                String contentType = URLConnection.guessContentTypeFromName(asset);
                 MediaType mediaType = MediaType.parseMediaType(contentType);
                 if (mediaType.getCharset() == null) {
                     mediaType =
@@ -58,10 +52,7 @@ public class FrontendService {
                         );
                 }
 
-                return ResponseEntity
-                    .ok()
-                    .contentType(mediaType)
-                    .body(baos.toString());
+                return ResponseEntity.ok().contentType(mediaType).body(baos.toString());
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -94,20 +85,14 @@ public class FrontendService {
 
             MediaType mediaType = MediaType.parseMediaType(contentType);
 
-            return Optional.of(
-                ResponseEntity.ok().contentType(mediaType).body(baos.toString())
-            );
+            return Optional.of(ResponseEntity.ok().contentType(mediaType).body(baos.toString()));
         } else {
             response.setStatus(connection.getResponseCode());
             response.setContentType(contentType);
 
             // hot path: directly copy the frontend response into the response
             // we shouldn't do any filtering here, as it will really slow down load times
-            StreamUtil.copy(
-                1024 * 512,
-                connection.getInputStream(),
-                response.getOutputStream()
-            );
+            StreamUtil.copy(1024 * 512, connection.getInputStream(), response.getOutputStream());
             return Optional.empty();
         }
     }

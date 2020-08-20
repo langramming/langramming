@@ -1,4 +1,11 @@
 {
+  "jsxSingleQuote": false,
+  "printWidth": 100,
+  "quoteProps": "consistent",
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "all",
+
   "overrides": [
     {
       "files": ["*.java"],

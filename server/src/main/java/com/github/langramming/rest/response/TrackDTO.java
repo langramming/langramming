@@ -44,10 +44,6 @@ public class TrackDTO {
                 .map(TrackArtistDTO::new)
                 .collect(Collectors.toList());
         this.images =
-            trackDetails
-                .getImages()
-                .stream()
-                .map(TrackImageDTO::new)
-                .collect(Collectors.toList());
+            trackDetails.getImages().stream().map(TrackImageDTO::new).collect(Collectors.toList());
     }
 }

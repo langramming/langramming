@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TrackImageRepository
-    extends JpaRepository<TrackImageEntity, Long> {
+public interface TrackImageRepository extends JpaRepository<TrackImageEntity, Long> {
     Collection<TrackImageEntity> findAllByTrack(TrackEntity trackEntity);
 }

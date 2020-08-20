@@ -1,4 +1,4 @@
-export type TrackProvider = "spotify";
+export type TrackProvider = 'spotify';
 
 export interface TrackAlbum {
   id: string;

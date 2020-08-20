@@ -24,19 +24,13 @@ public interface AlbumRepository extends JpaRepository<AlbumEntity, Long> {
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull String albumId
     ) {
-        return findByProviderAndProviderAlbumId(
-            trackProviderType.getId(),
-            albumId
-        );
+        return findByProviderAndProviderAlbumId(trackProviderType.getId(), albumId);
     }
 
     default Collection<AlbumEntity> findByIds(
         @Nonnull TrackProviderType trackProviderType,
         @Nonnull Collection<String> albumIds
     ) {
-        return findByProviderAndProviderAlbumIdIn(
-            trackProviderType.getId(),
-            albumIds
-        );
+        return findByProviderAndProviderAlbumIdIn(trackProviderType.getId(), albumIds);
     }
 }

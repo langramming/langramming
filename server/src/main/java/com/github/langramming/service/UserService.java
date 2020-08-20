@@ -27,19 +27,13 @@ public class UserService {
     }
 
     public User createUser(long telegramId, String name) {
-        UserEntity newUserEntity = UserEntity
-            .builder()
-            .telegramId(telegramId)
-            .name(name)
-            .build();
+        UserEntity newUserEntity = UserEntity.builder().telegramId(telegramId).name(name).build();
 
         return toUser(userRepository.save(newUserEntity));
     }
 
     public void updateUser(User user) {
-        Optional<UserEntity> userEntityOpt = userRepository.findById(
-            user.getId()
-        );
+        Optional<UserEntity> userEntityOpt = userRepository.findById(user.getId());
         if (userEntityOpt.isPresent()) {
             UserEntity userEntity = userEntityOpt.get();
             userEntity.name = user.getName();

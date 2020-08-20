@@ -63,20 +63,14 @@ public class SpotifyAuthenticationResource {
     }
 
     @GetMapping("/redirect")
-    public ResponseEntity<?> onReturnFromSpotify(
-        HttpServletRequest httpServletRequest
-    )
+    public ResponseEntity<?> onReturnFromSpotify(HttpServletRequest httpServletRequest)
         throws IOException, SpotifyWebApiException {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }
 
-        Optional<String> errorOpt = Optional.ofNullable(
-            httpServletRequest.getParameter("error")
-        );
-        Optional<String> codeOpt = Optional.ofNullable(
-            httpServletRequest.getParameter("code")
-        );
+        Optional<String> errorOpt = Optional.ofNullable(httpServletRequest.getParameter("error"));
+        Optional<String> codeOpt = Optional.ofNullable(httpServletRequest.getParameter("code"));
 
         if (codeOpt.isEmpty()) {
             if (errorOpt.isPresent()) {
@@ -87,9 +81,7 @@ public class SpotifyAuthenticationResource {
                     );
                 }
             }
-            return responseHelper.redirectToError(
-                LangrammingClientError.SPOTIFY_UNKNOWN_ERROR
-            );
+            return responseHelper.redirectToError(LangrammingClientError.SPOTIFY_UNKNOWN_ERROR);
         }
 
         String code = codeOpt.get();

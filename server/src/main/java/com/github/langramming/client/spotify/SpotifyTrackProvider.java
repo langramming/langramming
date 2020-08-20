@@ -100,30 +100,18 @@ public class SpotifyTrackProvider implements TrackProvider {
             .collect(Collectors.toList());
     }
 
-    private Optional<TrackDetails.Album> toTrackDetailsAlbum(
-        AlbumSimplified album
-    ) {
+    private Optional<TrackDetails.Album> toTrackDetailsAlbum(AlbumSimplified album) {
         return Optional.of(
-            TrackDetails
-                .Album.builder()
-                .id(album.getId())
-                .name(album.getName())
-                .build()
+            TrackDetails.Album.builder().id(album.getId()).name(album.getName()).build()
         );
     }
 
-    private List<TrackDetails.Artist> toTrackDetailsArtists(
-        ArtistSimplified[] artists
-    ) {
+    private List<TrackDetails.Artist> toTrackDetailsArtists(ArtistSimplified[] artists) {
         return Stream
             .of(artists)
             .map(
                 artist ->
-                    TrackDetails
-                        .Artist.builder()
-                        .id(artist.getId())
-                        .name(artist.getName())
-                        .build()
+                    TrackDetails.Artist.builder().id(artist.getId()).name(artist.getName()).build()
             )
             .collect(Collectors.toList());
     }

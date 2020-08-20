@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LanguageRepository
-    extends JpaRepository<LanguageEntity, Long> {
+public interface LanguageRepository extends JpaRepository<LanguageEntity, Long> {
     Optional<LanguageEntity> findByCode(String code);
 }

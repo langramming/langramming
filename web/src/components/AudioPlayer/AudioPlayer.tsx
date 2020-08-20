@@ -1,5 +1,5 @@
-import * as React from "react";
-import ReactAudioPlayer from "react-audio-player";
+import * as React from 'react';
+import ReactAudioPlayer from 'react-audio-player';
 
 interface AudioPlayerProps {
   src: string;
@@ -20,11 +20,7 @@ export const AudioPlayer = ({ src }: AudioPlayerProps) => {
   return (
     <>
       <ReactAudioPlayer ref={setAudioRef} src={src} />
-      {audioRef && (
-        <button onClick={togglePlayPause}>
-          {audioRef.paused ? "Play" : "Pause"}
-        </button>
-      )}
+      {audioRef && <button onClick={togglePlayPause}>{audioRef.paused ? 'Play' : 'Pause'}</button>}
     </>
   );
 };

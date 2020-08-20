@@ -126,17 +126,8 @@ public class RecentTracksResource {
                         .map(
                             entry ->
                                 trackService
-                                    .getTrackDetails(
-                                        TrackProviderType.SPOTIFY,
-                                        entry.getKey()
-                                    )
-                                    .map(
-                                        trackDetails ->
-                                            Pair.pair(
-                                                entry.getValue(),
-                                                trackDetails
-                                            )
-                                    )
+                                    .getTrackDetails(TrackProviderType.SPOTIFY, entry.getKey())
+                                    .map(trackDetails -> Pair.pair(entry.getValue(), trackDetails))
                         )
                         .flatMap(Optional::stream)
                         .collect(Collectors.toList());
@@ -145,19 +136,10 @@ public class RecentTracksResource {
                     Optional<PlayHistory> last = Optional.empty();
                     if (!tracks.isEmpty()) {
                         first =
-                            Optional.ofNullable(
-                                itemsByTrackId.get(
-                                    tracks.get(0).right().getId()
-                                )
-                            );
+                            Optional.ofNullable(itemsByTrackId.get(tracks.get(0).right().getId()));
                         last =
                             Optional.ofNullable(
-                                itemsByTrackId.get(
-                                    tracks
-                                        .get(tracks.size() - 1)
-                                        .right()
-                                        .getId()
-                                )
+                                itemsByTrackId.get(tracks.get(tracks.size() - 1).right().getId())
                             );
                     }
 
@@ -177,10 +159,7 @@ public class RecentTracksResource {
                                         new RecentSpotifyTrackDTO(
                                             track.right(),
                                             track.left().getPlayedAt(),
-                                            track
-                                                .left()
-                                                .getTrack()
-                                                .getPreviewUrl()
+                                            track.left().getTrack().getPreviewUrl()
                                         )
                                 )
                                 .collect(Collectors.toList())

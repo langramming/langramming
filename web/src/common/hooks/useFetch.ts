@@ -1,10 +1,10 @@
-import * as React from "react";
-import { useEffect } from "react";
+import * as React from 'react';
+import { useEffect } from 'react';
 
 type ActionType<T> =
-  | { type: "LOADING" }
-  | { type: "DATA"; data: T }
-  | { type: "ERROR"; error: Error };
+  | { type: 'LOADING' }
+  | { type: 'DATA'; data: T }
+  | { type: 'ERROR'; error: Error };
 
 export interface FetchState<T> {
   loading: boolean;
@@ -12,27 +12,21 @@ export interface FetchState<T> {
   error: Error | null;
 }
 
-const reducer = <T>(
-  prevState: FetchState<T>,
-  action: ActionType<T>
-): FetchState<T> => {
-  if (action.type === "LOADING") {
+const reducer = <T>(prevState: FetchState<T>, action: ActionType<T>): FetchState<T> => {
+  if (action.type === 'LOADING') {
     return { ...prevState, loading: true };
   }
-  if (action.type === "DATA") {
+  if (action.type === 'DATA') {
     return { ...prevState, loading: false, data: action.data, error: null };
   }
-  if (action.type === "ERROR") {
+  if (action.type === 'ERROR') {
     return { ...prevState, loading: false, error: action.error };
   }
   return prevState;
 };
 
 export const useFetch = <T>(uri: string): FetchState<T> => {
-  const castReducer = reducer as (
-    prevState: FetchState<T>,
-    action: ActionType<T>
-  ) => FetchState<T>;
+  const castReducer = reducer as (prevState: FetchState<T>, action: ActionType<T>) => FetchState<T>;
   const [{ loading, data, error }, dispatch] = React.useReducer(castReducer, {
     loading: false,
     data: null,
@@ -40,11 +34,11 @@ export const useFetch = <T>(uri: string): FetchState<T> => {
   });
 
   useEffect(() => {
-    dispatch({ type: "LOADING" });
+    dispatch({ type: 'LOADING' });
     fetch(uri)
       .then((response) => response.json())
-      .then((data) => dispatch({ type: "DATA", data }))
-      .catch((error) => dispatch({ type: "ERROR", error }));
+      .then((data) => dispatch({ type: 'DATA', data }))
+      .catch((error) => dispatch({ type: 'ERROR', error }));
   }, [uri]);
 
   return { loading, data, error };

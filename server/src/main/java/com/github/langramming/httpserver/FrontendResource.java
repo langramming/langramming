@@ -56,36 +56,26 @@ public class FrontendResource {
             }
             return null;
         } else {
-            ResponseEntity<?> responseEntity = frontendService.fromClasspath(
-                asset
-            );
+            ResponseEntity<?> responseEntity = frontendService.fromClasspath(asset);
             return filterResponseEntity(asset, responseEntity);
         }
     }
 
-    private ResponseEntity<?> filterResponseEntity(
-        String asset,
-        ResponseEntity<?> responseEntity
-    )
+    private ResponseEntity<?> filterResponseEntity(String asset, ResponseEntity<?> responseEntity)
         throws JsonProcessingException {
-        if (
-            asset.equals("index.html") &&
-            responseEntity.getBody() instanceof String
-        ) {
+        if (asset.equals("index.html") && responseEntity.getBody() instanceof String) {
             String template = (String) responseEntity.getBody();
             String content = replaceVariables(template);
             MediaType mediaType = responseEntity.getHeaders().getContentType();
             if (mediaType == null) {
-                mediaType =
-                    new MediaType("text", "html", StandardCharsets.UTF_8);
+                mediaType = new MediaType("text", "html", StandardCharsets.UTF_8);
             }
             responseEntity = responseHelper.ok(content, mediaType);
         }
         return responseEntity;
     }
 
-    private String replaceVariables(String template)
-        throws JsonProcessingException {
+    private String replaceVariables(String template) throws JsonProcessingException {
         FrontendModel frontendModel = frontendModelProvider.getFrontendModel();
         String jsonObject = objectMapper.writeValueAsString(frontendModel);
 

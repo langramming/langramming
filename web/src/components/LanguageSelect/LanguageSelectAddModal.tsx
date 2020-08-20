@@ -1,13 +1,13 @@
-import * as React from "react";
+import * as React from 'react';
 
-import Button, { ButtonGroup } from "@atlaskit/button";
-import Form, { Field, ErrorMessage, HelperMessage } from "@atlaskit/form";
+import Button, { ButtonGroup } from '@atlaskit/button';
+import Form, { Field, ErrorMessage, HelperMessage } from '@atlaskit/form';
 import ModalDialog, {
   ContainerComponentProps,
   ModalFooter,
   ModalTransition,
-} from "@atlaskit/modal-dialog";
-import Textfield from "@atlaskit/textfield";
+} from '@atlaskit/modal-dialog';
+import Textfield from '@atlaskit/textfield';
 
 interface LanguageSelectCreateModalProps {
   isSaving: boolean;
@@ -42,18 +42,14 @@ export const LanguageSelectAddModal = ({
               <ModalFooter>
                 <div
                   style={{
-                    display: "flex",
-                    flex: "0 0 auto",
-                    justifyContent: "flex-end",
-                    width: "100%",
+                    display: 'flex',
+                    flex: '0 0 auto',
+                    justifyContent: 'flex-end',
+                    width: '100%',
                   }}
                 >
                   <ButtonGroup>
-                    <Button
-                      appearance="primary"
-                      type="submit"
-                      isLoading={isSaving}
-                    >
+                    <Button appearance="primary" type="submit" isLoading={isSaving}>
                       Add
                     </Button>
                     <Button appearance="default" onClick={onClose}>
@@ -66,19 +62,11 @@ export const LanguageSelectAddModal = ({
           },
         }}
       >
-        <Field name="name" isRequired defaultValue={newOption ?? ""}>
+        <Field name="name" isRequired defaultValue={newOption ?? ''}>
           {({ fieldProps, error }) => (
             <>
-              <Textfield
-                {...fieldProps}
-                placeholder="Language name"
-                autoFocus
-              />
-              {!error && (
-                <HelperMessage>
-                  {"The language name, e.g. English"}
-                </HelperMessage>
-              )}
+              <Textfield {...fieldProps} placeholder="Language name" autoFocus />
+              {!error && <HelperMessage>{'The language name, e.g. English'}</HelperMessage>}
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </>
           )}
@@ -87,11 +75,7 @@ export const LanguageSelectAddModal = ({
           {({ fieldProps, error }) => (
             <>
               <Textfield {...fieldProps} placeholder="Language code" />
-              {!error && (
-                <HelperMessage>
-                  {"The language code, e.g. en or en_US"}
-                </HelperMessage>
-              )}
+              {!error && <HelperMessage>{'The language code, e.g. en or en_US'}</HelperMessage>}
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </>
           )}
