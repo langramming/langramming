@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-source ./creds.sh
+source "$(dirname $0)/creds.sh"
 
 echo "Building server..."
 mvn clean package
