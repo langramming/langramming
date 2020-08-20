@@ -15,3 +15,5 @@ mvn flyway:migrate -Dflyway.user="${DB_USER}" -Dflyway.password="${DB_PASSWORD}"
 
 java -jar webapp/target/langramming-webapp-*.jar 2>>../error.log >>../access.log &
 echo $! > ./langramming.pid
+
+echo "Server started successfully!"
