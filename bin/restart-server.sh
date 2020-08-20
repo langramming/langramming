@@ -3,6 +3,7 @@ set -e
 
 source ./creds.sh
 
+echo "Building server..."
 mvn clean package
 
 if [ -e ./langramming.pid ]
