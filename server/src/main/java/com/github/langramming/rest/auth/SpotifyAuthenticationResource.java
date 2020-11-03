@@ -1,6 +1,7 @@
 package com.github.langramming.rest.auth;
 
 import com.github.langramming.client.spotify.SpotifyRestClient;
+import com.github.langramming.configuration.LangrammingServerConfiguration;
 import com.github.langramming.service.SpotifyUserService;
 import com.github.langramming.util.LangrammingClientError;
 import com.github.langramming.util.ResponseHelper;
@@ -33,16 +34,19 @@ public class SpotifyAuthenticationResource {
     private final SpotifyRestClient spotifyRestClient;
     private final SpotifyUserService spotifyUserService;
     private final ResponseHelper responseHelper;
+    private final LangrammingServerConfiguration serverConfiguration;
 
     @Inject
     public SpotifyAuthenticationResource(
         SpotifyRestClient spotifyRestClient,
         SpotifyUserService spotifyUserService,
-        ResponseHelper responseHelper
+        ResponseHelper responseHelper,
+        LangrammingServerConfiguration serverConfiguration
     ) {
         this.spotifyRestClient = spotifyRestClient;
         this.spotifyUserService = spotifyUserService;
         this.responseHelper = responseHelper;
+        this.serverConfiguration = serverConfiguration;
     }
 
     @GetMapping("/connect")
@@ -94,6 +98,6 @@ public class SpotifyAuthenticationResource {
 
         spotifyUserService.createOrUpdateUser(authorizationCodeCredentials);
 
-        return responseHelper.redirect("/");
+        return responseHelper.redirect(serverConfiguration.getUrl());
     }
 }
