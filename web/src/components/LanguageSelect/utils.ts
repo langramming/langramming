@@ -23,8 +23,11 @@ export const isValid = (validationResult: LanguageValidation): boolean => {
   return [validationResult.name, validationResult.code].every((message) => message === undefined);
 };
 
-export const createLanguage = (language: Language): Promise<Response> => {
-  return fetch('/api/language', {
+export const createLanguage = (
+  language: Language,
+  { baseUrl }: { baseUrl: string },
+): Promise<Response> => {
+  return fetch(`${baseUrl}/api/language`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(language),

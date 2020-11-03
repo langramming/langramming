@@ -7,6 +7,7 @@ import { useFetch } from '../../common/hooks/useFetch';
 
 import { LanguageSelectAddModal } from './LanguageSelectAddModal';
 import { createLanguage, isValid, validate } from './utils';
+import { useAppContext } from '../../common/hooks/useAppContext';
 
 export interface LanguageSelectProps {
   autoFocus?: boolean;
@@ -86,6 +87,7 @@ export const LanguageSelect = ({
   onChange,
 }: LanguageSelectProps): JSX.Element => {
   const languageApiState = useFetch<LanguageResponse>('/api/language');
+  const { baseUrl } = useAppContext();
 
   const [state, dispatch] = React.useReducer(languageSelectReducer, {
     isSaving: false,
@@ -124,7 +126,7 @@ export const LanguageSelect = ({
       }
 
       dispatch({ type: 'CREATE_SAVE_BEGIN' });
-      createLanguage(language)
+      createLanguage(language, { baseUrl })
         .then(() => {
           dispatch({ type: 'CREATE_SAVE_SUCCESS', language });
           handleOnChange({ label: language.name, value: language });
