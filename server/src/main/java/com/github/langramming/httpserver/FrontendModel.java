@@ -14,6 +14,9 @@ public class FrontendModel {
     @JsonProperty("user")
     public final Optional<FrontendUserModel> user;
 
+    @JsonProperty("telegram")
+    public final FrontendTelegramModel telegram;
+
     @Builder
     @JsonAutoDetect
     public static class FrontendUserModel {
@@ -25,5 +28,12 @@ public class FrontendModel {
 
         @JsonProperty("isSpotifyAuthed")
         public final boolean isSpotifyAuthed;
+    }
+
+    @Builder
+    @JsonAutoDetect
+    public static class FrontendTelegramModel {
+        @JsonProperty("username")
+        public final String username;
     }
 }

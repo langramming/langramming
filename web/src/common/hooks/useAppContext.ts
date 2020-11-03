@@ -5,6 +5,9 @@ interface LangrammingData {
     name: string;
     isSpotifyAuthed: boolean;
   } | null;
+  telegram: {
+    username: string;
+  };
 }
 
 declare global {
