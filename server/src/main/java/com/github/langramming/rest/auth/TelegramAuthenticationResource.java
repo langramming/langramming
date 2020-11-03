@@ -6,10 +6,12 @@ import com.github.langramming.model.User;
 import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
 import com.github.langramming.util.ResponseHelper;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -19,16 +21,20 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth/telegram")
 public class TelegramAuthenticationResource {
-    private static Set<Long> TEMPORARY_allowedTelegramUsers = new HashSet<>(
-        Arrays.asList(112972102L)
+    private static final Set<Long> TEMPORARY_allowedTelegramUsers = new HashSet<>(
+        Collections.singletonList(112972102L)
     );
 
     private final UserService userService;
@@ -49,6 +55,7 @@ public class TelegramAuthenticationResource {
     @GetMapping("/login")
     public ResponseEntity<ErrorDTO> login(HttpServletRequest httpServletRequest) {
         if (!verifyTelegramLogin(httpServletRequest.getParameterMap())) {
+            log.warn("Returning bad request due to failed Telegram verification");
             return responseHelper.badRequest();
         }
 
@@ -57,11 +64,13 @@ public class TelegramAuthenticationResource {
         try {
             telegramId = Long.parseLong(httpServletRequest.getParameter("id"));
             name = httpServletRequest.getParameter("first_name");
-        } catch (NumberFormatException ex) {
+        } catch (Exception ex) {
+            log.error("Returning bad request due to failure to extract id/first_name", ex);
             return responseHelper.badRequest();
         }
 
         if (!TEMPORARY_allowedTelegramUsers.contains(telegramId)) {
+            log.warn("Returning forbidden due to non-allowlisted user attempting to log in");
             return responseHelper.forbidden();
         }
 
@@ -78,6 +87,7 @@ public class TelegramAuthenticationResource {
 
         UserContextFilter.setLoggedInUser(httpServletRequest.getSession(), user);
 
+        log.info("Successfully signed in as TG user with ID {}", user.getTelegramId());
         return responseHelper.redirect("/");
     }
 
@@ -97,6 +107,7 @@ public class TelegramAuthenticationResource {
 
             String hash = queryParams.remove("hash");
             if (hash == null) {
+                log.warn("No hash parameter in Telegram login attempt");
                 return false;
             }
 
@@ -108,14 +119,11 @@ public class TelegramAuthenticationResource {
                 .collect(Collectors.joining("\n"));
 
             byte[] hashedBytes = hmacSha256.doFinal(dataCheckString.getBytes());
-            StringBuilder hashedString = new StringBuilder();
-            for (byte b : hashedBytes) {
-                hashedString.append(String.format("%02x", b));
-            }
+            String hashedBytesString = Hex.encodeHexString(hashedBytes);
 
-            return hash.equals(hashedString.toString());
+            return hash.equals(hashedBytesString);
         } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
-            ex.printStackTrace();
+            log.error("Failed to verify Telegram login", ex);
             return false;
         }
     }

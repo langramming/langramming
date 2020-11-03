@@ -31,6 +31,14 @@ spring:
     time-zone: UTC
     locale: en_AU
 
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 ---
 # This config is only set during local development
 spring:
