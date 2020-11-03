@@ -20,9 +20,8 @@ spring:
     driver-class-name: 'org.sqlite.JDBC'
     url: 'jdbc:sqlite:langrammingdb.sqlite'
   jpa:
-    generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: 'org.hibernate.dialect.SQLiteDialect'
