@@ -4,6 +4,7 @@ import com.github.langramming.configuration.LangrammingTelegramConfiguration;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.GetMe;
 import com.pengrad.telegrambot.response.GetMeResponse;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class TelegramBotClient implements DisposableBean {
         this.telegramConfiguration = telegramConfiguration;
     }
 
+    @PostConstruct
     public void login() {
         String botToken = telegramConfiguration.getToken();
         this.telegramBot = new TelegramBot(botToken);

@@ -1,6 +1,5 @@
 package com.github.langramming;
 
-import com.github.langramming.client.telegram.TelegramStarter;
 import com.github.langramming.configuration.LangrammingFrontendConfiguration;
 import com.github.langramming.configuration.LangrammingServerConfiguration;
 import com.github.langramming.configuration.LangrammingSpotifyConfiguration;
@@ -9,7 +8,6 @@ import javax.inject.Singleton;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
@@ -28,11 +26,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class LangrammingApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(
-            LangrammingApplication.class,
-            args
-        );
-
-        context.getBean(TelegramStarter.class).start();
+        SpringApplication.run(LangrammingApplication.class, args);
     }
 }
