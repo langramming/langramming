@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { useAppContext } from './useAppContext';
 
 type ActionType<T> =
   | { type: 'LOADING' }
@@ -32,10 +33,11 @@ export const useFetch = <T>(uri: string): FetchState<T> => {
     data: null,
     error: null,
   });
+  const { baseUrl } = useAppContext();
 
   useEffect(() => {
     dispatch({ type: 'LOADING' });
-    fetch(uri)
+    fetch(`${baseUrl}${uri}`)
       .then((response) => response.json())
       .then((data) => dispatch({ type: 'DATA', data }))
       .catch((error) => dispatch({ type: 'ERROR', error }));

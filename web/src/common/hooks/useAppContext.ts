@@ -1,4 +1,5 @@
 interface LangrammingData {
+  baseUrl: string;
   user: {
     id: number;
     name: string;
