@@ -13,6 +13,10 @@
 
     <name>Langramming Website</name>
 
+    <properties>
+        <langramming.root>/langramming</langramming.root>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -49,7 +53,7 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>build -d target/parcel-build</arguments>
+                            <arguments>build --public-url ${langramming.root}/assets -d target/parcel-build</arguments>
                         </configuration>
                     </execution>
                 </executions>
@@ -67,7 +71,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <outputDirectory>${project.build.outputDirectory}/assets</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${basedir}/target/parcel-build</directory>

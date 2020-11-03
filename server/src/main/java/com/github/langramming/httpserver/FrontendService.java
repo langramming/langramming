@@ -11,6 +11,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,11 @@ import org.springframework.http.ResponseEntity;
 
 @Singleton
 public class FrontendService {
+    private static final Pattern ASSET_NAME = Pattern.compile(
+        "^(?:.*/)?[a-z0-9._-]+\\.(html|js|css|svg)$",
+        Pattern.CASE_INSENSITIVE
+    );
+
     private final LangrammingFrontendConfiguration frontendConfiguration;
 
     @Inject
@@ -31,18 +38,17 @@ public class FrontendService {
     }
 
     public ResponseEntity<?> fromClasspath(String asset) throws IOException {
-        String assetPath = "/assets/" + asset;
-        if (assetPath.contains("..")) {
+        Matcher matcher = ASSET_NAME.matcher(asset);
+        if (!matcher.matches() || asset.contains("..")) {
             return ResponseEntity.notFound().build();
         }
 
-        try (InputStream inputStream = getClass().getResourceAsStream(assetPath)) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/assets/" + asset)) {
             if (inputStream != null) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 StreamUtil.copy(inputStream, baos);
 
-                String contentType = URLConnection.guessContentTypeFromName(asset);
-                MediaType mediaType = MediaType.parseMediaType(contentType);
+                MediaType mediaType = guessContentTypeForExt(matcher.group(1));
                 if (mediaType.getCharset() == null) {
                     mediaType =
                         new MediaType(
@@ -109,5 +115,20 @@ public class FrontendService {
                 path
             )
         );
+    }
+
+    private MediaType guessContentTypeForExt(String ext) {
+        switch (ext) {
+            case "html":
+                return MediaType.parseMediaType("text/html;charset=UTF-8");
+            case "js":
+                return MediaType.parseMediaType("text/javascript;charset=UTF-8");
+            case "css":
+                return MediaType.parseMediaType("text/css;charset=UTF-8");
+            case "svg":
+                return MediaType.parseMediaType("image/svg;charset=UTF-8");
+            default:
+                return MediaType.TEXT_PLAIN;
+        }
     }
 }
