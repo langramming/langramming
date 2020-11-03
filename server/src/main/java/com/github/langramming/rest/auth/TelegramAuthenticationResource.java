@@ -1,13 +1,12 @@
 package com.github.langramming.rest.auth;
 
+import com.github.langramming.configuration.LangrammingServerConfiguration;
 import com.github.langramming.configuration.LangrammingTelegramConfiguration;
 import com.github.langramming.httpserver.UserContextFilter;
 import com.github.langramming.model.User;
 import com.github.langramming.rest.response.ErrorDTO;
 import com.github.langramming.service.UserService;
 import com.github.langramming.util.ResponseHelper;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,22 +38,28 @@ public class TelegramAuthenticationResource {
 
     private final UserService userService;
     private final ResponseHelper responseHelper;
+    private final LangrammingServerConfiguration serverConfiguration;
     private final LangrammingTelegramConfiguration telegramConfiguration;
 
     @Inject
     public TelegramAuthenticationResource(
         UserService userService,
         ResponseHelper responseHelper,
+        LangrammingServerConfiguration serverConfiguration,
         LangrammingTelegramConfiguration telegramConfiguration
     ) {
         this.userService = userService;
         this.responseHelper = responseHelper;
+        this.serverConfiguration = serverConfiguration;
         this.telegramConfiguration = telegramConfiguration;
     }
 
     @GetMapping("/login")
-    public ResponseEntity<ErrorDTO> login(HttpServletRequest httpServletRequest) {
-        if (!verifyTelegramLogin(httpServletRequest.getParameterMap())) {
+    public ResponseEntity<ErrorDTO> login(
+        HttpServletRequest httpServletRequest,
+        @RequestParam Map<String, String> queryParams
+    ) {
+        if (!verifyTelegramLogin(queryParams)) {
             log.warn("Returning bad request due to failed Telegram verification");
             return responseHelper.badRequest();
         }
@@ -62,8 +67,8 @@ public class TelegramAuthenticationResource {
         long telegramId;
         String name;
         try {
-            telegramId = Long.parseLong(httpServletRequest.getParameter("id"));
-            name = httpServletRequest.getParameter("first_name");
+            telegramId = Long.parseLong(queryParams.get("id"));
+            name = queryParams.get("first_name");
         } catch (Exception ex) {
             log.error("Returning bad request due to failure to extract id/first_name", ex);
             return responseHelper.badRequest();
@@ -88,10 +93,10 @@ public class TelegramAuthenticationResource {
         UserContextFilter.setLoggedInUser(httpServletRequest.getSession(), user);
 
         log.info("Successfully signed in as TG user with ID {}", user.getTelegramId());
-        return responseHelper.redirect("/");
+        return responseHelper.redirect(serverConfiguration.getUrl());
     }
 
-    private boolean verifyTelegramLogin(Map<String, String[]> parameterMap) {
+    private boolean verifyTelegramLogin(Map<String, String> parameterMap) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] secret = digest.digest(telegramConfiguration.getToken().getBytes());
@@ -102,8 +107,8 @@ public class TelegramAuthenticationResource {
             Map<String, String> queryParams = parameterMap
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() != null && entry.getValue().length > 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()[0]));
+                .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
             String hash = queryParams.remove("hash");
             if (hash == null) {
