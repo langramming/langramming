@@ -4,7 +4,7 @@ set -e
 source "$(dirname $0)/creds.sh"
 
 set -x
-mvn clean package
+mvn clean package install
 
 if [ -e ./langramming.pid ]
 then
