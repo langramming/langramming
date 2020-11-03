@@ -79,8 +79,8 @@ public class FrontendResource {
         FrontendModel frontendModel = frontendModelProvider.getFrontendModel();
         String jsonObject = objectMapper.writeValueAsString(frontendModel);
 
-        return template.replace(
-            "<!-- {{LANGRAMMING_DATA}} -->",
+        return template.replaceFirst(
+            "<script>window\\.__LANGRAMMING_DATA__=.+</script>",
             "<script>window.__LANGRAMMING_DATA__ = " + jsonObject + "</script>"
         );
     }

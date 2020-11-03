@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -120,13 +119,13 @@ public class FrontendService {
     private MediaType guessContentTypeForExt(String ext) {
         switch (ext) {
             case "html":
-                return MediaType.parseMediaType("text/html;charset=UTF-8");
+                return new MediaType("text", "html", StandardCharsets.UTF_8);
             case "js":
-                return MediaType.parseMediaType("text/javascript;charset=UTF-8");
+                return new MediaType("text", "javascript", StandardCharsets.UTF_8);
             case "css":
-                return MediaType.parseMediaType("text/css;charset=UTF-8");
+                return new MediaType("text", "css", StandardCharsets.UTF_8);
             case "svg":
-                return MediaType.parseMediaType("image/svg;charset=UTF-8");
+                return new MediaType("image", "svg", StandardCharsets.UTF_8);
             default:
                 return MediaType.TEXT_PLAIN;
         }
