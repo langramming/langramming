@@ -80,7 +80,7 @@ public class FrontendResource {
         String jsonObject = objectMapper.writeValueAsString(frontendModel);
 
         return template.replaceFirst(
-            "<script>window\\.__LANGRAMMING_DATA__=.+</script>",
+            "<script>window\\.__LANGRAMMING_DATA__=[^\n;]+?;</script>",
             "<script>window.__LANGRAMMING_DATA__ = " + jsonObject + "</script>"
         );
     }
