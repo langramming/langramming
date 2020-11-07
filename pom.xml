@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.github.langramming</groupId>
+    <groupId>dev.nickrobson.langramming</groupId>
     <artifactId>langramming-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -21,6 +21,7 @@
         <module>server</module>
         <module>web</module>
         <module>webapp</module>
+        <module>langramming-ngrok</module>
     </modules>
 
     <properties>
