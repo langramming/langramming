@@ -18,10 +18,10 @@
     <name>Langramming</name>
 
     <modules>
-        <module>server</module>
-        <module>web</module>
-        <module>webapp</module>
         <module>langramming-ngrok</module>
+        <module>langramming-server</module>
+        <module>langramming-web</module>
+        <module>langramming-webapp</module>
     </modules>
 
     <properties>

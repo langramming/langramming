@@ -6,10 +6,10 @@
   "repository": "https://github.com/langramming/langramming",
   "scripts": {
     "build": "mvn clean package",
-    "server": "java -jar webapp/target/langramming-*.jar --spring.profiles.active=local",
-    "server:debug": "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=:5005 -jar webapp/target/langramming-*.jar --spring.profiles.active=local",
+    "server": "java -jar langramming-webapp/target/langramming-*.jar --spring.profiles.active=local",
+    "server:debug": "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=:5005 -jar langramming-webapp/target/langramming-*.jar --spring.profiles.active=local",
     "start": "mvn clean spring-boot:run -Dspring-boot.run.profiles=local",
-    "web": "yarn workspace web start"
+    "web": "yarn workspace langramming-web start"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.7.1",
@@ -39,6 +39,6 @@
     ]
   },
   "workspaces": [
-    "web"
+    "langramming-web"
   ]
 }
