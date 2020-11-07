@@ -32,6 +32,8 @@ spring:
 
 server:
   tomcat:
+    accesslog:
+      enabled: true
     uri-encoding: UTF-8
   servlet:
     encoding:
@@ -52,5 +54,3 @@ spring:
 langramming:
   frontend:
     port: 1234
-  ngrok:
-    enabled: true
