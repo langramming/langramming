@@ -4,9 +4,9 @@ import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import dev.nickrobson.langramming.configuration.LangrammingServerConfiguration;
 import dev.nickrobson.langramming.configuration.LangrammingSpotifyConfiguration;
 import dev.nickrobson.langramming.model.SpotifyUser;
+import dev.nickrobson.langramming.service.BaseUrlService;
 import dev.nickrobson.langramming.service.SpotifyUserService;
 import java.io.IOException;
 import java.net.URI;
@@ -17,19 +17,19 @@ import javax.inject.Singleton;
 
 @Singleton
 public class SpotifyRestClient {
-    private final LangrammingServerConfiguration serverConfiguration;
+    private final BaseUrlService baseUrlService;
     private final LangrammingSpotifyConfiguration spotifyConfiguration;
     private final SpotifyUserService spotifyUserService;
 
     @Inject
     public SpotifyRestClient(
-        LangrammingServerConfiguration serverConfiguration,
-        LangrammingSpotifyConfiguration spotifyConfiguration,
-        SpotifyUserService spotifyUserService
+        BaseUrlService baseUrlService,
+        SpotifyUserService spotifyUserService,
+        LangrammingSpotifyConfiguration spotifyConfiguration
     ) {
-        this.serverConfiguration = serverConfiguration;
-        this.spotifyConfiguration = spotifyConfiguration;
+        this.baseUrlService = baseUrlService;
         this.spotifyUserService = spotifyUserService;
+        this.spotifyConfiguration = spotifyConfiguration;
     }
 
     private SpotifyApi.Builder spotifyApiBuilder() {
@@ -37,7 +37,7 @@ public class SpotifyRestClient {
             .builder()
             .setClientId(spotifyConfiguration.getClientId())
             .setClientSecret(spotifyConfiguration.getClientSecret())
-            .setRedirectUri(getRedirectUri(serverConfiguration.getUrl()));
+            .setRedirectUri(getRedirectUri());
     }
 
     public SpotifyApi getUnauthenticatedSpotifyApi() {
@@ -81,7 +81,8 @@ public class SpotifyRestClient {
             .build();
     }
 
-    private static URI getRedirectUri(String serverUrl) {
+    private URI getRedirectUri() {
+        String serverUrl = baseUrlService.getBaseUrl();
         String baseUrl = serverUrl + (serverUrl.endsWith("/") ? "" : "/");
         return SpotifyHttpManager.makeUri(baseUrl + "api/auth/spotify/redirect");
     }

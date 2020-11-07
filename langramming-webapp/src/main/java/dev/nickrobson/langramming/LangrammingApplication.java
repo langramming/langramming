@@ -1,7 +1,6 @@
 package dev.nickrobson.langramming;
 
 import dev.nickrobson.langramming.configuration.LangrammingFrontendConfiguration;
-import dev.nickrobson.langramming.configuration.LangrammingServerConfiguration;
 import dev.nickrobson.langramming.configuration.LangrammingSpotifyConfiguration;
 import dev.nickrobson.langramming.configuration.LangrammingTelegramConfiguration;
 import javax.inject.Singleton;
@@ -13,14 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableConfigurationProperties(
     {
-        LangrammingServerConfiguration.class,
         LangrammingFrontendConfiguration.class,
         LangrammingTelegramConfiguration.class,
         LangrammingSpotifyConfiguration.class,
     }
 )
 @ComponentScan(
-    basePackages = "com.github.langramming",
+    basePackages = "dev.nickrobson.langramming",
     includeFilters = @ComponentScan.Filter({ Singleton.class })
 )
 public class LangrammingApplication {

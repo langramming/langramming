@@ -1,8 +1,8 @@
 package dev.nickrobson.langramming.httpserver;
 
 import dev.nickrobson.langramming.client.telegram.TelegramBotClient;
-import dev.nickrobson.langramming.configuration.LangrammingServerConfiguration;
 import dev.nickrobson.langramming.model.User;
+import dev.nickrobson.langramming.service.BaseUrlService;
 import dev.nickrobson.langramming.service.SpotifyUserService;
 import dev.nickrobson.langramming.service.UserService;
 import javax.inject.Inject;
@@ -10,19 +10,19 @@ import javax.inject.Singleton;
 
 @Singleton
 public class FrontendModelProvider {
-    private final LangrammingServerConfiguration langrammingServerConfiguration;
+    private final BaseUrlService baseUrlService;
     private final UserService.UserProvider userProvider;
     private final SpotifyUserService spotifyUserService;
     private final TelegramBotClient telegramBotClient;
 
     @Inject
     public FrontendModelProvider(
-        LangrammingServerConfiguration langrammingServerConfiguration,
+        BaseUrlService baseUrlService,
         UserService.UserProvider userProvider,
         SpotifyUserService spotifyUserService,
         TelegramBotClient telegramBotClient
     ) {
-        this.langrammingServerConfiguration = langrammingServerConfiguration;
+        this.baseUrlService = baseUrlService;
         this.userProvider = userProvider;
         this.spotifyUserService = spotifyUserService;
         this.telegramBotClient = telegramBotClient;
@@ -31,7 +31,7 @@ public class FrontendModelProvider {
     public FrontendModel getFrontendModel() {
         return FrontendModel
             .builder()
-            .baseUrl(langrammingServerConfiguration.getUrl())
+            .baseUrl(baseUrlService.getBaseUrl())
             .user(userProvider.get().map(this::toUserModel))
             .telegram(
                 FrontendModel

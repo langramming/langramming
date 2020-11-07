@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="LangrammingApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="langramming-webapp" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.langramming.LangrammingApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="dev.nickrobson.langramming.LangrammingApplication" />
     <option name="VM_PARAMETERS" value="-Dcom.sun.management.jmxremote.port=5006 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.profiles.active=local" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">

@@ -18,7 +18,6 @@
     <name>Langramming</name>
 
     <modules>
-        <module>langramming-ngrok</module>
         <module>langramming-server</module>
         <module>langramming-web</module>
         <module>langramming-webapp</module>

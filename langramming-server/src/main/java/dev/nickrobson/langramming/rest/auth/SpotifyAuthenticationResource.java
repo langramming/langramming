@@ -5,7 +5,7 @@ import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredential
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
-import dev.nickrobson.langramming.configuration.LangrammingServerConfiguration;
+import dev.nickrobson.langramming.service.BaseUrlService;
 import dev.nickrobson.langramming.service.SpotifyUserService;
 import dev.nickrobson.langramming.util.LangrammingClientError;
 import dev.nickrobson.langramming.util.ResponseHelper;
@@ -31,22 +31,22 @@ public class SpotifyAuthenticationResource {
         "user-top-read"
     );
 
+    private final BaseUrlService baseUrlService;
     private final SpotifyRestClient spotifyRestClient;
     private final SpotifyUserService spotifyUserService;
     private final ResponseHelper responseHelper;
-    private final LangrammingServerConfiguration serverConfiguration;
 
     @Inject
     public SpotifyAuthenticationResource(
+        BaseUrlService baseUrlService,
         SpotifyRestClient spotifyRestClient,
         SpotifyUserService spotifyUserService,
-        ResponseHelper responseHelper,
-        LangrammingServerConfiguration serverConfiguration
+        ResponseHelper responseHelper
     ) {
+        this.baseUrlService = baseUrlService;
         this.spotifyRestClient = spotifyRestClient;
         this.spotifyUserService = spotifyUserService;
         this.responseHelper = responseHelper;
-        this.serverConfiguration = serverConfiguration;
     }
 
     @GetMapping("/connect")
@@ -98,6 +98,6 @@ public class SpotifyAuthenticationResource {
 
         spotifyUserService.createOrUpdateUser(authorizationCodeCredentials);
 
-        return responseHelper.redirect(serverConfiguration.getUrl());
+        return responseHelper.redirect(baseUrlService.getBaseUrl());
     }
 }

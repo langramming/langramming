@@ -13,7 +13,7 @@ langramming:
 
 logging:
   level:
-    com.github.langramming: INFO
+    dev.nickrobson.langramming: INFO
 
 spring:
   datasource:
@@ -52,3 +52,5 @@ spring:
 langramming:
   frontend:
     port: 1234
+  ngrok:
+    enabled: true

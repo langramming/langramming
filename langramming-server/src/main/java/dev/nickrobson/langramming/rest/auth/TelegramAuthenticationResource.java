@@ -1,10 +1,10 @@
 package dev.nickrobson.langramming.rest.auth;
 
-import dev.nickrobson.langramming.configuration.LangrammingServerConfiguration;
 import dev.nickrobson.langramming.configuration.LangrammingTelegramConfiguration;
 import dev.nickrobson.langramming.httpserver.UserContextFilter;
 import dev.nickrobson.langramming.model.User;
 import dev.nickrobson.langramming.rest.response.ErrorDTO;
+import dev.nickrobson.langramming.service.BaseUrlService;
 import dev.nickrobson.langramming.service.UserService;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import java.security.InvalidKeyException;
@@ -36,21 +36,21 @@ public class TelegramAuthenticationResource {
         Collections.singletonList(112972102L)
     );
 
+    private final BaseUrlService baseUrlService;
     private final UserService userService;
     private final ResponseHelper responseHelper;
-    private final LangrammingServerConfiguration serverConfiguration;
     private final LangrammingTelegramConfiguration telegramConfiguration;
 
     @Inject
     public TelegramAuthenticationResource(
+        BaseUrlService baseUrlService,
         UserService userService,
         ResponseHelper responseHelper,
-        LangrammingServerConfiguration serverConfiguration,
         LangrammingTelegramConfiguration telegramConfiguration
     ) {
+        this.baseUrlService = baseUrlService;
         this.userService = userService;
         this.responseHelper = responseHelper;
-        this.serverConfiguration = serverConfiguration;
         this.telegramConfiguration = telegramConfiguration;
     }
 
@@ -93,7 +93,7 @@ public class TelegramAuthenticationResource {
         UserContextFilter.setLoggedInUser(httpServletRequest.getSession(), user);
 
         log.info("Successfully signed in as TG user with ID {}", user.getTelegramId());
-        return responseHelper.redirect(serverConfiguration.getUrl());
+        return responseHelper.redirect(baseUrlService.getBaseUrl());
     }
 
     private boolean verifyTelegramLogin(Map<String, String> parameterMap) {
