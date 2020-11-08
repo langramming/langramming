@@ -1,11 +1,11 @@
 node_modules/
 
-server/target/
+langramming-server/target/
 
-web/.cache/
-web/dist/
-web/node/
-web/node_modules/
-web/target/
+langramming-web/.cache/
+langramming-web/dist/
+langramming-web/node/
+langramming-web/node_modules/
+langramming-web/target/
 
-webapp/target/
+langramming-webapp/target/

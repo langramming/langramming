@@ -13,7 +13,7 @@ fi
 
 mvn flyway:migrate -Dflyway.user="${DB_USER}" -Dflyway.password="${DB_PASSWORD}"
 
-java -Dfile.encoding=UTF-8 -jar webapp/target/langramming-webapp-*.jar 2>../error.log >../access.log &
+java -Dfile.encoding=UTF-8 -jar langramming-webapp/target/langramming-webapp-*.jar 2>../error.log >../access.log &
 echo $! > ./langramming.pid
 
 echo "Server started successfully!"
