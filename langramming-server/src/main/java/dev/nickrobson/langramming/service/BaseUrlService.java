@@ -21,7 +21,7 @@ public class BaseUrlService {
         if (contextPath.endsWith("/")) {
             contextPath = contextPath.substring(0, contextPath.length() - 1);
         }
-        if (!contextPath.startsWith("/")) {
+        if (!contextPath.isEmpty() && !contextPath.startsWith("/")) {
             contextPath = "/" + contextPath;
         }
 
