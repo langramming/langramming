@@ -79,9 +79,11 @@ public class FrontendResource {
         FrontendModel frontendModel = frontendModelProvider.getFrontendModel();
         String jsonObject = objectMapper.writeValueAsString(frontendModel);
 
-        return template.replaceFirst(
-            "<script>window\\.__LANGRAMMING_DATA__=[^\n;]+?;</script>",
-            "<script>window.__LANGRAMMING_DATA__ = " + jsonObject + "</script>"
+        return template.replace(
+            "<script type=\"application/javascript\" id=\"langramming-data\"></script>",
+            "<script type=\"application/javascript\">window.__LANGRAMMING_DATA__ = " +
+            jsonObject +
+            "</script>"
         );
     }
 }

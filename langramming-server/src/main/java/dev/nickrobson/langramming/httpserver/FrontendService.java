@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -25,10 +26,15 @@ public class FrontendService {
         Pattern.CASE_INSENSITIVE
     );
 
+    private final String contextPath;
     private final LangrammingFrontendConfiguration frontendConfiguration;
 
     @Inject
-    public FrontendService(LangrammingFrontendConfiguration frontendConfiguration) {
+    public FrontendService(
+        @Value("${server.servlet.context-path:}") String contextPath,
+        LangrammingFrontendConfiguration frontendConfiguration
+    ) {
+        this.contextPath = contextPath;
         this.frontendConfiguration = frontendConfiguration;
     }
 
@@ -109,8 +115,9 @@ public class FrontendService {
 
         return new URL(
             String.format(
-                "http://localhost:%d/assets/%s",
+                "http://localhost:%d%s/assets/%s",
                 frontendConfiguration.getPort().get(),
+                contextPath,
                 path
             )
         );

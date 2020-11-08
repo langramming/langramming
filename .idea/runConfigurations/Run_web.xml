@@ -5,7 +5,7 @@
     <scripts>
       <script value="web" />
     </scripts>
-    <arguments value="--no-autoinstall --public-url /assets" />
+    <arguments value="--no-autoinstall --public-url /langramming/assets" />
     <node-interpreter value="project" />
     <envs />
     <method v="2" />
