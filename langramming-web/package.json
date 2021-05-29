@@ -4,34 +4,57 @@
   "private": true,
   "main": "dist/index.html",
   "engines": {
-    "node": "^13.12.0",
-    "yarn": "^1.22.4"
+    "node": "^14.17.0",
+    "yarn": "^1.22.10"
+  },
+  "targets": {
+    "maven": {
+      "distDir": "target/parcel-build",
+      "engines": {
+        "browsers": "last 5 Chrome versions, last 3 Firefox versions, last 3 Safari versions AND >1%"
+      }
+    }
   },
   "scripts": {
     "build": "rm -rf build/ dist/ && parcel build public/index.html",
     "start": "parcel serve public/index.html"
   },
   "dependencies": {
-    "@atlaskit/button": "^14.0.0",
+    "@atlaskit/button": "^15.1.6",
     "@atlaskit/css-reset": "^6.0.0",
     "@atlaskit/form": "^8.1.0",
     "@atlaskit/modal-dialog": "^11.1.0",
-    "@atlaskit/select": "^12.0.1",
-    "@atlaskit/textfield": "^4.0.0",
-    "query-string": "^6.13.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "@atlaskit/select": "^14.0.0",
+    "@atlaskit/textfield": "^5.0.1",
+    "query-string": "^7.0.0",
+    "react": "^17.0.2",
+    "react-audio-player": "^0.17.0",
+    "react-dom": "^17.0.2",
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "redux": "^4.0.5",
-    "styled-components": "3",
-    "tslib": "^1.11.1"
+    "styled-components": "5.3.0",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
-    "@types/react": "^16.9.32",
-    "@types/react-audio-player": "^0.11.0",
-    "@types/react-dom": "^16.9.6",
-    "parcel": "^1.12.4",
-    "react-audio-player": "^0.13.0"
+    "@babel/core": "^7.14.3",
+    "@types/react": "^17.0.8",
+    "@types/react-audio-player": "^0.13.0",
+    "@types/react-dom": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "lint-staged": "^11.0.0",
+    "parcel": "^2.0.0-beta.2",
+    "postcss": "^8.3.0",
+    "typescript": "^4.3.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
   }
 }

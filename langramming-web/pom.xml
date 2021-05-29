@@ -31,8 +31,8 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v13.14.0</nodeVersion>
-                            <yarnVersion>v1.22.4</yarnVersion>
+                            <nodeVersion>v14.17.0</nodeVersion>
+                            <yarnVersion>v1.22.10</yarnVersion>
                         </configuration>
                     </execution>
 
@@ -47,13 +47,13 @@
                     </execution>
 
                     <execution>
-                        <id>yarn build</id>
+                        <id>build frontend</id>
                         <goals>
                             <goal>yarn</goal>
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>build --public-url ${langramming.root}/assets -d target/parcel-build</arguments>
+                            <arguments>build --public-url ${langramming.root}/assets --target maven</arguments>
                         </configuration>
                     </execution>
                 </executions>

@@ -3,6 +3,7 @@ access.log
 /langrammingdb.sqlite
 
 /node_modules/
+/.parcel-cache/
 
 ### Java ###
 # Compiled class file
