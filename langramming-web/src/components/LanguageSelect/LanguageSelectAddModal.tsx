@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Button, { ButtonGroup } from '@atlaskit/button';
+import Button, { ButtonGroup, LoadingButton } from '@atlaskit/button';
 import Form, { Field, ErrorMessage, HelperMessage } from '@atlaskit/form';
 import ModalDialog, {
   ContainerComponentProps,
@@ -49,9 +49,9 @@ export const LanguageSelectAddModal = ({
                   }}
                 >
                   <ButtonGroup>
-                    <Button appearance="primary" type="submit" isLoading={isSaving}>
+                    <LoadingButton appearance="primary" type="submit" isLoading={isSaving}>
                       Add
-                    </Button>
+                    </LoadingButton>
                     <Button appearance="default" onClick={onClose}>
                       Cancel
                     </Button>
