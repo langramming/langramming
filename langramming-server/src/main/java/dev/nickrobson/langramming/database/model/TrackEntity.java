@@ -30,6 +30,7 @@ import lombok.NoArgsConstructor;
     uniqueConstraints = { @UniqueConstraint(columnNames = { "provider", "provider_track_id" }) }
 )
 public class TrackEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

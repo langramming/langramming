@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 @JsonAutoDetect
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorDTO {
+
     @JsonProperty("message")
     public String message;
 

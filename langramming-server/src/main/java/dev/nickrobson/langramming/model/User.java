@@ -7,6 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 public class User {
+
     private long id;
     private long telegramId;
 

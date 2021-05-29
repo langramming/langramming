@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
     uniqueConstraints = { @UniqueConstraint(columnNames = { "provider", "provider_album_id" }) }
 )
 public class AlbumEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

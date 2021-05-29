@@ -7,6 +7,7 @@ import java.util.Date;
 
 @JsonAutoDetect
 public class RecentSpotifyTrackDTO {
+
     @JsonProperty("track")
     public final TrackDTO track;
 

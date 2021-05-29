@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 @JsonAutoDetect
 public class LanguagesDTO {
+
     @JsonProperty("languages")
     public List<LanguageDTO> languages;
 

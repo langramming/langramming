@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 @Slf4j
 public class SpotifyTrackProvider implements TrackProvider {
+
     private final SpotifyRestClient spotifyRestClient;
     private final SpotifyUserService spotifyUserService;
 
@@ -79,8 +80,8 @@ public class SpotifyTrackProvider implements TrackProvider {
     }
 
     private TrackDetails.Links toTrackDetailsLinks(Track track) {
-        return TrackDetails
-            .Links.builder()
+        return TrackDetails.Links
+            .builder()
             .url(track.getExternalUrls().getExternalUrls().get("spotify"))
             .build();
     }
@@ -90,8 +91,8 @@ public class SpotifyTrackProvider implements TrackProvider {
             .of(images)
             .map(
                 image ->
-                    TrackDetails
-                        .Image.builder()
+                    TrackDetails.Image
+                        .builder()
                         .height(image.getHeight())
                         .width(image.getWidth())
                         .url(image.getUrl())

@@ -7,5 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties("langramming.frontend")
 public class LangrammingFrontendConfiguration {
+
     private Optional<Short> port = Optional.empty();
 }

@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
     uniqueConstraints = @UniqueConstraint(columnNames = { "track_id", "width", "height" })
 )
 public class TrackImageEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id")

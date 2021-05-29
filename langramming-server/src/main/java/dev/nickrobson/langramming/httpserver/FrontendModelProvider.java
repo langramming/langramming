@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class FrontendModelProvider {
+
     private final BaseUrlService baseUrlService;
     private final UserService.UserProvider userProvider;
     private final SpotifyUserService spotifyUserService;
@@ -34,8 +35,8 @@ public class FrontendModelProvider {
             .baseUrl(baseUrlService.getBaseUrl())
             .user(userProvider.get().map(this::toUserModel))
             .telegram(
-                FrontendModel
-                    .FrontendTelegramModel.builder()
+                FrontendModel.FrontendTelegramModel
+                    .builder()
                     .username(telegramBotClient.getTelegramBotInfo().user().username())
                     .build()
             )
@@ -43,8 +44,8 @@ public class FrontendModelProvider {
     }
 
     private FrontendModel.FrontendUserModel toUserModel(User user) {
-        return FrontendModel
-            .FrontendUserModel.builder()
+        return FrontendModel.FrontendUserModel
+            .builder()
             .id(user.getId())
             .name(user.getName())
             .isSpotifyAuthed(spotifyUserService.getCurrentSpotifyUser().isPresent())

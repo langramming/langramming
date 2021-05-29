@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "User")
 @Table(name = "user_v1")
 public class UserEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

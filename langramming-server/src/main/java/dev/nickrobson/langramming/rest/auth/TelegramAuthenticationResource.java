@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth/telegram")
 public class TelegramAuthenticationResource {
+
     private static final Set<Long> TEMPORARY_allowedTelegramUsers = new HashSet<>(
         Collections.singletonList(112972102L)
     );

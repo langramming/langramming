@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "Language")
 @Table(name = "language_v1")
 public class LanguageEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

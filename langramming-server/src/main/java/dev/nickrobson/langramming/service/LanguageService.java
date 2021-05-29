@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class LanguageService {
+
     private final LanguageRepository languageRepository;
 
     @Inject

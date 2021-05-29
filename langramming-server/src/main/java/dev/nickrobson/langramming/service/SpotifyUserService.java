@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class SpotifyUserService {
+
     private final UserService.UserProvider userProvider;
     private final SpotifyUserRepository spotifyUserRepository;
 

@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class SpotifyRestClient {
+
     private final BaseUrlService baseUrlService;
     private final LangrammingSpotifyConfiguration spotifyConfiguration;
     private final SpotifyUserService spotifyUserService;

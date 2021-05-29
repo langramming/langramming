@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "SpotifyUser")
 @Table(name = "spotify_user_v1")
 public class SpotifyUserEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

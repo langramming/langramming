@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 @JsonAutoDetect
 public class TrackDTO {
+
     @JsonProperty("provider")
     public final TrackProviderType provider;
 

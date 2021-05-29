@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Singleton
 public class BaseUrlService {
+
     private final String host;
     private final String contextPath;
     private final String baseUrl;

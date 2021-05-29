@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class UserService {
+
     private final TelegramUserRepository userRepository;
 
     @Inject

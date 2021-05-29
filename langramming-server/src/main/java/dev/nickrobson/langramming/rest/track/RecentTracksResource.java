@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/track/recent")
 public class RecentTracksResource {
+
     private final ResponseHelper responseHelper;
     private final TrackService trackService;
     private final SpotifyUserService spotifyUserService;

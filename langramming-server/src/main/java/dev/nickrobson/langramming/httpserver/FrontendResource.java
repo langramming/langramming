@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class FrontendResource {
+
     private final FrontendService frontendService;
     private final FrontendModelProvider frontendModelProvider;
     private final ResponseHelper responseHelper;
@@ -44,8 +45,7 @@ public class FrontendResource {
     public ResponseEntity<?> getAsset(
         @PathVariable("filename") String asset,
         HttpServletResponse response
-    )
-        throws IOException {
+    ) throws IOException {
         if (frontendService.isFrontendServerEnabled()) {
             Optional<ResponseEntity<?>> responseEntityOpt = frontendService.fromFrontendServer(
                 asset,

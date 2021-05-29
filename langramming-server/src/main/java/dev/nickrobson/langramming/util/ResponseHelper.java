@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 @Singleton
 public class ResponseHelper {
+
     private final UserService.UserProvider userProvider;
 
     @Inject

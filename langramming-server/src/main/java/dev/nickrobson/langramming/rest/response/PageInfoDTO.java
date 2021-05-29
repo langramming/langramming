@@ -9,6 +9,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect
 public class PageInfoDTO<T> {
+
     @JsonProperty("first")
     public final Optional<String> first;
 

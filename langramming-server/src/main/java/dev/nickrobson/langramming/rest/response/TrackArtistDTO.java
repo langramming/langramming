@@ -6,6 +6,7 @@ import dev.nickrobson.langramming.model.TrackDetails;
 
 @JsonAutoDetect
 public class TrackArtistDTO {
+
     @JsonProperty("id")
     public final String id;
 

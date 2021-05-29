@@ -8,6 +8,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect
 public class FrontendModel {
+
     @JsonProperty("baseUrl")
     public final String baseUrl;
 
@@ -20,6 +21,7 @@ public class FrontendModel {
     @Builder
     @JsonAutoDetect
     public static class FrontendUserModel {
+
         @JsonProperty("id")
         public final long id;
 
@@ -33,6 +35,7 @@ public class FrontendModel {
     @Builder
     @JsonAutoDetect
     public static class FrontendTelegramModel {
+
         @JsonProperty("username")
         public final String username;
     }

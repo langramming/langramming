@@ -7,14 +7,6 @@
     "node": "^14.17.0",
     "yarn": "^1.22.10"
   },
-  "targets": {
-    "maven": {
-      "distDir": "target/parcel-build",
-      "engines": {
-        "browsers": "last 5 Chrome versions, last 3 Firefox versions, last 3 Safari versions AND >1%"
-      }
-    }
-  },
   "scripts": {
     "build": "rm -rf build/ dist/ && parcel build public/index.html",
     "start": "parcel serve public/index.html"
@@ -56,5 +48,13 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
     ]
+  },
+  "targets": {
+    "maven": {
+      "distDir": "target/parcel-build",
+      "engines": {
+        "browsers": "last 5 Chrome versions, last 3 Firefox versions, last 3 Safari versions AND >1%"
+      }
+    }
   }
 }

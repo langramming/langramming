@@ -6,6 +6,7 @@ import dev.nickrobson.langramming.model.Language;
 
 @JsonAutoDetect
 public class LanguageDTO {
+
     @JsonProperty("code")
     public final String code;
 

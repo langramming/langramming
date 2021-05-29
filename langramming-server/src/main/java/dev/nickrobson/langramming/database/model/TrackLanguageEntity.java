@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
     }
 )
 public class TrackLanguageEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

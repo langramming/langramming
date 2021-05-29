@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/language")
 public class LanguageResource {
+
     private final LanguageService languageService;
     private final ResponseHelper responseHelper;
 

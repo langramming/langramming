@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Singleton
 public class TrackService {
+
     private final EnumMap<TrackProviderType, TrackProvider> trackProviderEnumMap;
     private final TrackRepository trackRepository;
     private final AlbumRepository albumRepository;
@@ -86,20 +87,20 @@ public class TrackService {
                     .ofNullable(trackEntity.album)
                     .map(
                         album ->
-                            TrackDetails
-                                .Album.builder()
+                            TrackDetails.Album
+                                .builder()
                                 .id(album.providerAlbumId)
                                 .name(album.name)
                                 .build()
                     )
             )
             .artists(
-                trackEntity
-                    .artists.stream()
+                trackEntity.artists
+                    .stream()
                     .map(
                         artist ->
-                            TrackDetails
-                                .Artist.builder()
+                            TrackDetails.Artist
+                                .builder()
                                 .id(artist.providerArtistId)
                                 .name(artist.name)
                                 .build()
@@ -107,12 +108,12 @@ public class TrackService {
                     .collect(Collectors.toList())
             )
             .images(
-                trackEntity
-                    .images.stream()
+                trackEntity.images
+                    .stream()
                     .map(
                         image ->
-                            TrackDetails
-                                .Image.builder()
+                            TrackDetails.Image
+                                .builder()
                                 .width(image.width)
                                 .height(image.height)
                                 .url(image.url)

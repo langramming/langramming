@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth/spotify")
 public class SpotifyAuthenticationResource {
+
     private static final String SPOTIFY_SCOPES = String.join(
         ",",
         "playlist-read-collaborative",

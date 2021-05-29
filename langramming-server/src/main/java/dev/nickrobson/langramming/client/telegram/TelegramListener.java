@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class TelegramListener implements UpdatesListener {
+
     private final TelegramBot bot;
 
     @Override

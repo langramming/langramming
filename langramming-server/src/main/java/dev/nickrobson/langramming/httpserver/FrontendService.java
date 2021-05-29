@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 
 @Singleton
 public class FrontendService {
+
     private static final Pattern ASSET_NAME = Pattern.compile(
         "^(?:.*/)?[a-z0-9._-]+\\.(html|js|css|svg)$",
         Pattern.CASE_INSENSITIVE
@@ -73,8 +74,7 @@ public class FrontendService {
     public Optional<ResponseEntity<?>> fromFrontendServer(
         String asset,
         HttpServletResponse response
-    )
-        throws IOException {
+    ) throws IOException {
         URL resourceUrl = getFrontendServerUrl(asset);
         if (resourceUrl == null) {
             return Optional.of(this.fromClasspath(asset));

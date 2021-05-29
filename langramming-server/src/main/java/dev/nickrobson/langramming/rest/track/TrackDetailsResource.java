@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/track/details")
 public class TrackDetailsResource {
+
     private final TrackService trackService;
     private final ResponseHelper responseHelper;
 

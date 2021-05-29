@@ -13,6 +13,7 @@ import org.springframework.beans.factory.DisposableBean;
 @Slf4j
 @Singleton
 public class TelegramBotClient implements DisposableBean {
+
     private final LangrammingTelegramConfiguration telegramConfiguration;
     private TelegramBot telegramBot;
     private GetMeResponse telegramBotInfo;
