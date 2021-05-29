@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":automergeMinor",
+    ":automergePatch",
+    ":preserveSemverRanges"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    }
+  ],
+  "js": {
+    "packageRules": [
+      {
+        "groupName": "Atlaskit",
+        "matchPackagePrefixes": ["@atlaskit/"]
+      }
+    ]
+  },
+  "maven": {
+    "fileMatch": [
+      "\\.pom\\.xml$",
+      "(^|/)pom\\.xml$"
+    ],
+    "versioning": "maven",
+    "packageRules": [
+      {
+        "groupName": "Maven plugins",
+        "matchPackagePrefixes": ["org.apache.maven.plugins:"]
+      },
+      {
+        "groupName": "Spring Boot",
+        "matchPackagePrefixes": ["org.springframework.boot:"]
+      },
+      {
+        "groupName": "Jackson",
+        "matchPackagePrefixes": ["com.fasterxml.jackson.datatype:"]
+      },
+      {
+        "groupName": "Flyway",
+        "matchPackagePrefixes": ["org.flywaydb:"]
+      }
+    ]
+  }
+}
