@@ -18,16 +18,11 @@
     "prettier-plugin-java": "^1.1.1",
     "prettier-plugin-package": "^1.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "langramming-web/**": [
       "yarn workspace langramming-web lint-staged"
     ],
-    "package.json": [
+    "*.{json,json5,yml}": [
       "prettier --write"
     ],
     "*.java": [

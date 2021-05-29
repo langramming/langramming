@@ -4,6 +4,7 @@
   packageRules: [
     {
       matchUpdateTypes: ['minor', 'patch', 'pin', 'digest'],
+      matchCurrentVersion: '!/^0/',
       automerge: true,
     },
     {

@@ -3,7 +3,6 @@ access.log
 /langrammingdb.sqlite
 
 /node_modules/
-/.husky/
 /.parcel-cache/
 
 ### Java ###
