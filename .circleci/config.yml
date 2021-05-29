@@ -1,0 +1,46 @@
+version: 2.1
+
+jobs:
+  lint:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Prettier
+          command: yarn prettier --check .
+  build-and-test-backend:
+    docker:
+      - image: cimg/openjdk:16.0
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: mvn -B -DskipTests clean package
+      - run:
+          name: Test
+          command: mvn test
+  build-and-test-frontend:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: ESLint
+          command: yarn workspace langramming-web eslint .
+      - run:
+          name: Typechecking
+          command: yarn workspace langramming-web tsc --noEmit
+
+workflows:
+  ci:
+    jobs:
+      - lint
+      - build-and-test-backend
+      - build-and-test-frontend
