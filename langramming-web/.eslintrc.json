@@ -7,13 +7,15 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "reportUnusedDisableDirectives": true,
   "settings": {
     "react": {
       "version": "detect"
     }
+  },
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }

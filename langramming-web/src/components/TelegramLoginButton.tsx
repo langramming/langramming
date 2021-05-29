@@ -25,7 +25,7 @@ export const TelegramLoginButton = (): JSX.Element => {
 
     // if no ref, nothing to clean up
     return undefined;
-  }, [ref, telegramBotUsername]);
+  }, [baseUrl, ref, telegramBotUsername]);
 
   return <div ref={setRef} />;
 };

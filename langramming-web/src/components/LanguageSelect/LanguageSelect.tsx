@@ -97,14 +97,9 @@ export const LanguageSelect = ({
   });
 
   const handleOnChange = React.useCallback(
-    (value: ValueType<LanguageOption>) => {
-      if (value == null || 'value' in value) {
-        dispatch({ type: 'SELECT', selectedOption: value });
-        onChange(value?.value);
-      } else {
-        dispatch({ type: 'SELECT', selectedOption: value[0] });
-        onChange(value[0].value);
-      }
+    (value: ValueType<LanguageOption, false>) => {
+      dispatch({ type: 'SELECT', selectedOption: value });
+      onChange(value?.value);
     },
     [onChange],
   );
@@ -135,7 +130,7 @@ export const LanguageSelect = ({
           dispatch({ type: 'CREATE_SAVE_FAIL' });
         });
     },
-    [handleOnChange],
+    [baseUrl, handleOnChange],
   );
 
   const handleOnCreateCancel = React.useCallback(() => dispatch({ type: 'CREATE_CANCEL' }), []);

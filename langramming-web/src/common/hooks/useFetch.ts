@@ -41,7 +41,7 @@ export const useFetch = <T>(uri: string): FetchState<T> => {
       .then((response) => response.json())
       .then((data) => dispatch({ type: 'DATA', data }))
       .catch((error) => dispatch({ type: 'ERROR', error }));
-  }, [uri]);
+  }, [baseUrl, uri]);
 
   return { loading, data, error };
 };

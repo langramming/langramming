@@ -6,21 +6,36 @@ interface AudioPlayerProps {
 }
 
 export const AudioPlayer = ({ src }: AudioPlayerProps) => {
-  const [audioRef, setAudioRef] = React.useState<HTMLAudioElement | null>(null);
+  const [audioPlayerRef, setAudioPlayerRef] = React.useState<ReactAudioPlayer | null>(null);
+  const [canPlay, setCanPlay] = React.useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
   const togglePlayPause = React.useCallback(() => {
-    if (audioRef == null) return;
-    if (audioRef.paused) {
-      audioRef.play();
-    } else {
-      audioRef.pause();
+    const audioPlayerEl = audioPlayerRef?.audioEl.current;
+    if (audioPlayerEl == null) {
+      return;
     }
-  }, []);
+
+    if (audioPlayerEl.paused) {
+      audioPlayerEl.play();
+      setIsPlaying(true);
+    } else {
+      audioPlayerEl.pause();
+      setIsPlaying(false);
+    }
+  }, [audioPlayerRef]);
 
   return (
     <>
-      <ReactAudioPlayer ref={setAudioRef} src={src} />
-      {audioRef && <button onClick={togglePlayPause}>{audioRef.paused ? 'Play' : 'Pause'}</button>}
+      <ReactAudioPlayer
+        ref={setAudioPlayerRef}
+        src={src}
+        autoPlay={isPlaying}
+        onCanPlay={() => setCanPlay(true)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
+      {canPlay && <button onClick={togglePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>}
     </>
   );
 };
