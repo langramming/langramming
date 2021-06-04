@@ -1,5 +1,6 @@
 package dev.nickrobson.langramming.httpserver;
 
+import dev.nickrobson.langramming.SpotifyUserService;
 import dev.nickrobson.langramming.client.telegram.TelegramBotClient;
 import dev.nickrobson.langramming.manager.BaseUrlManager;
 import dev.nickrobson.langramming.manager.SpotifyUserManager;
@@ -13,19 +14,19 @@ public class FrontendModelProvider {
 
     private final BaseUrlManager baseUrlManager;
     private final UserManager.UserProvider userProvider;
-    private final SpotifyUserManager spotifyUserManager;
+    private final SpotifyUserService spotifyUserService;
     private final TelegramBotClient telegramBotClient;
 
     @Inject
     public FrontendModelProvider(
         BaseUrlManager baseUrlManager,
         UserManager.UserProvider userProvider,
-        SpotifyUserManager spotifyUserManager,
+        SpotifyUserService spotifyUserService,
         TelegramBotClient telegramBotClient
     ) {
         this.baseUrlManager = baseUrlManager;
         this.userProvider = userProvider;
-        this.spotifyUserManager = spotifyUserManager;
+        this.spotifyUserService = spotifyUserService;
         this.telegramBotClient = telegramBotClient;
     }
 
@@ -48,7 +49,7 @@ public class FrontendModelProvider {
             .builder()
             .id(user.getId())
             .name(user.getName())
-            .isSpotifyAuthed(spotifyUserManager.getCurrentSpotifyUser().isPresent())
+            .isSpotifyAuthed(spotifyUserService.getCurrentSpotifyUser().isPresent())
             .build();
     }
 }

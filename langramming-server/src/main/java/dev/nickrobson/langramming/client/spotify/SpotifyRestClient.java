@@ -12,10 +12,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.util.Optional;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
+@ParametersAreNonnullByDefault
 public class SpotifyRestClient {
 
     private final BaseUrlManager baseUrlManager;
@@ -52,28 +54,7 @@ public class SpotifyRestClient {
         );
 
         if (spotifyUser.getExpiresAt() <= Instant.now().getEpochSecond()) {
-            try {
-                AuthorizationCodeCredentials credentials = spotifyApiBuilder()
-                    .build()
-                    .authorizationCodeRefresh()
-                    .refresh_token(spotifyUser.getRefreshToken())
-                    .build()
-                    .execute();
-
-                spotifyUser =
-                    spotifyUserManager.createOrUpdateUser(
-                        new AuthorizationCodeCredentials.Builder()
-                            .setScope(credentials.getScope())
-                            .setTokenType(credentials.getTokenType())
-                            .setExpiresIn(credentials.getExpiresIn())
-                            .setAccessToken(credentials.getAccessToken())
-                            .setRefreshToken(spotifyUser.getRefreshToken())
-                            .build()
-                    );
-            } catch (SpotifyWebApiException | IOException ex) {
-                ex.printStackTrace();
-                throw new IllegalStateException("Failed to refresh Spotify token", ex);
-            }
+            spotifyUser = refreshAccessToken(spotifyUser);
         }
 
         return spotifyApiBuilder()
@@ -82,9 +63,42 @@ public class SpotifyRestClient {
             .build();
     }
 
+    public boolean isAuthenticated(SpotifyUser spotifyUser) {
+        try {
+            refreshAccessToken(spotifyUser);
+            return true;
+        } catch (IllegalStateException ex) {
+            return false;
+        }
+    }
+
     private URI getRedirectUri() {
         String serverUrl = baseUrlManager.getBaseUrl();
         String baseUrl = serverUrl + (serverUrl.endsWith("/") ? "" : "/");
         return SpotifyHttpManager.makeUri(baseUrl + "api/auth/spotify/redirect");
+    }
+
+    private SpotifyUser refreshAccessToken(SpotifyUser spotifyUser) throws IllegalStateException {
+        try {
+            AuthorizationCodeCredentials credentials = spotifyApiBuilder()
+                .build()
+                .authorizationCodeRefresh()
+                .refresh_token(spotifyUser.getRefreshToken())
+                .build()
+                .execute();
+
+            return spotifyUserManager.createOrUpdateUser(
+                new AuthorizationCodeCredentials.Builder()
+                    .setScope(credentials.getScope())
+                    .setTokenType(credentials.getTokenType())
+                    .setExpiresIn(credentials.getExpiresIn())
+                    .setAccessToken(credentials.getAccessToken())
+                    .setRefreshToken(spotifyUser.getRefreshToken())
+                    .build()
+            );
+        } catch (SpotifyWebApiException | IOException ex) {
+            ex.printStackTrace();
+            throw new IllegalStateException("Failed to refresh Spotify token", ex);
+        }
     }
 }

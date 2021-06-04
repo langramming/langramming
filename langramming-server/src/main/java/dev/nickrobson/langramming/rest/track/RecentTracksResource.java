@@ -4,6 +4,7 @@ import static java.util.Collections.emptyList;
 
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
+import dev.nickrobson.langramming.SpotifyUserService;
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
 import dev.nickrobson.langramming.manager.SpotifyUserManager;
 import dev.nickrobson.langramming.manager.TrackManager;
@@ -39,19 +40,19 @@ public class RecentTracksResource {
 
     private final ResponseHelper responseHelper;
     private final TrackManager trackManager;
-    private final SpotifyUserManager spotifyUserManager;
+    private final SpotifyUserService spotifyUserService;
     private final SpotifyRestClient spotifyRestClient;
 
     @Inject
     public RecentTracksResource(
         ResponseHelper responseHelper,
         TrackManager trackManager,
-        SpotifyUserManager spotifyUserManager,
+        SpotifyUserService spotifyUserService,
         SpotifyRestClient spotifyRestClient
     ) {
         this.responseHelper = responseHelper;
         this.trackManager = trackManager;
-        this.spotifyUserManager = spotifyUserManager;
+        this.spotifyUserService = spotifyUserService;
         this.spotifyRestClient = spotifyRestClient;
     }
 
@@ -61,7 +62,7 @@ public class RecentTracksResource {
         @RequestParam(name = "after", required = false) Instant after,
         @RequestParam(name = "limit", defaultValue = "50") int limit
     ) {
-        if (spotifyUserManager.getCurrentSpotifyUser().isEmpty()) {
+        if (spotifyUserService.getCurrentSpotifyUser().isEmpty()) {
             return responseHelper.unauthorized();
         }
 

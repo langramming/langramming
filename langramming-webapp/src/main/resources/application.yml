@@ -24,7 +24,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: 'org.hibernate.dialect.SQLiteDialect'
+        dialect: 'org.sqlite.hibernate.dialect.SQLiteDialect'
   jackson:
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
     time-zone: UTC
