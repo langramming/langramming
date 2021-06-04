@@ -1,4 +1,4 @@
-package dev.nickrobson.langramming;
+package dev.nickrobson.langramming.service;
 
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
 import dev.nickrobson.langramming.manager.SpotifyUserManager;

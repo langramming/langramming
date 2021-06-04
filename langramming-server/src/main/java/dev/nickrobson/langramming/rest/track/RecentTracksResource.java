@@ -4,14 +4,13 @@ import static java.util.Collections.emptyList;
 
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
-import dev.nickrobson.langramming.SpotifyUserService;
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
-import dev.nickrobson.langramming.manager.SpotifyUserManager;
 import dev.nickrobson.langramming.manager.TrackManager;
 import dev.nickrobson.langramming.model.TrackDetails;
 import dev.nickrobson.langramming.model.TrackProviderType;
 import dev.nickrobson.langramming.rest.response.PageInfoDTO;
 import dev.nickrobson.langramming.rest.response.RecentSpotifyTrackDTO;
+import dev.nickrobson.langramming.service.SpotifyUserService;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import io.atlassian.fugue.Checked;
 import io.atlassian.fugue.Either;

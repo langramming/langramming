@@ -1,11 +1,10 @@
 package dev.nickrobson.langramming.httpserver;
 
-import dev.nickrobson.langramming.SpotifyUserService;
 import dev.nickrobson.langramming.client.telegram.TelegramBotClient;
 import dev.nickrobson.langramming.manager.BaseUrlManager;
-import dev.nickrobson.langramming.manager.SpotifyUserManager;
 import dev.nickrobson.langramming.manager.UserManager;
 import dev.nickrobson.langramming.model.User;
+import dev.nickrobson.langramming.service.SpotifyUserService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
