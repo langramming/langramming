@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ValueType } from 'react-select';
-import { CreatableSelect } from '@atlaskit/select';
+import CreatableSelect from 'react-select/creatable';
 
 import { Language, LanguageResponse } from '../../types/Language';
 import { useFetch } from '../../common/hooks/useFetch';
@@ -156,7 +156,7 @@ export const LanguageSelect = ({
         autoFocus={autoFocus}
         closeMenuOnSelect
         formatCreateLabel={(inputValue: string) => `Add "${inputValue}"`}
-        formatOptionLabel={(option) =>
+        formatOptionLabel={(option: LanguageOption) =>
           option.value.code != null ? `${option.label} (${option.value.code})` : option.label
         }
         onChange={handleOnChange}
@@ -165,12 +165,14 @@ export const LanguageSelect = ({
         placeholder="Select a language..."
         value={state.selectedOption}
       />
-      <LanguageSelectAddModal
-        isSaving={state.isSaving}
-        newOption={state.newOption}
-        onAdd={handleOnCreateSave}
-        onClose={handleOnCreateCancel}
-      />
+      {state.newOption != null && (
+        <LanguageSelectAddModal
+          isSaving={state.isSaving}
+          initialName={state.newOption}
+          onAdd={handleOnCreateSave}
+          onClose={handleOnCreateCancel}
+        />
+      )}
     </>
   );
 };

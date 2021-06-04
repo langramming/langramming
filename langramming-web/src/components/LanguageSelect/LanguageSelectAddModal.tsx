@@ -1,86 +1,79 @@
 import * as React from 'react';
-
-import Button, { ButtonGroup, LoadingButton } from '@atlaskit/button';
-import Form, { Field, ErrorMessage, HelperMessage } from '@atlaskit/form';
-import ModalDialog, {
-  ContainerComponentProps,
-  ModalFooter,
-  ModalTransition,
-} from '@atlaskit/modal-dialog';
-import Textfield from '@atlaskit/textfield';
+import { Button, Dialog, Pane, TextInputField } from 'evergreen-ui';
+import { Language } from 'types/Language';
+import { useForm } from 'react-hook-form';
 
 interface LanguageSelectCreateModalProps {
   isSaving: boolean;
-  newOption: string | null;
-  onAdd: (value: { name: string; code: string }) => void;
+  initialName: string;
+  onAdd: (value: Language) => void;
   onClose: () => void;
 }
 
 export const LanguageSelectAddModal = ({
   isSaving,
-  newOption,
+  initialName,
   onAdd,
   onClose,
-}: LanguageSelectCreateModalProps): JSX.Element => (
-  <ModalTransition>
-    {newOption != null && (
-      <ModalDialog
-        shouldCloseOnEscapePress
-        shouldCloseOnOverlayClick
-        heading="Add new language"
-        onClose={onClose}
-        components={{
-          Container({ children }: ContainerComponentProps) {
-            return (
-              <Form onSubmit={onAdd}>
-                {({ formProps }) => <form {...formProps}>{children}</form>}
-              </Form>
-            );
-          },
-          Footer() {
-            return (
-              <ModalFooter>
-                <div
-                  style={{
-                    display: 'flex',
-                    flex: '0 0 auto',
-                    justifyContent: 'flex-end',
-                    width: '100%',
-                  }}
-                >
-                  <ButtonGroup>
-                    <LoadingButton appearance="primary" type="submit" isLoading={isSaving}>
-                      Add
-                    </LoadingButton>
-                    <Button appearance="default" onClick={onClose}>
-                      Cancel
-                    </Button>
-                  </ButtonGroup>
-                </div>
-              </ModalFooter>
-            );
-          },
-        }}
-      >
-        <Field name="name" isRequired defaultValue={newOption ?? ''}>
-          {({ fieldProps, error }) => (
-            <>
-              <Textfield {...fieldProps} placeholder="Language name" autoFocus />
-              {!error && <HelperMessage>{'The language name, e.g. English'}</HelperMessage>}
-              {error && <ErrorMessage>{error}</ErrorMessage>}
-            </>
-          )}
-        </Field>
-        <Field name="code" isRequired defaultValue="">
-          {({ fieldProps, error }) => (
-            <>
-              <Textfield {...fieldProps} placeholder="Language code" />
-              {!error && <HelperMessage>{'The language code, e.g. en or en_US'}</HelperMessage>}
-              {error && <ErrorMessage>{error}</ErrorMessage>}
-            </>
-          )}
-        </Field>
-      </ModalDialog>
-    )}
-  </ModalTransition>
-);
+}: LanguageSelectCreateModalProps): JSX.Element => {
+  const { register, handleSubmit, formState } = useForm<{ code: string; name: string }>({
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
+    defaultValues: {
+      code: '',
+      name: initialName,
+    },
+  });
+
+  const onSubmit = React.useCallback(
+    (values: { code: string; name: string }) => {
+      onAdd(values);
+      onClose();
+    },
+    [onAdd, onClose],
+  );
+
+  // TODO: figure out what errors look like and add validation errors
+  console.log(formState.errors);
+
+  return (
+    <Dialog
+      isShown
+      preventBodyScrolling
+      shouldCloseOnEscapePress
+      shouldCloseOnOverlayClick
+      title="Add new language"
+      hasFooter={false}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <main>
+          <TextInputField
+            label="Name"
+            autoFocus
+            hint="The name of the language, e.g. English or French"
+            {...register('name', {
+              required: true,
+              validate: (name) => name.trim() !== '',
+            })}
+          />
+          <TextInputField
+            label="Code"
+            hint="The ISO code for the language, e.g. en or fr"
+            {...register('code', {
+              required: true,
+              validate: (code) => code.trim() !== '',
+            })}
+          />
+        </main>
+        <footer>
+          <Pane display="flex" flexDirection="row" justifyContent="flex-end">
+            <Button onClick={onClose}>Cancel</Button>
+            <Button appearance="primary" isLoading={isSaving} type="submit">
+              Add
+            </Button>
+          </Pane>
+        </footer>
+      </form>
+    </Dialog>
+  );
+};

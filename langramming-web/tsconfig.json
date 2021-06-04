@@ -6,7 +6,7 @@
     "incremental": true,
     "target": "es2019",
     "module": "commonjs",
-    "jsx": "react-jsx",
+    "jsx": "react",
 
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,

@@ -12,14 +12,6 @@
       automerge: true,
     },
   ],
-  js: {
-    packageRules: [
-      {
-        groupName: 'Atlaskit',
-        matchPackagePrefixes: ['@atlaskit/'],
-      },
-    ],
-  },
   maven: {
     fileMatch: ['\\.pom\\.xml$', '(^|/)pom\\.xml$'],
     versioning: 'maven',
