@@ -5,8 +5,8 @@ import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredential
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
-import dev.nickrobson.langramming.service.BaseUrlService;
-import dev.nickrobson.langramming.service.SpotifyUserService;
+import dev.nickrobson.langramming.manager.BaseUrlManager;
+import dev.nickrobson.langramming.manager.SpotifyUserManager;
 import dev.nickrobson.langramming.util.LangrammingClientError;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import java.io.IOException;
@@ -32,21 +32,21 @@ public class SpotifyAuthenticationResource {
         "user-top-read"
     );
 
-    private final BaseUrlService baseUrlService;
+    private final BaseUrlManager baseUrlManager;
     private final SpotifyRestClient spotifyRestClient;
-    private final SpotifyUserService spotifyUserService;
+    private final SpotifyUserManager spotifyUserManager;
     private final ResponseHelper responseHelper;
 
     @Inject
     public SpotifyAuthenticationResource(
-        BaseUrlService baseUrlService,
+        BaseUrlManager baseUrlManager,
         SpotifyRestClient spotifyRestClient,
-        SpotifyUserService spotifyUserService,
+        SpotifyUserManager spotifyUserManager,
         ResponseHelper responseHelper
     ) {
-        this.baseUrlService = baseUrlService;
+        this.baseUrlManager = baseUrlManager;
         this.spotifyRestClient = spotifyRestClient;
-        this.spotifyUserService = spotifyUserService;
+        this.spotifyUserManager = spotifyUserManager;
         this.responseHelper = responseHelper;
     }
 
@@ -97,8 +97,8 @@ public class SpotifyAuthenticationResource {
 
         AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 
-        spotifyUserService.createOrUpdateUser(authorizationCodeCredentials);
+        spotifyUserManager.createOrUpdateUser(authorizationCodeCredentials);
 
-        return responseHelper.redirect(baseUrlService.getBaseUrl());
+        return responseHelper.redirect(baseUrlManager.getBaseUrl());
     }
 }

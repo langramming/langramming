@@ -1,4 +1,4 @@
-package dev.nickrobson.langramming.service;
+package dev.nickrobson.langramming.manager;
 
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import dev.nickrobson.langramming.database.model.SpotifyUserEntity;
@@ -13,14 +13,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class SpotifyUserService {
+public class SpotifyUserManager {
 
-    private final UserService.UserProvider userProvider;
+    private final UserManager.UserProvider userProvider;
     private final SpotifyUserRepository spotifyUserRepository;
 
     @Inject
-    private SpotifyUserService(
-        UserService.UserProvider userProvider,
+    private SpotifyUserManager(
+        UserManager.UserProvider userProvider,
         SpotifyUserRepository spotifyUserRepository
     ) {
         this.userProvider = userProvider;

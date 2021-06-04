@@ -1,4 +1,4 @@
-package dev.nickrobson.langramming.service;
+package dev.nickrobson.langramming.manager;
 
 import dev.nickrobson.langramming.database.model.LanguageEntity;
 import dev.nickrobson.langramming.database.repository.LanguageRepository;
@@ -10,12 +10,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class LanguageService {
+public class LanguageManager {
 
     private final LanguageRepository languageRepository;
 
     @Inject
-    public LanguageService(LanguageRepository languageRepository) {
+    public LanguageManager(LanguageRepository languageRepository) {
         this.languageRepository = languageRepository;
     }
 

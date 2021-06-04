@@ -5,12 +5,12 @@ import static java.util.Collections.emptyList;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
+import dev.nickrobson.langramming.manager.SpotifyUserManager;
+import dev.nickrobson.langramming.manager.TrackManager;
 import dev.nickrobson.langramming.model.TrackDetails;
 import dev.nickrobson.langramming.model.TrackProviderType;
 import dev.nickrobson.langramming.rest.response.PageInfoDTO;
 import dev.nickrobson.langramming.rest.response.RecentSpotifyTrackDTO;
-import dev.nickrobson.langramming.service.SpotifyUserService;
-import dev.nickrobson.langramming.service.TrackService;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import io.atlassian.fugue.Checked;
 import io.atlassian.fugue.Either;
@@ -38,20 +38,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecentTracksResource {
 
     private final ResponseHelper responseHelper;
-    private final TrackService trackService;
-    private final SpotifyUserService spotifyUserService;
+    private final TrackManager trackManager;
+    private final SpotifyUserManager spotifyUserManager;
     private final SpotifyRestClient spotifyRestClient;
 
     @Inject
     public RecentTracksResource(
         ResponseHelper responseHelper,
-        TrackService trackService,
-        SpotifyUserService spotifyUserService,
+        TrackManager trackManager,
+        SpotifyUserManager spotifyUserManager,
         SpotifyRestClient spotifyRestClient
     ) {
         this.responseHelper = responseHelper;
-        this.trackService = trackService;
-        this.spotifyUserService = spotifyUserService;
+        this.trackManager = trackManager;
+        this.spotifyUserManager = spotifyUserManager;
         this.spotifyRestClient = spotifyRestClient;
     }
 
@@ -61,7 +61,7 @@ public class RecentTracksResource {
         @RequestParam(name = "after", required = false) Instant after,
         @RequestParam(name = "limit", defaultValue = "50") int limit
     ) {
-        if (spotifyUserService.getCurrentSpotifyUser().isEmpty()) {
+        if (spotifyUserManager.getCurrentSpotifyUser().isEmpty()) {
             return responseHelper.unauthorized();
         }
 
@@ -126,7 +126,7 @@ public class RecentTracksResource {
                         .stream()
                         .map(
                             entry ->
-                                trackService
+                                trackManager
                                     .getTrackDetails(TrackProviderType.SPOTIFY, entry.getKey())
                                     .map(trackDetails -> Pair.pair(entry.getValue(), trackDetails))
                         )

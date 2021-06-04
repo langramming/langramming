@@ -2,11 +2,11 @@ package dev.nickrobson.langramming.rest;
 
 import static org.apache.http.util.TextUtils.isBlank;
 
+import dev.nickrobson.langramming.manager.LanguageManager;
 import dev.nickrobson.langramming.model.Language;
 import dev.nickrobson.langramming.rest.request.LanguageRequest;
 import dev.nickrobson.langramming.rest.response.LanguageDTO;
 import dev.nickrobson.langramming.rest.response.LanguagesDTO;
-import dev.nickrobson.langramming.service.LanguageService;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import io.atlassian.fugue.Option;
 import java.util.List;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/language")
 public class LanguageResource {
 
-    private final LanguageService languageService;
+    private final LanguageManager languageManager;
     private final ResponseHelper responseHelper;
 
     @Inject
-    public LanguageResource(LanguageService languageService, ResponseHelper responseHelper) {
-        this.languageService = languageService;
+    public LanguageResource(LanguageManager languageManager, ResponseHelper responseHelper) {
+        this.languageManager = languageManager;
         this.responseHelper = responseHelper;
     }
 
@@ -40,7 +40,7 @@ public class LanguageResource {
             return responseHelper.unauthorized();
         }
 
-        List<Language> languages = languageService.getLanguages();
+        List<Language> languages = languageManager.getLanguages();
 
         return responseHelper.ok(new LanguagesDTO(languages));
     }
@@ -55,7 +55,7 @@ public class LanguageResource {
             return responseHelper.badRequest();
         }
 
-        Optional<Language> languageOpt = languageService.getLanguageByCode(code);
+        Optional<Language> languageOpt = languageManager.getLanguageByCode(code);
 
         return Option
             .fromOptional(languageOpt)
@@ -76,7 +76,7 @@ public class LanguageResource {
             return responseHelper.badRequest();
         }
 
-        Language language = languageService.createLanguage(
+        Language language = languageManager.createLanguage(
             languageRequest.code,
             languageRequest.name
         );

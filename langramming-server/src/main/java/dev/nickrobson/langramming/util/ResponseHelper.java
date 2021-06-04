@@ -1,7 +1,7 @@
 package dev.nickrobson.langramming.util;
 
+import dev.nickrobson.langramming.manager.UserManager;
 import dev.nickrobson.langramming.rest.response.ErrorDTO;
-import dev.nickrobson.langramming.service.UserService;
 import io.atlassian.fugue.Either;
 import java.net.URI;
 import javax.inject.Inject;
@@ -13,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 @Singleton
 public class ResponseHelper {
 
-    private final UserService.UserProvider userProvider;
+    private final UserManager.UserProvider userProvider;
 
     @Inject
-    public ResponseHelper(UserService.UserProvider userProvider) {
+    public ResponseHelper(UserManager.UserProvider userProvider) {
         this.userProvider = userProvider;
     }
 

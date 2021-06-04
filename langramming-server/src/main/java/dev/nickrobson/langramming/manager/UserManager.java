@@ -1,4 +1,4 @@
-package dev.nickrobson.langramming.service;
+package dev.nickrobson.langramming.manager;
 
 import dev.nickrobson.langramming.database.model.UserEntity;
 import dev.nickrobson.langramming.database.repository.TelegramUserRepository;
@@ -10,12 +10,12 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 @Singleton
-public class UserService {
+public class UserManager {
 
     private final TelegramUserRepository userRepository;
 
     @Inject
-    public UserService(TelegramUserRepository userRepository) {
+    public UserManager(TelegramUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

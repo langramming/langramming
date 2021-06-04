@@ -1,9 +1,9 @@
 package dev.nickrobson.langramming.rest.track;
 
+import dev.nickrobson.langramming.manager.TrackManager;
 import dev.nickrobson.langramming.model.TrackDetails;
 import dev.nickrobson.langramming.model.TrackProviderType;
 import dev.nickrobson.langramming.rest.response.TrackDTO;
-import dev.nickrobson.langramming.service.TrackService;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import io.atlassian.fugue.Option;
 import java.util.Optional;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/track/details")
 public class TrackDetailsResource {
 
-    private final TrackService trackService;
+    private final TrackManager trackManager;
     private final ResponseHelper responseHelper;
 
     @Inject
-    public TrackDetailsResource(TrackService trackService, ResponseHelper responseHelper) {
-        this.trackService = trackService;
+    public TrackDetailsResource(TrackManager trackManager, ResponseHelper responseHelper) {
+        this.trackManager = trackManager;
         this.responseHelper = responseHelper;
     }
 
@@ -38,7 +38,7 @@ public class TrackDetailsResource {
             return responseHelper.unauthorized();
         }
 
-        Optional<TrackDetails> trackDetailsOpt = trackService.getTrackDetails(
+        Optional<TrackDetails> trackDetailsOpt = trackManager.getTrackDetails(
             trackProviderType,
             trackId
         );

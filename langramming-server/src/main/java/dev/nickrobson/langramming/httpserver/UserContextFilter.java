@@ -1,7 +1,7 @@
 package dev.nickrobson.langramming.httpserver;
 
+import dev.nickrobson.langramming.manager.UserManager;
 import dev.nickrobson.langramming.model.User;
-import dev.nickrobson.langramming.service.UserService;
 import java.io.IOException;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -31,7 +31,7 @@ public class UserContextFilter implements Filter {
     }
 
     @Inject
-    private UserService userService;
+    private UserManager userManager;
 
     @Override
     public void doFilter(
@@ -48,7 +48,7 @@ public class UserContextFilter implements Filter {
                 httpSession.setMaxInactiveInterval(36 * 60 * 60); // 36 hours
 
                 if (userId instanceof Long) {
-                    Optional<User> user = userService.getUser((Long) userId);
+                    Optional<User> user = userManager.getUser((Long) userId);
                     user.ifPresentOrElse(userLocal::set, userLocal::remove);
                 } else {
                     userLocal.remove();

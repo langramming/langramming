@@ -1,4 +1,4 @@
-package dev.nickrobson.langramming.service;
+package dev.nickrobson.langramming.manager;
 
 import dev.nickrobson.langramming.database.model.AlbumEntity;
 import dev.nickrobson.langramming.database.model.ArtistEntity;
@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 import org.springframework.transaction.annotation.Transactional;
 
 @Singleton
-public class TrackService {
+public class TrackManager {
 
     private final EnumMap<TrackProviderType, TrackProvider> trackProviderEnumMap;
     private final TrackRepository trackRepository;
@@ -33,7 +33,7 @@ public class TrackService {
     private final TrackImageRepository trackImageRepository;
 
     @Inject
-    public TrackService(
+    public TrackManager(
         TrackRepository trackRepository,
         AlbumRepository albumRepository,
         ArtistRepository artistRepository,

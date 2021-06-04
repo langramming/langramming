@@ -2,10 +2,10 @@ package dev.nickrobson.langramming.rest.auth;
 
 import dev.nickrobson.langramming.configuration.LangrammingTelegramConfiguration;
 import dev.nickrobson.langramming.httpserver.UserContextFilter;
+import dev.nickrobson.langramming.manager.BaseUrlManager;
+import dev.nickrobson.langramming.manager.UserManager;
 import dev.nickrobson.langramming.model.User;
 import dev.nickrobson.langramming.rest.response.ErrorDTO;
-import dev.nickrobson.langramming.service.BaseUrlService;
-import dev.nickrobson.langramming.service.UserService;
 import dev.nickrobson.langramming.util.ResponseHelper;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -37,20 +37,20 @@ public class TelegramAuthenticationResource {
         Collections.singletonList(112972102L)
     );
 
-    private final BaseUrlService baseUrlService;
-    private final UserService userService;
+    private final BaseUrlManager baseUrlManager;
+    private final UserManager userManager;
     private final ResponseHelper responseHelper;
     private final LangrammingTelegramConfiguration telegramConfiguration;
 
     @Inject
     public TelegramAuthenticationResource(
-        BaseUrlService baseUrlService,
-        UserService userService,
+        BaseUrlManager baseUrlManager,
+        UserManager userManager,
         ResponseHelper responseHelper,
         LangrammingTelegramConfiguration telegramConfiguration
     ) {
-        this.baseUrlService = baseUrlService;
-        this.userService = userService;
+        this.baseUrlManager = baseUrlManager;
+        this.userManager = userManager;
         this.responseHelper = responseHelper;
         this.telegramConfiguration = telegramConfiguration;
     }
@@ -80,21 +80,21 @@ public class TelegramAuthenticationResource {
             return responseHelper.forbidden();
         }
 
-        Optional<User> userOpt = userService.getUserByTelegramId(telegramId);
+        Optional<User> userOpt = userManager.getUserByTelegramId(telegramId);
 
         userOpt.ifPresent(
             user -> {
                 user.setName(name);
-                userService.updateUser(user);
+                userManager.updateUser(user);
             }
         );
 
-        User user = userOpt.orElseGet(() -> userService.createUser(telegramId, name));
+        User user = userOpt.orElseGet(() -> userManager.createUser(telegramId, name));
 
         UserContextFilter.setLoggedInUser(httpServletRequest.getSession(), user);
 
         log.info("Successfully signed in as TG user with ID {}", user.getTelegramId());
-        return responseHelper.redirect(baseUrlService.getBaseUrl());
+        return responseHelper.redirect(baseUrlManager.getBaseUrl());
     }
 
     private boolean verifyTelegramLogin(Map<String, String> parameterMap) {

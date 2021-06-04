@@ -6,11 +6,11 @@ import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Image;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
+import dev.nickrobson.langramming.manager.SpotifyUserManager;
 import dev.nickrobson.langramming.model.SpotifyUser;
 import dev.nickrobson.langramming.model.TrackDetails;
 import dev.nickrobson.langramming.model.TrackProvider;
 import dev.nickrobson.langramming.model.TrackProviderType;
-import dev.nickrobson.langramming.service.SpotifyUserService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +27,15 @@ import lombok.extern.slf4j.Slf4j;
 public class SpotifyTrackProvider implements TrackProvider {
 
     private final SpotifyRestClient spotifyRestClient;
-    private final SpotifyUserService spotifyUserService;
+    private final SpotifyUserManager spotifyUserManager;
 
     @Inject
     public SpotifyTrackProvider(
         SpotifyRestClient spotifyRestClient,
-        SpotifyUserService spotifyUserService
+        SpotifyUserManager spotifyUserManager
     ) {
         this.spotifyRestClient = spotifyRestClient;
-        this.spotifyUserService = spotifyUserService;
+        this.spotifyUserManager = spotifyUserManager;
     }
 
     @Nonnull
@@ -47,7 +47,7 @@ public class SpotifyTrackProvider implements TrackProvider {
     @Nonnull
     @Override
     public Optional<TrackDetails> getTrackDetails(@NotNull String trackId) {
-        Optional<SpotifyUser> spotifyUserOpt = spotifyUserService.getCurrentSpotifyUser();
+        Optional<SpotifyUser> spotifyUserOpt = spotifyUserManager.getCurrentSpotifyUser();
         if (spotifyUserOpt.isEmpty()) {
             return Optional.empty();
         }
