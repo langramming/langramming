@@ -17,6 +17,7 @@ import io.atlassian.fugue.Either;
 import io.atlassian.fugue.Pair;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,15 +134,15 @@ public class RecentTracksResource {
                         .flatMap(Optional::stream)
                         .collect(Collectors.toList());
 
-                    Optional<PlayHistory> first = Optional.empty();
-                    Optional<PlayHistory> last = Optional.empty();
-                    if (!tracks.isEmpty()) {
-                        first =
-                            Optional.ofNullable(itemsByTrackId.get(tracks.get(0).right().getId()));
-                        last =
-                            Optional.ofNullable(
-                                itemsByTrackId.get(tracks.get(tracks.size() - 1).right().getId())
-                            );
+                    Optional<PlayHistory> latest = Optional.empty();
+                    Optional<PlayHistory> earliest = Optional.empty();
+                    List<PlayHistory> playHistoryItems = Arrays
+                        .stream(response.getItems())
+                        .sorted(Comparator.comparing(PlayHistory::getPlayedAt))
+                        .toList();
+                    if (!playHistoryItems.isEmpty()) {
+                        latest = Optional.of(playHistoryItems.get(0));
+                        earliest = Optional.of(playHistoryItems.get(playHistoryItems.size() - 1));
                     }
 
                     Function<PlayHistory, String> toDateString = ph ->
@@ -149,8 +150,8 @@ public class RecentTracksResource {
 
                     return PageInfoDTO
                         .<RecentSpotifyTrackDTO>builder()
-                        .first(first.map(toDateString))
-                        .last(last.map(toDateString))
+                        .first(latest.map(toDateString))
+                        .last(earliest.map(toDateString))
                         .total(total)
                         .items(
                             tracks

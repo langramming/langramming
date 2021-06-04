@@ -16,8 +16,8 @@ export const useRecentTracks = (
   { before, after, limit }: UseRecentTracksRequest = {},
 ): FetchState<RecentTracksResponse> => {
   const queryString = qs.stringify({
-    before: before?.getDate(),
-    after: after?.getDate(),
+    before: before?.toISOString(),
+    after: after?.toISOString(),
     limit,
   });
 

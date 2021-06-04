@@ -44,7 +44,9 @@ server:
 ---
 # This config is only set during local development
 spring:
-  profiles: local
+  config:
+    activate:
+      on-profile: local
   datasource:
     username: 'langramming'
     password: 'languages r cool'
