@@ -9,6 +9,7 @@ import dev.nickrobson.langramming.util.ResponseHelper;
 import io.atlassian.fugue.Option;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,12 +45,12 @@ public class LanguageResource {
     }
 
     @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getLanguage(@PathVariable("code") String code) {
+    public ResponseEntity<?> getLanguage(@PathVariable("code") @Nonnull String code) {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }
 
-        if (code == null || code.isBlank()) {
+        if (code.isBlank()) {
             return responseHelper.badRequest();
         }
 
@@ -70,7 +71,7 @@ public class LanguageResource {
             return responseHelper.unauthorized();
         }
 
-        if (isBlank(languageRequest.code) || isBlank(languageRequest.name)) {
+        if (languageRequest.code.isBlank() || languageRequest.name.isBlank()) {
             return responseHelper.badRequest();
         }
 
