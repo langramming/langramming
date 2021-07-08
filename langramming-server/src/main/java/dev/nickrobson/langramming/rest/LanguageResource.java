@@ -1,7 +1,5 @@
 package dev.nickrobson.langramming.rest;
 
-import static org.apache.http.util.TextUtils.isBlank;
-
 import dev.nickrobson.langramming.manager.LanguageManager;
 import dev.nickrobson.langramming.model.Language;
 import dev.nickrobson.langramming.rest.request.LanguageRequest;
@@ -51,7 +49,7 @@ public class LanguageResource {
             return responseHelper.unauthorized();
         }
 
-        if (isBlank(code)) {
+        if (code == null || code.isBlank()) {
             return responseHelper.badRequest();
         }
 
