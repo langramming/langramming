@@ -124,17 +124,12 @@ public class FrontendService {
     }
 
     private MediaType guessContentTypeForExt(String ext) {
-        switch (ext) {
-            case "html":
-                return new MediaType("text", "html", StandardCharsets.UTF_8);
-            case "js":
-                return new MediaType("text", "javascript", StandardCharsets.UTF_8);
-            case "css":
-                return new MediaType("text", "css", StandardCharsets.UTF_8);
-            case "svg":
-                return new MediaType("image", "svg", StandardCharsets.UTF_8);
-            default:
-                return MediaType.TEXT_PLAIN;
-        }
+        return switch (ext) {
+            case "html" -> new MediaType("text", "html", StandardCharsets.UTF_8);
+            case "js" -> new MediaType("text", "javascript", StandardCharsets.UTF_8);
+            case "css" -> new MediaType("text", "css", StandardCharsets.UTF_8);
+            case "svg" -> new MediaType("image", "svg", StandardCharsets.UTF_8);
+            default -> MediaType.TEXT_PLAIN;
+        };
     }
 }

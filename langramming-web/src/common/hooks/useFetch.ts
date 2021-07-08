@@ -27,8 +27,9 @@ const reducer = <T>(prevState: FetchState<T>, action: ActionType<T>): FetchState
 };
 
 export const useFetch = <T>(uri: string): FetchState<T> => {
-  const castReducer = reducer as (prevState: FetchState<T>, action: ActionType<T>) => FetchState<T>;
-  const [{ loading, data, error }, dispatch] = React.useReducer(castReducer, {
+  const [{ loading, data, error }, dispatch] = React.useReducer<
+    (prevState: FetchState<T>, action: ActionType<T>) => FetchState<T>
+  >(reducer, {
     loading: false,
     data: null,
     error: null,
