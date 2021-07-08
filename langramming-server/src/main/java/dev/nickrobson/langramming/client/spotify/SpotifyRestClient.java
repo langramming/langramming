@@ -15,6 +15,7 @@ import java.util.Optional;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.apache.hc.core5.http.ParseException;
 
 @Singleton
 @ParametersAreNonnullByDefault
@@ -96,7 +97,7 @@ public class SpotifyRestClient {
                     .setRefreshToken(spotifyUser.getRefreshToken())
                     .build()
             );
-        } catch (SpotifyWebApiException | IOException ex) {
+        } catch (SpotifyWebApiException | IOException | ParseException ex) {
             ex.printStackTrace();
             throw new IllegalStateException("Failed to refresh Spotify token", ex);
         }
