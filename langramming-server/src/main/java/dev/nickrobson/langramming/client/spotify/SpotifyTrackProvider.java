@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hc.core5.http.ParseException;
 
 @Singleton
 @Slf4j
@@ -60,7 +61,7 @@ public class SpotifyTrackProvider implements TrackProvider {
         Track track;
         try {
             track = getTrackRequest.execute();
-        } catch (SpotifyWebApiException | IOException ex) {
+        } catch (SpotifyWebApiException | IOException | ParseException ex) {
             ex.printStackTrace();
             return Optional.empty();
         }

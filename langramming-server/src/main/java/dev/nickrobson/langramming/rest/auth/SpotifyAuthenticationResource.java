@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.hc.core5.http.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +70,7 @@ public class SpotifyAuthenticationResource {
 
     @GetMapping("/redirect")
     public ResponseEntity<?> onReturnFromSpotify(HttpServletRequest httpServletRequest)
-        throws IOException, SpotifyWebApiException {
+        throws IOException, SpotifyWebApiException, ParseException {
         if (!responseHelper.isLoggedIn()) {
             return responseHelper.unauthorized();
         }
