@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   lint:
     docker:
-      - image: cimg/node:14.17
+      - image: cimg/node:16.11
     steps:
       - checkout
       - run:
@@ -25,7 +25,7 @@ jobs:
           command: mvn test
   build-and-test-frontend:
     docker:
-      - image: cimg/node:14.17
+      - image: cimg/node:16.11
     steps:
       - checkout
       - run:
