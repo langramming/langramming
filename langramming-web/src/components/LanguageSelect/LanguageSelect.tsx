@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ValueType } from 'react-select';
+import { SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 import { Language, LanguageResponse } from '../../types/Language';
@@ -97,7 +97,7 @@ export const LanguageSelect = ({
   });
 
   const handleOnChange = React.useCallback(
-    (value: ValueType<LanguageOption, false>) => {
+    (value: SingleValue<LanguageOption>) => {
       dispatch({ type: 'SELECT', selectedOption: value });
       onChange(value?.value);
     },
