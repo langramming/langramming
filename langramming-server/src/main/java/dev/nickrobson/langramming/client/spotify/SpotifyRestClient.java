@@ -1,9 +1,5 @@
 package dev.nickrobson.langramming.client.spotify;
 
-import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.SpotifyHttpManager;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import dev.nickrobson.langramming.configuration.LangrammingSpotifyConfiguration;
 import dev.nickrobson.langramming.manager.BaseUrlManager;
 import dev.nickrobson.langramming.manager.SpotifyUserManager;
@@ -16,6 +12,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.apache.hc.core5.http.ParseException;
+import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.SpotifyHttpManager;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 @Singleton
 @ParametersAreNonnullByDefault

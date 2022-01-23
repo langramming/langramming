@@ -1,6 +1,5 @@
 package dev.nickrobson.langramming.manager;
 
-import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import dev.nickrobson.langramming.database.model.SpotifyUserEntity;
 import dev.nickrobson.langramming.database.model.UserEntity;
 import dev.nickrobson.langramming.database.repository.SpotifyUserRepository;
@@ -11,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 @Singleton
 public class SpotifyUserManager {

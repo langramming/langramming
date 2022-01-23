@@ -1,11 +1,5 @@
 package dev.nickrobson.langramming.client.spotify;
 
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
-import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
-import com.wrapper.spotify.model_objects.specification.Image;
-import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import dev.nickrobson.langramming.model.SpotifyUser;
 import dev.nickrobson.langramming.model.TrackDetails;
 import dev.nickrobson.langramming.model.TrackProvider;
@@ -22,6 +16,12 @@ import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.core5.http.ParseException;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
+import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Image;
+import se.michaelthelin.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.requests.data.tracks.GetTrackRequest;
 
 @Singleton
 @Slf4j

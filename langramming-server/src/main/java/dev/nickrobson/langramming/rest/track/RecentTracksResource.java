@@ -2,8 +2,6 @@ package dev.nickrobson.langramming.rest.track;
 
 import static java.util.Collections.emptyList;
 
-import com.wrapper.spotify.model_objects.specification.PlayHistory;
-import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import dev.nickrobson.langramming.client.spotify.SpotifyRestClient;
 import dev.nickrobson.langramming.manager.TrackManager;
 import dev.nickrobson.langramming.model.TrackDetails;
@@ -33,6 +31,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
+import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 
 @RestController
 @RequestMapping("/api/track/recent")
@@ -132,7 +132,7 @@ public class RecentTracksResource {
                                     .map(trackDetails -> Pair.pair(entry.getValue(), trackDetails))
                         )
                         .flatMap(Optional::stream)
-                        .collect(Collectors.toList());
+                        .toList();
 
                     Optional<PlayHistory> latest = Optional.empty();
                     Optional<PlayHistory> earliest = Optional.empty();
