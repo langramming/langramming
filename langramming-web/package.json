@@ -2,7 +2,6 @@
   "name": "langramming-web",
   "version": "0.0.1",
   "private": true,
-  "main": "dist/index.html",
   "engines": {
     "node": "^16.13.2",
     "yarn": "^1.22.10"
@@ -47,6 +46,7 @@
       "eslint --fix"
     ]
   },
+  "source": "dist/index.html",
   "targets": {
     "maven": {
       "distDir": "target/parcel-build",
