@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/index.html",
   "engines": {
-    "node": "^14.17.0",
+    "node": "^16.13.2",
     "yarn": "^1.22.10"
   },
   "scripts": {
